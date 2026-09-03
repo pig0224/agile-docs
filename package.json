@@ -1,6 +1,6 @@
 {
   "name": "agile-docs",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "fcc-agile 生态文档站（VitePress）—— CLI / 插件 / 模板完整中文文档，部署于 GitHub Pages",
   "type": "module",
