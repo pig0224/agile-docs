@@ -1,6 +1,6 @@
 # CLAUDE.md — agile-docs 仓库导航
 
-本仓库 = fcc-agile 生态文档站（VitePress，中文），部署于 GitHub Pages。**修改文档前先读本文。**
+本仓库 = FCC-Agile 生态文档站（VitePress，中文），部署于 GitHub Pages。**修改文档前先读本文。**
 
 ## 常用命令
 

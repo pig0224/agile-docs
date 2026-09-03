@@ -2,13 +2,26 @@ import { defineConfig } from 'vitepress';
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: 'fcc-agile',
-  description: '一个根、五个抽屉——agile 工作区 CLI、Claude Code 插件与项目模板生态文档',
+  title: 'FCC-Agile — 一个根，五个抽屉的研发工作区',
+  description:
+    'FCC-Agile 生态官方文档：agile 工作区 CLI（git submodule 同步、worktree 开发环境、项目模板脚手架、健康检查）、Claude Code SDD/TDD 插件（12 个斜杠命令与 7 个角色 subagent）、项目模板注册中心，以及内置 MCP Server 的完整中文使用指南与开发指南。',
   base: '/agile-docs/',
 
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/agile-docs/logo.svg' }]],
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/agile-docs/logo.svg' }],
+    ['meta', { name: 'keywords', content: 'FCC-Agile, agile CLI, 工作区管理, git submodule, git worktree, 项目模板, Claude Code 插件, SDD, TDD, MCP, Model Context Protocol, 研发流程' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'FCC-Agile 生态文档' }],
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+  ],
+
+  sitemap: {
+    hostname: 'https://pig0224.github.io',
+  },
 
   themeConfig: {
+    siteTitle: 'FCC-Agile',
     nav: [
       { text: 'CLI 指南', link: '/guide/getting-started', activeMatch: '/guide/' },
       { text: '插件', link: '/plugin/overview', activeMatch: '/plugin/' },
@@ -86,7 +99,7 @@ export default defineConfig({
     socialLinks: [{ icon: 'github', link: 'https://github.com/pig0224/agile-docs' }],
     footer: {
       message: '基于 MIT 协议发布',
-      copyright: 'fcc-agile 生态文档 · <a href="https://github.com/pig0224/agile-docs" target="_blank">GitHub</a>',
+      copyright: 'FCC-Agile 生态文档 · <a href="https://github.com/pig0224/agile-docs" target="_blank">GitHub</a>',
     },
     search: {
       provider: 'local',

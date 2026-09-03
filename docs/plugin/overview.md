@@ -1,6 +1,6 @@
 # 插件概览与流程
 
-agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓库 [agile-plugins](https://github.com/pig0224/agile-plugins)），以 **SDD（先设计后开发）/ TDD（测试驱动开发）** 方法论组织团队研发流程：
+Agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓库 [agile-plugins](https://github.com/pig0224/agile-plugins)），以 **SDD（先设计后开发）/ TDD（测试驱动开发）** 方法论组织团队研发流程：
 
 - **12 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
 - **7 个角色 subagent**——具体执行（[角色说明](/plugin/roles)）
@@ -8,7 +8,7 @@ agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓�
 
 ## 安装
 
-在 agile workspace 内：
+在 Agile workspace 内：
 
 ```bash
 agile plugin install agile

@@ -4,7 +4,7 @@
 [![Deploy Pages](https://github.com/pig0224/agile-docs/actions/workflows/pages.yml/badge.svg)](https://github.com/pig0224/agile-docs/actions/workflows/pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-**fcc-agile 生态文档站**（VitePress，中文）：CLI 命令参考、MCP 工具、使用流程、插件角色与开发指南、模板开发指南。
+**FCC-Agile 生态文档站**（VitePress，中文）：CLI 命令参考、MCP 工具、使用流程、插件角色与开发指南、模板开发指南。
 
 在线阅读：**https://pig0224.github.io/agile-docs/**
 
@@ -40,4 +40,4 @@ npm run release -- patch          # 或 minor / major / x.y.z
 
 ## License
 
-[MIT](./LICENSE) © fcc contributors
+[MIT](./LICENSE) © FCC contributors

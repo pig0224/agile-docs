@@ -1,6 +1,6 @@
 # 插件开发指南
 
-如何为 agile-plugins 市场仓库开发新插件（或修改 agile 主插件）。**开发插件不需要动 agile-cli**——CLI 对插件内容零知识。
+如何为 agile-plugins 市场仓库开发新插件（或修改 Agile 主插件）。**开发插件不需要动 agile-cli**——CLI 对插件内容零知识。
 
 ## 市场仓库结构
 

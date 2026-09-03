@@ -10,7 +10,7 @@
 { "mcpServers": { "agile": { "command": "agile", "args": ["mcp"] } } }
 ```
 
-**方式二：agile 插件捆绑**：安装 agile 插件后自动可用（工具名带插件命名空间前缀，形如 `mcp__plugins_agile_agile__agile_status`）。
+**方式二：Agile 插件捆绑**：安装 Agile 插件后自动可用（工具名带插件命名空间前缀，形如 `mcp__plugins_agile_agile__agile_status`）。
 
 ## 工具清单
 

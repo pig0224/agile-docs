@@ -2,12 +2,12 @@
 layout: home
 
 hero:
-  name: fcc-agile
+  name: FCC-Agile
   text: 一个根、五个抽屉
-  tagline: agile 工作区 CLI · Claude Code SDD/TDD 插件 · 项目模板生态
+  tagline: Agile 工作区 CLI · Claude Code SDD/TDD 插件 · 项目模板生态
   image:
     src: /logo.svg
-    alt: fcc-agile
+    alt: FCC-Agile
   actions:
     - theme: brand
       text: 快速上手

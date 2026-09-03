@@ -1,6 +1,6 @@
 # 角色 Subagent
 
-agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校验 → Task 委派 → 复核汇报」，角色 agent 做具体执行。`description` 用第三人称描述"何时使用"——这是模型自动委派的触发依据。
+Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校验 → Task 委派 → 复核汇报」，角色 agent 做具体执行。`description` 用第三人称描述"何时使用"——这是模型自动委派的触发依据。
 
 全部角色共同约束：
 
