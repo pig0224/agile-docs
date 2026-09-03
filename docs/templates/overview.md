@@ -5,7 +5,8 @@
 ## 使用
 
 ```bash
-agile template list                     # 列出全部模板（自动刷新缓存）
+agile template list                     # 列出全部模板（默认读本地缓存）
+agile template list --refresh           # 联网刷新缓存后再列出
 agile init project <name> --template <模板名>
 agile template update                   # 强制刷新缓存
 ```
@@ -37,7 +38,7 @@ agile template update                   # 强制刷新缓存
 
 CLI 把模板仓库克隆到 `~/.agile/templates/<url哈希>`（用户级只读副本，跨 workspace 共享）：
 
-- `template list` / `init project` 自动 `fetch + reset --hard` 刷新
+- `template list` / `init project` 默认**读本地缓存**（不联网）；`--refresh` 或 `agile template update` 才联网 `fetch + reset --hard`
 - 失联降级：网络失败且有缓存 → 使用缓存并提示 stale
 - 本地目录直读：`--registry <本地路径>` 直接读取（开发模板时用，不走缓存）
 

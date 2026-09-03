@@ -1,4 +1,4 @@
-# agile-docs
+# Agile-Docs
 
 [![CI](https://github.com/pig0224/agile-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/pig0224/agile-docs/actions/workflows/ci.yml)
 [![Deploy Pages](https://github.com/pig0224/agile-docs/actions/workflows/pages.yml/badge.svg)](https://github.com/pig0224/agile-docs/actions/workflows/pages.yml)

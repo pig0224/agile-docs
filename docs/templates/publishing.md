@@ -21,7 +21,7 @@ CI（Check workflow）在推送时自动跑一致性校验，registry 与目录�
 
 | 用户场景 | 生效方式 |
 |---|---|
-| `agile template list` | 自动 fetch 刷新缓存 → 新模板立即可见 |
+| `agile template list --refresh` / `agile template update` | 联网刷新缓存 → 新模板立即可见 |
 | `agile init project --template <新模板>` | 同上，直接可用 |
 | 离线/失联 | 下次联网后 `agile template update` 强制刷新 |
 | 本地调试者 | `--registry <本地路径>` 直读，改完即生效 |

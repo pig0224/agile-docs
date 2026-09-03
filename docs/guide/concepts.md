@@ -105,8 +105,8 @@ hooks:                        # 项目钩子，match 匹配 projects/<name>
 
 CLI 把模板注册中心仓库克隆到 `~/.agile/templates/<url哈希>`（用户级、跨 workspace 共享的只读副本）：
 
-- `template list` / `init project` 时自动 `fetch + reset --hard` 刷新
-- 失联时降级使用本地缓存（提示 stale）
+- `template list` / `init project` 默认**读本地缓存**（不联网）；`--refresh` 或 `agile template update` 时才 `fetch + reset --hard` 刷新
+- 刷新时失联则降级使用本地缓存（提示 stale）
 - `--registry` 传本地目录时直接读取（开发模板时用）
 
 ## 生态三仓

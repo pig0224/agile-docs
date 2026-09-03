@@ -217,7 +217,7 @@ workspace 仓库必须有首次提交（unborn HEAD 时 create 会给出明确�
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `list` | `agile template list [--registry <url>] [--no-refresh] [--json]` | 列出全部模板（默认联网刷新缓存） |
+| `list` | `agile template list [--registry <url>] [--refresh] [--json]` | 列出全部模板（默认读本地缓存，`--refresh` 联网刷新） |
 | `update` | `agile template update [--registry <url>]` | 强制刷新模板缓存 |
 | `check` | `agile template check [--registry <url>]` | 注册中心一致性校验（CI 用） |
 
