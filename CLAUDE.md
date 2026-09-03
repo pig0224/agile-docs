@@ -2,6 +2,14 @@
 
 本仓库 = FCC-Agile 生态文档站（VitePress，中文），部署于 GitHub Pages。**修改文档前先读本文。**
 
+## 协作红线（优先级最高）
+
+1. **绝对不允许执行 `git add`**：哪些变更进入提交，由人工审阅决定。完成修改后，列出变更文件清单与建议的 commit message，等待人工 add。
+2. **人工 add 完成后，可汇总执行 `git commit`**：但 commit 前必须先 `git status` 检查——若仍有本次变更相关的未暂存文件，停下来提醒人工补充 add（不得自行 add）；确认全部已暂存后才执行 commit。
+3. **不允许执行 `git push`**（含 tag 推送、以及内部会执行 add/commit/push 的命令）：推送一律人工处理。
+4. **决不允许发版**：`npm run release`、创建/推送 tag、触发 Release workflow、创建 GitHub Release 等一切发版动作，只能由人工处理。
+5. 只读 git 命令（status / log / diff / blame / fetch）不受限制。
+
 ## 常用命令
 
 ```bash
