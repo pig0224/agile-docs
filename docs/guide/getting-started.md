@@ -4,7 +4,7 @@
 
 ## 前置条件
 
-- Node.js ≥ 18、git ≥ 2.30
+- Node.js ≥ 20.5（推荐 22/24 LTS）、git ≥ 2.30
 - （可选）[Claude Code](https://code.claude.com/docs)——使用 /agile:xxx 插件命令时需要
 
 ## 1. 安装 CLI
