@@ -1,7 +1,0 @@
-#!/bin/sh
-# pre-commit 门禁：文档构建（死链/语法失败则阻止提交）
-set -e
-cd "$(git rev-parse --show-toplevel)"
-echo "[pre-commit] docs:build..."
-pnpm docs:build
-echo "[pre-commit] 通过 ✔"

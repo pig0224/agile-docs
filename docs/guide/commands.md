@@ -291,12 +291,15 @@ agile plugin install agile --marketplace git@corp:team/plugins.git   # 私有市
 自更新。
 
 ```
-agile update [--cli] [--plugin]
+agile update              # 默认：更新 CLI
+agile update --plugin     # 只更新插件
+agile update --all        # 全部更新
 ```
 
 | 参数 | 说明 |
 |---|---|
-| `--cli` | 只更新 CLI（查询 npm registry 并 `npm install -g fcc-agile-cli@latest`） |
+| `--plugin` | 只更新插件（重新安装拉取插件市场最新版本） |
+| `--all` | 同时更新 CLI 与插件 |
 | `--plugin` | 只重新安装插件（拉取市场最新版本） |
 
 缺省两者都执行。
