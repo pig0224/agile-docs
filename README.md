@@ -29,12 +29,8 @@ pnpm docs:preview   # 预览构建产物
 
 ## 发布
 
-- **push main** → [pages.yml](./.github/workflows/pages.yml) 自动部署 GitHub Pages
-- **`npm run release`**（[scripts/release.mjs](./scripts/release.mjs)）→ 质量门（docs:build）→ bump 版本 → tag → 触发 [release.yml](./.github/workflows/release.yml)（部署 Pages + GitHub Release 归档站点 zip）
-
-```bash
-npm run release -- patch          # 或 minor / major / x.y.z
-```
+- **push main** → [pages.yml](./.github/workflows/pages.yml) 自动部署 GitHub Pages——文档没有独立发版动作，merge 到 main 即上线
+- PR → [ci.yml](./.github/workflows/ci.yml) 构建校验（死链/语法失败即红，不部署）
 
 > 一次性设置：仓库 Settings → Pages → Source 选 **GitHub Actions**。
 
