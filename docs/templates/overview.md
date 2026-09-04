@@ -7,7 +7,7 @@
 ```bash
 agile template list                     # 列出全部模板（默认读本地缓存）
 agile template list --refresh           # 联网刷新缓存后再列出
-agile init project <name> --template <模板名>
+agile init project <name> --template <模板名>   # 不带 --template 则创建空项目骨架（不访问注册中心）
 agile template update                   # 强制刷新缓存
 ```
 

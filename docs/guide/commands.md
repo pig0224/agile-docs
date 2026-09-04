@@ -54,21 +54,26 @@ agile init workspace --name my-workspace
 
 ### agile init project
 
-从模板注册中心脚手架一个项目到 `projects/<name>`（workspace 单仓内**普通目录**，非 submodule），并 `git add` 纳入版本管理（不自动 commit）。
+在 `projects/<name>` 初始化项目（workspace 单仓内**普通目录**，非 submodule），并 `git add` 纳入版本管理（不自动 commit）。两种方式：
+
+- **`--template <模板名>`**：从模板注册中心脚手架（模板来自独立 git 仓库）
+- **缺省 `--template`**：生成**空项目骨架**（仅一个 README.md）——不联网、不读模板缓存，适合尚无合适模板的场景
 
 ```
-agile init project <name> --template <模板名> [--registry <url>]
+agile init project <name> [--template <模板名>] [--registry <url>] [--refresh]
 ```
 
 | 参数 | 必填 | 说明 |
 |---|---|---|
 | `<name>` | ✅ | 项目名，将作为 `projects/` 下的目录名 |
-| `--template` | ✅ | 模板名，`agile template list` 查看 |
-| `--registry` | ❌ | 模板源 git URL，缺省取 workspace.yaml `templates.registry` |
+| `--template` | ❌ | 模板名，`agile template list` 查看；**缺省创建空项目骨架** |
+| `--registry` | ❌ | 模板源 git URL，缺省取 workspace.yaml `templates.registry`（仅 `--template` 时生效） |
+| `--refresh` | ❌ | 联网刷新模板缓存（默认走本地缓存；仅 `--template` 时生效） |
 
 ```bash
 agile template list                          # 先看可用模板
 agile init project order-service --template go-service
+agile init project my-lib                    # 空项目骨架（不访问模板注册中心）
 ```
 
 模板中的占位符会被替换：`{{name}}` → 项目名，`{{safeName}}` → 小写字母数字段（Java 包名等场景）。
@@ -273,8 +278,8 @@ Claude Code 插件管理。插件市场是独立 git 仓库（新增插件无需
 | 子命令 | 语法 | 说明 |
 |---|---|---|
 | `install` | `agile plugin install [name] [--marketplace <url>] [--marketplace-name <名称>]` | 从市场安装（默认 `agile`） |
-| `enable` | `agile plugin enable <name>` | 启用 |
-| `disable` | `agile plugin disable <name>` | 禁用 |
+| `enable` | `agile plugin enable [name]` | 启用（缺省 `agile`） |
+| `disable` | `agile plugin disable [name]` | 禁用（缺省 `agile`） |
 | `list` | `agile plugin list` | 列出已登记插件与市场地址 |
 
 ```bash
