@@ -51,6 +51,7 @@ export default defineConfig({
           items: [
             { text: '命令参考', link: '/guide/commands' },
             { text: 'MCP 工具', link: '/guide/mcp' },
+            { text: '更新日志', link: 'https://github.com/pig0224/agile-cli/blob/main/CHANGELOG.md' },
             { text: '故障排查', link: '/guide/troubleshooting' },
           ],
         },
