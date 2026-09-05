@@ -147,10 +147,10 @@ agile sync                 # 执行
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `get` | `agile config get <key>` | 查看配置值（未配置时给出 set 提示） |
+| `get` | `agile config get <key>` | 查看配置值（未配置时给出 set 提示；workspace 外分发源两键返回内置官方默认） |
 | `set` | `agile config set <key> <git-url>` | 写入 settings.json 对应键（`agile sync` 生效） |
 | `unset` | `agile config unset <key>` | 移除配置（行为见上表） |
-| `list` | `agile config list` | 输出 settings.json 全量配置（原样 JSON） |
+| `list` | `agile config list` | 输出 settings.json 全量配置（原样 JSON；workspace 外显示内置默认配置） |
 
 ```bash
 agile config set tech-specs git@gitlab.corp:specs/tech-specs.git
@@ -210,7 +210,7 @@ agile worktree create feature/STO-001    # 自动跟踪检出 origin/feature/STO
 
 ## template
 
-项目模板管理。模板注册中心 = git 仓库，地址在 settings.json `templates.registry`（默认官方源，`agile config set template-repo <git-url>` 可换团队私有仓库）。
+项目模板管理。模板注册中心 = git 仓库，地址在 settings.json `templates.registry`（默认官方源，`agile config set template-repo <git-url>` 可换团队私有仓库）。**workspace 外也可用**：`list` / `update` 自动落到内置官方源（模板缓存用户级，跨 workspace 共享）——模板开发者在模板仓内、或尚未初始化 workspace 时都能直接查询。
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
@@ -224,7 +224,7 @@ agile worktree create feature/STO-001    # 自动跟踪检出 origin/feature/STO
 
 ## plugin
 
-Claude Code 插件管理（类 npm 心智）。插件市场是独立 git 仓库（新增插件无需升级 CLI）；依赖声明登记在 `.agile/settings.json` 的 `plugins.dependencies`，`agile sync` 按声明补装。
+Claude Code 插件管理（类 npm 心智）。插件市场是独立 git 仓库（新增插件无需升级 CLI）；依赖声明登记在 `.agile/settings.json` 的 `plugins.dependencies`，`agile sync` 按声明补装。`ls` 在 workspace 外仅显示本机安装实况（无声明对照）。
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
