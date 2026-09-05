@@ -37,11 +37,11 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 
 | | |
 |---|---|
-| 用途 | 把抽屉三的需求产物同步到 `process-docs/<编号>/`，创建标准五文档目录 |
+| 用途 | 把抽屉三的需求产物同步到 `process-docs/<编号>/`，创建标准任务目录（7 个 .md） |
 | 场景 | prd 完成后、进入设计前——为开发准备过程目录 |
 | 参数 | `<需求编号>`（缺省列出 process-docs 现有编号供选择） |
 | 前置 | `/agile:prd` 已产出需求产物 |
-| 产物 | 调 MCP `agile_task_create` 创建五文档目录；PRD+AC 并入 `requirement.md`；AC/功能树/菜单树复制到过程目录（抽屉三原件保留） |
+| 产物 | 调 MCP `agile_task_create` 创建任务目录（7 个 .md）；PRD+AC 并入 `requirement.md`；AC/功能树/菜单树复制到过程目录（抽屉三原件保留） |
 | 示例 | `/agile:sync-req STO-001` |
 
 校验：`requirement.md` 中 AC 至少 1 条，否则警告回到 `/agile:prd`。
@@ -73,7 +73,7 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 参数 | `<需求编号>` |
 | 委派 | test-engineer subagent |
 | 前置 | `requirement.md`（AC）必须有；`design.md` 缺失时警告（可经确认仅基于 AC 生成） |
-| 产物 | `process-docs/<编号>/gen-test.md`：测试范围、案例清单（TC 表：AC 映射/前置/步骤/期望/优先级/类型）、数据准备、自动化映射 |
+| 产物 | `process-docs/<编号>/gen-test.md`：测试范围、案例清单（分「后端用例/前端用例」两节，TC 表：AC 映射/前置/步骤/期望/优先级/类型）、数据准备、自动化映射 |
 | 示例 | `/agile:gen-test STO-001` |
 
 质量要求：每条 AC 至少 1 正常 + 1 边界/异常案例。
@@ -89,7 +89,7 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 参数 | `<需求编号> [项目名]`，如 `STO-001` 或 `STO-001 order-service` |
 | 委派 | backend-dev subagent（分批，每批 ≤5 任务） |
 | 前置 | design.md 已填充（红线）；建议先 `agile worktree create feature/<编号>`；工作区干净 |
-| 产物 | worktree 内代码 + 测试；`implementation.md` 任务清单与 TDD 循环记录；`STO-xxx(red|green|refactor):` 序列 commit |
+| 产物 | worktree 内代码 + 测试；`implementation-be.md` 任务清单与 TDD 循环记录；`STO-xxx(red|green|refactor):` 序列 commit |
 | 示例 | `/agile:backend STO-001` |
 
 闭环条件：任务全勾、测试全绿、循环记录完整、无 design 外依赖。
@@ -105,7 +105,7 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 参数 | `<需求编号> [前端项目名]` |
 | 委派 | frontend-dev subagent（分批） |
 | 前置 | design.md 已填充（红线）；menu-tree/feature-tree 确定页面范围；工作区干净 |
-| 产物 | 分层代码 + 组件测试；浏览器验证记录；implementation.md 更新 |
+| 产物 | 分层代码 + 组件测试；浏览器验证记录；implementation-fe.md 更新 |
 | 示例 | `/agile:frontend STO-001 frontend-web` |
 
 每层都 TDD；浏览器验证走查关键路径对照 AC。
@@ -120,7 +120,7 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 场景 | 提测验收；发布前确认 |
 | 参数 | `<需求编号> [--only P0] [--repo 仓库路径]` |
 | 委派 | test-engineer subagent |
-| 前置 | implementation.md 有已完成任务；gen-test.md 缺失时现场生成精简清单（报告注明） |
+| 前置 | implementation-be/-fe.md 有已完成任务；gen-test.md 缺失时现场生成精简清单（报告注明） |
 | 产物 | `process-docs/<编号>/run-test.md`：范围/环境/逐案例结果表/失败清单/通过率/结论（通过/有条件通过/不通过） |
 | 示例 | `/agile:run-test STO-001` |
 
@@ -163,8 +163,8 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 用途 | 把遗漏的开发任务**追加**到任务清单（只增不改：已有条目、勾选状态、顺序一律不动） |
 | 场景 | 开发中发现 design 遗漏的工作项 |
 | 参数 | `<需求编号> <任务描述>`（多条用分号/换行） |
-| 前置 | implementation.md 存在 |
-| 产物 | 任务清单追加条目（编号顺延）；与既有任务重复时不追加只汇报 |
+| 前置 | implementation.md（主文件）存在 |
+| 产物 | 任务清单追加条目（编号顺延，按归属写入 implementation-be/-fe.md 并同步主文件表）；与既有任务重复时不追加只汇报 |
 | 示例 | `/agile:add-task STO-001 增加导出接口的限流逻辑` |
 
 ---

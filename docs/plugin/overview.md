@@ -33,12 +33,14 @@ agile plugin install agile
 
 辅助命令随时可用：`/agile:fix-bug`（任意阶段修缺陷）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
 
+前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），git 合并零冲突——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop)。
+
 ## 两条红线
 
 写进 skill 与全部角色 agent，任何命令不得绕过：
 
 1. **SDD 红线**：没有 `design.md` 不进入开发——architect/backend/frontend 命令都有前置校验，缺失即停止
-2. **TDD 红线**：没有失败测试不写实现——每任务先写失败测试（Red），最小实现转绿（Green），重构保持绿色（Refactor），循环记录登记进 implementation.md
+2. **TDD 红线**：没有失败测试不写实现——每任务先写失败测试（Red），最小实现转绿（Green），重构保持绿色（Refactor），循环记录登记进角色文件（implementation-be.md / implementation-fe.md）
 
 ## 与 CLI / MCP 的协作
 

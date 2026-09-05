@@ -34,7 +34,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 |---|---|
 | 何时委派 | 后端开发任务（/agile:backend）；按 TDD 实现服务端逻辑 |
 | 输入 | design.md + 测试案例 + worktree 路径 + 任务清单（每批 ≤5） |
-| 产出 | worktree 内实现与测试；implementation.md 任务勾选与 TDD 循环记录表；`STO-xxx(red|green|refactor):` 序列 commit |
+| 产出 | worktree 内实现与测试；implementation-be.md 任务勾选与 TDD 循环记录表（**仅后端可写**）；`STO-xxx(red|green|refactor):` 序列 commit |
 | TDD 硬规则 | Red（写失败测试并记录输出）→ Green（最小实现）→ Refactor（保持绿色）；脚手架/接口签名之外不提前实现 |
 
 ## frontend-dev —— 前端工程师
@@ -43,7 +43,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 |---|---|
 | 何时委派 | 前端开发任务（/agile:frontend）；Web 界面实现 |
 | 输入 | design.md + UI/交互规范（抽屉三）+ 既有组件清单（抽屉二）+ worktree 路径 |
-| 产出 | 接口层（api 封装 + 类型 + mock）→ 组件层（先测试后实现）→ 页面层（组装 + 路由对齐菜单树）；浏览器验证记录 |
+| 产出 | 接口层（api 封装 + 类型 + mock）→ 组件层（先测试后实现）→ 页面层（组装 + 路由对齐菜单树）；浏览器验证记录；implementation-fe.md 任务清单与测试记录（**仅前端可写**） |
 | 分层顺序 | 接口层 → 组件层 → 页面层，每层 TDD |
 
 ## ui-designer —— UI / 组件库专家
@@ -61,7 +61,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 |---|---|
 | 何时委派 | 生成测试案例（/agile:gen-test，Stage 1）；执行测试验收（/agile:run-test，Stage 2） |
 | 输入 | Stage1：requirement.md + design.md；Stage2：gen-test.md + 各项目实现 |
-| 产出 | `gen-test.md`（TC 案例表 + 数据准备 + 自动化映射）；`run-test.md`（逐案例结果 + 通过率 + 结论） |
+| 产出 | `gen-test.md`（分后端/前端两节的 TC 案例表 + 数据准备 + 自动化映射）；`run-test.md`（逐案例结果 + 通过率 + 结论） |
 | 诚实原则 | 没跑过的用例标「未执行」，禁止推断填「通过」；测试命令与输出摘录入报告 |
 
 ## bug-hunter —— 缺陷诊断专家

@@ -15,7 +15,7 @@ workspace/                     # 单一 git 仓库（团队）
 ├── biz-tech-docs/             # 抽屉二：团队技术设计知识库（普通目录）
 ├── biz-product-docs/          # 抽屉三：产品设计知识库（普通目录）
 ├── projects/                  # 抽屉四：项目代码（普通目录，多项目平铺）
-└── process-docs/              # 抽屉五：过程产物（STO-xxx 五文档）
+└── process-docs/              # 抽屉五：过程产物（STO-xxx 需求档案）
 ```
 
 | 抽屉 | 内容 | 维护角色 |
@@ -78,18 +78,22 @@ hooks:                        # 项目钩子，match 匹配 projects/<name>
 
 两个 git 源地址（插件市场/模板源）都可换成团队私有仓库——**换配置即换源，CLI 无需发版**。
 
-## 过程产物（STO-xxx 五文档）
+## 过程产物（STO-xxx 需求档案）
 
-`process-docs/<需求编号>/` 是一个需求的完整档案：
+`process-docs/<需求编号>/` 是一个需求的完整档案（7 个 .md）：
 
 | 文档 | 内容 | 由谁填充 |
 |---|---|---|
 | `requirement.md` | 需求说明与验收标准（AC） | 产品（/agile:prd + /agile:sync-req） |
-| `design.md` | 技术设计 | 架构（/agile:architect） |
-| `gen-test.md` | 测试案例（Stage 1） | 测试（/agile:gen-test） |
-| `implementation.md` | 任务清单与 TDD 循环记录 | 开发（/agile:backend / frontend） |
-| `run-test.md` | 测试验收报告（Stage 2） | 测试（/agile:run-test） |
-| `review.md` / `release.md` | 评审与发布记录 | 全员 |
+| `design.md` | 技术设计（方案、接口契约、任务分配） | 负责人（/agile:architect） |
+| `implementation.md` | 实施主文件：任务分配表（design 冻结时填写，之后只读）+ 联调约定 | 负责人建骨架 |
+| `implementation-be.md` | 后端任务清单、TDD 循环记录、变更清单（**后端专属**） | 后端（/agile:backend） |
+| `implementation-fe.md` | 前端任务清单、测试记录、变更清单（**前端专属**） | 前端（/agile:frontend） |
+| `gen-test.md` | 测试案例（Stage 1，分「后端用例/前端用例」两节） | 负责人/测试（/agile:gen-test） |
+| `run-test.md` | 测试验收报告（Stage 2） | 开发兼任/测试（/agile:run-test） |
+| `review.md` / `release.md` | 评审与发布记录 | 负责人汇总 |
+
+> **文件级隔离**：前后端并行开发（同一需求分支）时各写各的角色文件，git 合并零冲突。团队协作详见[团队协作 SOP](/guide/sop)。
 
 目录由 MCP 工具 `agile_task_create` 生成（无 CLI 命令——流程能力归插件）。
 

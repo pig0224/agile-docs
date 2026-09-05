@@ -21,7 +21,7 @@
 | [version](#version) | 查看版本 |
 | [mcp](#mcp) | 启动 MCP Server |
 
-> 任务目录（STO-xxx 五文档）**没有 CLI 命令**——它是流程能力，仅通过 MCP 工具 `agile_task_create` 暴露，由 Claude Code 插件命令（/agile:sync-req 等）调用。见 [MCP 工具](/guide/mcp)。
+> 任务目录（STO-xxx，7 个 .md）**没有 CLI 命令**——它是流程能力，仅通过 MCP 工具 `agile_task_create` 暴露，由 Claude Code 插件命令（/agile:sync-req 等）调用。见 [MCP 工具](/guide/mcp)。
 
 ---
 
@@ -200,7 +200,7 @@ agile doctor [--fix] [--offline] [--json]
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `create` | `agile worktree create <branch> [--base <ref>]` | 创建 `.worktrees/<branch>/`；**创建前自动 sync 外部仓库** |
+| `create` | `agile worktree create <branch> [--base <ref>]` | 创建 `.worktrees/<branch>/`；**创建前自动 sync 外部仓库**。本地已有该分支 → 直接检出；远程已有（origin/&lt;branch&gt;）→ 创建跟踪分支（多人协作各自拉取同一需求分支）；都没有 → 以 `--base` 新建 |
 | `list` | `agile worktree list` | 列出全部 worktree |
 | `remove` | `agile worktree remove <branch> [--force]` | 移除并删除分支（未合并时分支保留并提示） |
 
@@ -208,6 +208,9 @@ agile doctor [--fix] [--offline] [--json]
 agile worktree create feature/STO-001    # 自动 sync → 建环境
 cd .worktrees/feature__STO-001           # 开发
 agile worktree remove feature/STO-001    # 清理
+
+# 协作场景：负责人已推送远程需求分支，前后端各自拉取
+agile worktree create feature/STO-001    # 自动跟踪检出 origin/feature/STO-001
 ```
 
 ::: warning 前置条件

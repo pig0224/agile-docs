@@ -21,7 +21,7 @@
 | `agile_sync` | 收敛外部 submodule 到 registry 声明状态 | `dryRun`（**默认 true**）、`force`、`repo[]` |
 | `agile_doctor` | 健康检查（配置/权限/漂移） | `offline`、`fix` |
 | `agile_template_list` | 列出模板注册中心全部模板 | `refresh`（默认 false 只读缓存） |
-| `agile_task_create` | 创建 `process-docs/<编号>/` 五文档目录 | `taskId`（如 `STO-001`） |
+| `agile_task_create` | 创建 `process-docs/<编号>/` 标准任务目录（7 个 .md） | `taskId`（如 `STO-001`） |
 | `agile_config_list` | workspace.yaml 全量配置 | 无 |
 | `agile_repo_list` | registry 全部仓库（url/branch/pin） | 无 |
 
