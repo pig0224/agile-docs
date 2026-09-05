@@ -83,11 +83,11 @@ agile plugin install agile                           # Claude Code 插件
 | 1 | 建环境 | 负责人 | 主工作区 | `agile worktree create feat/STO-xxx`，推送远程分支 |
 | 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口契约**、任务分配表）→ 推送 |
 | 3 | 拉取环境 | 后端 + 前端 | 各自机器 | `agile worktree create feat/STO-xxx`（**自动跟踪已存在的远程分支**） |
-| 4 | 测试设计 | 负责人（有测试则测试先行） | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节） |
+| 4 | 测试设计 | 负责人（有测试则测试先行） | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节；e2e 用例归前端节） |
 | 5 | 并行开发 | 负责人承其一端 + 对端 | 各自本地 | `/agile:backend` ‖ `/agile:frontend`（辅以 ui / bugfix / add-task / feedback），各自写 `implementation-be/-fe.md`，小步推送（自动 CI + stage CD） |
 | 6 | 联调 | 后端 + 前端 | worktree 内 | 集成测试通过 |
 | 7 | 自测验收 | 开发兼任（有测试则独立执行） | worktree 内 | `/agile:run-test` → run-test.md |
-| 8 | stage 业务验收 | 产品 | stage 环境 | 按 AC 逐条确认 |
+| 8 | stage 业务验收 | 产品 | stage 环境 | e2e 冒烟（如有）通过后按 AC 逐条确认 |
 | 9 | 交付 | 负责人 | — | PR（代码 + 全部过程文档）→ CI 绿 → squash 合入 main → **从 main 发版/部署生产** |
 | 10 | 清理 | 负责人 | 主工作区 | `agile worktree remove feat/STO-xxx` |
 
