@@ -17,12 +17,18 @@ git push origin main
 
 CI（Validate workflow）在推送时自动校验清单；校验失败即红，不合格的变更不会静默生效。
 
+## 版本模型（无版本号 + commit SHA）
+
+插件**不设** `version` 字段（plugin.json 与 marketplace 条目均不设）。按 Claude Code 官方 Version management 规则，git 托管市场中的相对路径源会落到 **git commit SHA** 作为更新的版本缓存键：push 即变更，`claude plugin update agile@fcc` 与 `agile plugin update` 都能直接检测到更新——这是官方对「内部 / 团队活跃开发插件」的推荐模式，与本仓「推送即发版」天然对齐。
+
+> 若未来走向对外稳定发布（需要语义化版本与回滚锚点），再切换 Explicit version 模式：plugin.json 与 marketplace 条目**两处同步**写 semver，并用 `claude plugin tag` 打 `{name}--v{version}` tag——设了 version 后不 bump 就不会推送更新，需配套发版纪律。
+
 ## 变更如何触达用户
 
 | 用户场景 | 拿到新版本的方式 |
 |---|---|
 | 新安装 | `agile plugin install <name>`（安装时拉取市场最新） |
-| 已安装 | `agile plugin update`（刷新市场 → 强制重装）或 Claude Code 内更新插件 |
+| 已安装 | `claude plugin marketplace update fcc` + `claude plugin update agile@fcc`（按 commit SHA 判定）；或 `agile plugin update` 一条龙（刷新市场 → 强制重装） |
 | 本地市场调试者 | 重启会话（本地目录直读，热加载） |
 
 ::: tip
