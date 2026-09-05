@@ -56,7 +56,7 @@ disable-model-invocation: true                                 ← 可选：仅�
 - **只做「前置校验 → Task 委派 agent → 复核汇报」**，不写实现细节
 - 开头 `先阅读 skill sdd-tdd-method`（共享方法论按需加载）
 - 文件系统/git 操作一律走 CLI/MCP（如任务目录用 MCP `agile_task_create`），不手搓命令
-- 产物全中文、落盘位置写明（抽屉路径从 workspace.yaml 读取）
+- 产物全中文、落盘位置写明（抽屉路径从 `.agile/settings.json` 读取）
 
 ## 角色 Agent（agents/*.md）
 
@@ -103,5 +103,5 @@ claude plugin install <name>@fcc    # 安装
 
 1. 命令=入口、agent=执行、skill=知识，职责不混
 2. 两条 SDD/TDD 红线不得削弱（无 design.md 不开发；无失败测试不写实现）
-3. 不硬编码抽屉路径与 git 命令，全部经 workspace.yaml / CLI / MCP
+3. 不硬编码抽屉路径与 git 命令，全部经 `.agile/settings.json` / CLI / MCP
 4. 有写操作的 MCP 工具保持 dry-run 默认或显式确认参数

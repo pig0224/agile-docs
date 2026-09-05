@@ -43,13 +43,13 @@ templates:
 3. **目录名 === name**：一个目录一个身份，禁止别名指向同一模板
 4. **path 合法**：禁止绝对路径与 `..` 越界；必须指向仓库内已存在目录
 
-以上由 CLI（`template check` / `init project`）与仓库 CI（`scripts/check.mjs`）**双重强制**，违反即拒绝。
+以上由 CLI（`init project` 加载注册中心时校验，不一致即拒绝生成）与仓库 CI（`scripts/check.mjs`）**双重强制**，违反即拒绝。
 
 **命名建议**：`<技术栈/框架>-<变体>`，如 `vue3-vite`、`go-service`、`java-springboot`；扩展示例 `vue3-nuxt`、`go-grpc`、`node-cli`。
 
 ## 模板内容约定
 
-- **构建特征文件**：模板根必须有 `package.json` / `go.mod` / `pom.xml` / `tsconfig.json` 之一——`agile foreach` / `hooks` 按此识别项目
+- **构建特征文件**：模板根必须有 `package.json` / `go.mod` / `pom.xml` / `tsconfig.json` 之一——CLI 与插件按此识别项目类型
 - **占位符**：`{{name}}`（项目名）、`{{safeName}}`（小写安全段，Java 包目录如 `src/main/java/com/example/{{safeName}}/` 用目录名占位也会替换）
 - **README**：写清运行/测试命令（CLI 与插件按约定执行测试）
 - **至少一个可运行测试**（TDD 起点）
@@ -60,15 +60,27 @@ templates:
 ```bash
 git clone git@github.com:pig0224/agile-templates.git && cd agile-templates
 node scripts/check.mjs                          # 一致性校验（无外部依赖）
-# 在 workspace 里用本地路径直读（不走缓存）：
-agile template list --registry /path/to/agile-templates
-agile init project demo --template <你的模板> --registry /path/to/agile-templates
+```
+
+在 workspace 里用本地路径直读（不走缓存）：把 `.agile/settings.json` 的 `templates.registry` 临时指向本地目录即可。
+
+```json
+{
+  "templates": {
+    "registry": "/path/to/agile-templates"
+  }
+}
+```
+
+```bash
+agile template list
+agile init project demo --template <你的模板>
 ```
 
 ::: warning
-`--registry` 传**绝对路径**（或相对于运行目录的路径）；相对路径会按 CLI 工作目录解析。
+`templates.registry` 指向**本地目录**时直接读取、不走缓存；调试完记得把该键改回原地址。
 :::
 
 ## CI
 
-仓库 Check workflow 自动执行 `scripts/check.mjs` 与 `agile template check`（CLI 发版后启用）双重校验，PR/push 时拦截不一致的 registry。
+仓库 Check workflow 自动执行 `scripts/check.mjs`，PR/push 时拦截不一致的 registry；CLI 侧 `init project` 加载注册中心时同样校验（issues 非空即拒绝生成）。

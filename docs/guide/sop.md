@@ -61,19 +61,18 @@
 ## 2. 一次性架构初始化（架构师交付）
 
 ```bash
-agile init workspace                                 # 五抽屉骨架 + .agile 配置 + git 仓库
-agile repo add tech-specs <公司规范仓库 URL>          # 登记公司级规范（submodule）
-agile repo add biz-tech-docs <团队知识库仓库 URL>     # 可选：多 workspace 团队共享知识库（submodule）
-agile sync
-agile plugin install agile                           # Claude Code 插件
+agile init workspace --tech-specs <公司规范仓库 URL>   # 五抽屉骨架 + settings.json + git 仓库；一并登记公司级规范
+agile config set biz-tech-docs <团队知识库仓库 URL>    # 可选：多 workspace 团队共享知识库（也可 init 时 --biz-tech-docs）
+agile sync                                            # 拉取外部资源 + 模板缓存 + 插件
+agile plugin install agile                            # Claude Code 插件
 ```
 
 架构师一次性交付：
 
 | 交付物 | 落点 |
 |---|---|
-| 公司级技术规范 | tech-specs（外部 submodule） |
-| 团队技术知识库（多 workspace 时） | biz-tech-docs（登记为 submodule，单一事实源；单 workspace 保持普通目录）；沉淀入口 `/agile:knowledge` |
+| 公司级技术规范 | tech-specs（外部 git 仓库，目录不入库，`agile sync` 拉取） |
+| 团队技术知识库（多 workspace 时） | biz-tech-docs（登记为外部仓库，单一事实源；单 workspace 保持普通目录）；沉淀入口 `/agile:knowledge` |
 | 产品文档模板（PRD/AC/功能树/菜单树） | `biz-product-docs/templates/`（init 已内置 PRD 模板） |
 | UI / 交互规范 | `biz-product-docs/` |
 | 项目模板 | [agile-templates](/templates/overview) 注册中心 |
@@ -216,7 +215,8 @@ npm run release        # 质量门 → 自动 CHANGELOG → 建议版本号 → 
 | 现象 | 处置 |
 |---|---|
 | worktree create 报「没有首次提交」 | 先把骨架 commit 一次 |
-| sync 报分叉（ff-only 失败） | 人工确认后 pin 或 rebase，**绝不 force push** |
+| sync 报「无法快进到远端」（分叉） | 进入外部目录人工 merge/rebase 处理，**绝不 force push / reset** |
+| sync 提示「存在未提交改动，跳过更新」 | 外部目录本地改动优先——提交或 stash 后再 sync |
 | worktree 目录残留 | `agile worktree remove <分支> --force` |
 | 模板仓库不可达 | `init project` 不带 `--template` 先建空项目 |
 | 需求取消 | 保留分支至下个迭代（需求档案不丢），或补 docs-only PR 归档后删分支 |

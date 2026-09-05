@@ -40,11 +40,12 @@ CI（Validate workflow）在推送时自动校验清单；校验失败即红，�
 不想用官方市场？把 agile-plugins 仓库 fork/复制到团队私有 git，用户侧指向它即可——CLI 不绑定市场地址：
 
 ```bash
-# workspace.yaml（一次性）
-plugin:
-  marketplace: git@gitlab.corp:team/agile-plugins.git
+agile config set plugin-repo git@gitlab.corp:team/agile-plugins.git
+agile config unset plugin-repo   # 恢复内置官方源
+```
 
-# 或安装时指定
+```bash
+# 或安装时一次性指定（不写入配置）
 agile plugin install agile --marketplace git@gitlab.corp:team/agile-plugins.git
 ```
 

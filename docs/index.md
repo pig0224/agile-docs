@@ -22,17 +22,17 @@ hero:
 features:
   - icon: 🗂️
     title: 一个根、五个抽屉
-    details: 单仓工作区：公司规范（submodule）+ 技术知识库 + 产品知识库 + 项目代码 + 过程产物，目录即治理。
+    details: 单仓工作区：公司规范（外部仓库，sync 拉取不入库）+ 技术知识库 + 产品知识库 + 项目代码 + 过程产物，目录即治理。
     link: /guide/concepts
     linkText: 核心概念
   - icon: 🔄
-    title: registry 驱动同步
-    details: registry.yaml 是唯一事实源，sync 把外部仓库收敛到声明状态；worktree 创建时自动同步。
+    title: settings.json 单一配置
+    details: .agile/settings.json 一处声明外部仓库、插件依赖与模板源；sync 拉取外部资源、本地改动优先，worktree 创建时自动同步。
     link: /guide/commands#sync
     linkText: sync 命令
   - icon: 🤖
     title: MCP 双通道
-    details: 人类用命令行，AI 用 MCP——8 个工具共享同一实现，agile_sync 默认 dry-run 防误操作。
+    details: 人类用命令行，AI 用 MCP——4 个工具共享同一实现，agile_sync 默认 dry-run 防误操作。
     link: /guide/mcp
     linkText: MCP 工具
   - icon: 🧩

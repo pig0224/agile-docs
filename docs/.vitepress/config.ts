@@ -4,12 +4,12 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'FCC-Agile — 一个根，五个抽屉的研发工作区',
   description:
-    'FCC-Agile 生态官方文档：agile 工作区 CLI（git submodule 同步、worktree 开发环境、项目模板脚手架、健康检查）、Claude Code SDD/TDD 插件（15 个斜杠命令与 7 个角色 subagent）、项目模板注册中心，以及内置 MCP Server 的完整中文使用指南与开发指南。',
+    'FCC-Agile 生态官方文档：agile 工作区 CLI（.agile/settings.json 单一配置、外部资源 sync 同步、worktree 开发环境、项目模板脚手架）、Claude Code SDD/TDD 插件（15 个斜杠命令与 7 个角色 subagent）、项目模板注册中心，以及内置 MCP Server 的完整中文使用指南与开发指南。',
   base: '/agile-docs/',
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/agile-docs/logo.svg' }],
-    ['meta', { name: 'keywords', content: 'FCC-Agile, agile CLI, 工作区管理, git submodule, git worktree, 项目模板, Claude Code 插件, SDD, TDD, MCP, Model Context Protocol, 研发流程' }],
+    ['meta', { name: 'keywords', content: 'FCC-Agile, agile CLI, 工作区管理, settings.json, 外部资源同步, agile sync, git worktree, 项目模板, Claude Code 插件, SDD, TDD, MCP, Model Context Protocol, 研发流程' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'FCC-Agile 生态文档' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],

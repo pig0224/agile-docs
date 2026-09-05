@@ -236,7 +236,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 场景 | 会话出问题后归档；给 CLI/插件/规范提 issue 前整理现场 |
 | 参数 | `[主题或需求编号]` |
 | 前置 | 无（仅人工触发，模型不会自动调用） |
-| 产物 | `process-docs/<编号>/feedback-<日期>.md`：环境信息（agile version + doctor 摘要）、问题清单（现象/期望/严重级/建议归属）、原始错误摘录 |
+| 产物 | `process-docs/<编号>/feedback-<日期>.md`：环境信息（agile version + `agile sync --dry-run` / `agile plugin ls` 摘要）、问题清单（现象/期望/严重级/建议归属）、原始错误摘录 |
 | 示例 | `/agile:feedback STO-001` |
 
 ---
@@ -253,7 +253,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态）+ `README.md` 导航条目；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
 | 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012` |
 
-**运行环境**：agile workspace 内三库齐备（路径读 workspace.yaml）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用；biz-product-docs 绑定具体产品，始终随 workspace 使用。
+**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用；biz-product-docs 绑定具体产品，始终随 workspace 使用。
 
 **三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs）；说业务规则、用户看到什么 → `product`（biz-product-docs）。
 

@@ -4,7 +4,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 
 全部角色共同约束：
 
-- 产物**全中文**落盘到约定位置（抽屉路径先读 `.agile/workspace.yaml`）
+- 产物**全中文**落盘到约定位置（抽屉路径先读 `.agile/settings.json`）
 - 规范引用优先级：抽屉一（公司硬规范）> 抽屉二（团队设计）> 抽屉三（产品/UI 规范）> 当前 design.md
 - 两条红线：无 design.md 不开发；无失败测试不写实现
 
@@ -71,5 +71,5 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 | 何时委派 | 快速修复 bug（/agile:fix-bug）；定位需要根因分析的缺陷 |
 | 输入 | bug 描述 + 涉及项目 + 任务编号 |
 | 产出 | 根因（一句话）+ 证据链 + 最小修复 diff + 复现测试（Red→Green）+ 全量回归确认 + 文档登记 |
-| 诊断工具箱 | git log/blame/diff 代码考古；`agile status` 看外部仓库漂移；配置/schema/环境差异排查 |
+| 诊断工具箱 | git log/blame/diff 代码考古；`agile sync --dry-run` 看外部资源同步计划与漂移；配置/schema/环境差异排查 |
 | 原则 | 不能复现时输出「无法复现」报告与所需信息清单，禁止瞎猜；dirty 仓库先停下确认 |

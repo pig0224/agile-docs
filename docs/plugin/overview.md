@@ -52,10 +52,10 @@ agile plugin install agile
 
 插件命令不手搓 git 和文件系统，统一经 CLI/MCP：
 
-- Bash 执行 `agile status / worktree create / doctor / template list`
-- MCP 工具：`agile_task_create`（创建任务目录，**无 CLI 命令**）、`agile_sync`（默认 dry-run）、`agile_status` 等
+- Bash 执行 `agile worktree create / sync / template list / plugin ls`
+- MCP 工具：`agile_task_create`（创建任务目录，**无 CLI 命令**）、`agile_sync`（默认 dry-run）等
 
-抽屉路径不硬编码——命令先读 `.agile/workspace.yaml` 的 `paths` 段。
+抽屉路径不硬编码——命令先读 `.agile/settings.json` 的 `paths` 段。
 
 ## 典型一周
 

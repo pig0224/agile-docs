@@ -7,8 +7,6 @@
 ```bash
 # 1. 本地校验
 node scripts/check.mjs
-# 有 CLI 时更强校验：
-agile template check --registry .
 
 # 2. 提交推送
 git add -A && git commit -m "feat: add go-grpc template"
@@ -21,10 +19,10 @@ CI（Check workflow）在推送时自动跑一致性校验，registry 与目录�
 
 | 用户场景 | 生效方式 |
 |---|---|
-| `agile template list --refresh` / `agile template update` | 联网刷新缓存 → 新模板立即可见 |
-| `agile init project --template <新模板>` | 同上，直接可用 |
+| `agile template update` / `agile sync` | 联网刷新缓存 → 新模板立即可见 |
+| `agile init project --template <新模板>` | 刷新后直接可用（默认走本地缓存） |
 | 离线/失联 | 下次联网后 `agile template update` 强制刷新 |
-| 本地调试者 | `--registry <本地路径>` 直读，改完即生效 |
+| 本地调试者 | `.agile/settings.json` 的 `templates.registry` 指向本地路径直读，改完即生效 |
 
 ## 修改既有模板
 
@@ -45,4 +43,4 @@ fork 或自建仓库，满足两点即可作为模板源：
 1. 根目录有合法的 `registry.yaml`（通过四防线校验）
 2. 模板目录与登记一致
 
-用户侧改 workspace.yaml `templates.registry` 或 `--registry` 参数指向它。官方模板可定期 `git merge` 上游同步。
+用户侧改 `.agile/settings.json` 的 `templates.registry` 指向它。官方模板可定期 `git merge` 上游同步。

@@ -6,13 +6,12 @@ fcc-agile 的工作区（workspace）是一个**单一 git 仓库**，内部按�
 
 ```
 workspace/                     # 单一 git 仓库（团队）
-├── .gitmodules                # 仅外部 submodule（由 agile sync 维护）
 ├── .agile/
-│   ├── workspace.yaml         # workspace 元信息
-│   ├── registry.yaml          # 外部仓库登记处（唯一事实源）
-│   └── plugin.yaml            # 已安装插件登记
-├── tech-specs/                # 抽屉一：公司级技术规范（submodule）
-├── biz-tech-docs/             # 抽屉二：团队技术设计知识库（默认普通目录；多 workspace 团队登记为 submodule）
+│   └── settings.json          # 唯一配置（抽屉路径 / 外部仓库 / 插件 / 模板源）
+├── .gitignore                 # 忽略 .worktrees/、tech-specs/、biz-tech-docs/（外部资源不入库）
+├── .gitattributes             # 换行符统一（init workspace 生成）
+├── tech-specs/                # 抽屉一：公司级技术规范（独立 git 仓库，不入库，sync 拉取）
+├── biz-tech-docs/             # 抽屉二：团队技术设计知识库（默认普通目录；多 workspace 团队登记为外部仓库）
 ├── biz-product-docs/          # 抽屉三：产品设计知识库（普通目录）
 ├── projects/                  # 抽屉四：项目代码（普通目录，多项目平铺）
 └── process-docs/              # 抽屉五：过程产物（STO-xxx 需求档案）
@@ -33,55 +32,48 @@ workspace/                     # 单一 git 仓库（团队）
 - 跨模块变更**一个 PR 原子完成**（前后端代码 + 过程文档一起 review）
 - 发版 = workspace 仓库打 tag（可目录级 tag 独立发版）
 - 角色权限用托管平台原生的 **CODEOWNERS** 目录级 review 权限治理
-- 保留为外部 submodule 的是「团队之外维护」或「需跨 workspace 共享」的仓库，registry 登记两类：
-  - **tech-specs**：公司级规范仓库——跨团队共享、团队无写权限、需要锁版本
-  - **biz-tech-docs**（可选升级）：团队技术知识库——团队有**多个 workspace** 时登记为 submodule，保持单一事实源；单 workspace 团队保持普通目录即可（`agile repo add biz-tech-docs <url>` + `agile sync`，骨架目录自动让位）
+- **外部资源不入库**：由团队之外维护或需跨 workspace 共享的仓库不进 workspace 版本管理——目录写入 `.gitignore`，各自是独立 git 仓库，由 `agile sync` clone / 快进拉取。当前登记两类：
+  - **tech-specs**：公司级规范仓库——跨团队共享、团队无写权限
+  - **biz-tech-docs**（可选登记）：团队技术知识库——团队有**多个 workspace** 时登记为外部仓库共享，保持单一事实源；单 workspace 团队保持普通目录即可（`agile config set biz-tech-docs <url>` + `agile sync`，骨架目录自动让位）
 
-## registry.yaml：唯一事实源
+::: warning 可写工作区
+tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge` 直接落盘）。因此 sync 一律**本地优先**：有未提交改动（dirty）就跳过绝不覆盖、只 pull 不 reset、与远端分叉报人工处理。
+:::
 
-`.agile/registry.yaml` 登记全部外部仓库，sync 把磁盘状态收敛到声明状态（期望 ← 记录 ← 实际三方比对）：
+## settings.json：唯一配置
 
-```yaml
-version: 1
-repositories:
-  tech-specs:
-    url: git@gitlab.corp:specs/tech-specs.git
-    branch: main
-    pin: a1b2c3d...        # 可选：固定 commit，sync 精确 checkout
-  biz-tech-docs:           # 可选：团队知识库 submodule（多 workspace 共享单一事实源）
-    url: git@gitlab.corp:kb/tech-docs.git
-    branch: main
+`.agile/settings.json` 是工作区的唯一配置文件——抽屉路径、外部仓库、插件依赖、模板源全部在此声明：
+
+```json
+{
+  "version": 1,
+  "name": "my-workspace",
+  "created": "2026-09-01",
+  "defaultBranch": "main",
+  "paths": {
+    "techSpecs": "tech-specs",
+    "bizTechDocs": "biz-tech-docs",
+    "bizProductDocs": "biz-product-docs",
+    "projects": "projects",
+    "processDocs": "process-docs"
+  },
+  "repos": {
+    "techSpecs": { "url": "git@gitlab.corp:specs/tech-specs.git" },
+    "bizTechDocs": { "url": "git@gitlab.corp:kb/tech-docs.git" }
+  },
+  "plugins": {
+    "marketplace": "https://github.com/pig0224/agile-plugins.git",
+    "dependencies": { "agile": { "marketplace": "fcc" } }
+  },
+  "templates": {
+    "registry": "https://github.com/pig0224/agile-templates.git"
+  }
+}
 ```
 
-- key = submodule 路径（相对 workspace 根）
-- `branch`：跟踪分支（PR/发布基线）
-- `pin`：锁版本；存在时 sync 精确 checkout 到该 commit
-
-**冲突解决纪律**：registry 是声明式配置，git 冲突时**不要手工解 .gitmodules**——合并 registry 后跑 `agile sync`，其余全部自动收敛。
-
-## workspace.yaml
-
-```yaml
-version: 1
-name: my-workspace
-created: 2026-09-01
-defaultBranch: main
-paths:                       # 五个抽屉的路径（可自定义）
-  techSpecs: tech-specs
-  bizTechDocs: biz-tech-docs
-  bizProductDocs: biz-product-docs
-  projects: projects
-  processDocs: process-docs
-plugin:
-  marketplace: https://github.com/pig0224/agile-plugins.git   # 插件市场
-templates:
-  registry: https://github.com/pig0224/agile-templates.git    # 模板源
-hooks:                        # 项目钩子，match 匹配 projects/<name>
-  - match: "projects/frontend-*"
-    run: npm install
-```
-
-两个 git 源地址（插件市场/模板源）都可换成团队私有仓库——**换配置即换源，CLI 无需发版**。
+- `repos` 两键均可缺省（不登记的资源由 sync 提示 `agile config set <key> <git-url>`）；`ref` 为版本锁定预留——出现即警告「锁定暂未实现，按最新拉取」，不阻断
+- `repos.*.url`、`plugins.marketplace`、`templates.registry` 用 `agile config set/get/unset` 管理（快捷键 `tech-specs` / `biz-tech-docs` / `plugin-repo` / `template-repo`，类 npm 换源体验；分发源两键 unset 恢复内置官方源）——**换配置即换源，CLI 无需发版**
+- 旧版三 yaml（`workspace.yaml` / `registry.yaml` / `plugin.yaml`）由 `agile init workspace` 自动迁移合并进 settings.json（旧文件保留，提示人工 `git rm`）
 
 ## 过程产物（STO-xxx 需求档案）
 
@@ -106,17 +98,17 @@ hooks:                        # 项目钩子，match 匹配 projects/<name>
 
 | 时机 | 行为 |
 |---|---|
-| `agile worktree create <branch>` | 创建开发环境前自动 sync 外部仓库（失败仅警告不阻塞） |
-| 手动 `agile sync` | 幂等收敛，随时可跑 |
-| `agile doctor` | 检测漂移并报告（不自动改） |
+| `agile worktree create <branch>` | 创建开发环境前、后各自动 sync 一次（主仓拉外部资源；worktree 内独立 clone 外部仓库；失败仅警告不阻塞） |
+| 手动 `agile sync` | 幂等收敛，随时可跑；`--dry-run` 先看计划 |
+| `agile sync --dry-run` | 只输出将执行的动作，不落盘 |
 
 ## 模板缓存
 
 CLI 把模板注册中心仓库克隆到 `~/.agile/templates/<url哈希>`（用户级、跨 workspace 共享的只读副本）：
 
-- `template list` / `init project` 默认**读本地缓存**（不联网）；`--refresh` 或 `agile template update` 时才 `fetch + reset --hard` 刷新
+- `template list` / `init project` 默认**读本地缓存**（不联网）；`agile template update` 或 `agile sync` 时才 `fetch + reset` 刷新
 - 刷新时失联则降级使用本地缓存（提示 stale）
-- `--registry` 传本地目录时直接读取（开发模板时用）
+- `templates.registry` 指向本地目录时直接读取（开发模板时用，不走缓存）
 
 ## 生态三仓
 

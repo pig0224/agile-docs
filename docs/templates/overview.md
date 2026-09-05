@@ -6,12 +6,11 @@
 
 ```bash
 agile template list                     # 列出全部模板（默认读本地缓存）
-agile template list --refresh           # 联网刷新缓存后再列出
+agile template update                   # 强制刷新缓存（agile sync 也会刷新）
 agile init project <name> --template <模板名>   # 不带 --template 则创建空项目骨架（不访问注册中心）
-agile template update                   # 强制刷新缓存
 ```
 
-模板源解析优先级：`--registry` 参数 > workspace.yaml `templates.registry`（默认官方源）。
+模板源固定读 `.agile/settings.json` 的 `templates.registry`（默认官方源；`agile config set template-repo <git-url>` 可换团队私有仓库）。
 
 ## 内置模板
 
@@ -38,16 +37,19 @@ agile template update                   # 强制刷新缓存
 
 CLI 把模板仓库克隆到 `~/.agile/templates/<url哈希>`（用户级只读副本，跨 workspace 共享）：
 
-- `template list` / `init project` 默认**读本地缓存**（不联网）；`--refresh` 或 `agile template update` 才联网 `fetch + reset --hard`
+- `template list` / `init project` 默认**读本地缓存**（不联网）；`agile template update` 或 `agile sync` 才联网 `fetch + reset` 刷新
 - 失联降级：网络失败且有缓存 → 使用缓存并提示 stale
-- 本地目录直读：`--registry <本地路径>` 直接读取（开发模板时用，不走缓存）
+- 本地目录直读：`templates.registry` 指向本地目录时直接读取（开发模板时用，不走缓存）
 
 ## 私有模板源
 
-```yaml
-# workspace.yaml
-templates:
-  registry: git@gitlab.corp:team/agile-templates.git
+```json
+// .agile/settings.json
+{
+  "templates": {
+    "registry": "git@gitlab.corp:team/agile-templates.git"
+  }
+}
 ```
 
 团队可 fork 官方仓库或自建：只要根目录有 `registry.yaml` + 模板目录，即可作为模板源。
