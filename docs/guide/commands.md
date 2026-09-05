@@ -155,6 +155,7 @@ registry.yaml（外部仓库登记处）条目管理。
 ```bash
 agile repo add tech-specs git@gitlab.corp:specs/tech-specs.git
 agile repo pin tech-specs          # 锁定规范版本，sync 不再前进
+agile repo add biz-tech-docs git@gitlab.corp:kb/tech-docs.git   # 可选：团队知识库（多 workspace 共享）
 ```
 
 `repoPath` 是相对 workspace 根的路径（如 `tech-specs`），也是 submodule 路径。合法字符：字母、数字、`_ . - /`；不允许绝对路径、`..`、位于 `.agile/` 内。

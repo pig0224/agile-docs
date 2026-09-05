@@ -24,14 +24,15 @@ agile init workspace --name my-workspace
 
 生成 `.agile/` 三个配置、五个抽屉骨架、git 仓库。此时整个工作区是一个**空的单仓 git 仓库**。
 
-## 3. 登记公司规范仓库（唯一的外部 submodule）
+## 3. 登记外部仓库（submodule）
 
 ```bash
 agile repo add tech-specs git@gitlab.corp:specs/tech-specs.git
+agile repo add biz-tech-docs git@gitlab.corp:kb/tech-docs.git   # 可选：多 workspace 团队共享知识库
 agile sync
 ```
 
-sync 会拉取 tech-specs 并挂载为 submodule。规范仓库后续更新时，`agile sync`（或创建 worktree 时的自动 sync）会拉到最新；需要锁定版本时 `agile repo pin tech-specs`。
+sync 会拉取登记的仓库并挂载为 submodule（公司级规范 tech-specs 必选；团队知识库 biz-tech-docs 可选——团队有多个 workspace 时共享同一份知识库，保持单一事实源）。仓库后续更新时，`agile sync`（或创建 worktree 时的自动 sync）会拉到最新；需要锁定版本时 `agile repo pin <名称>`。
 
 ## 4. 创建项目（模板脚手架）
 
