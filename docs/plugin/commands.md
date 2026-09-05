@@ -144,15 +144,42 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 
 ## /agile:ui —— UI 与组件库
 
+UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模式（缺省时询问用户选择）。
+
 | | |
 |---|---|
-| 用途 | 组件库全生命周期：建设（build）/ 原型（prototype）/ 维护（maintain） |
-| 场景 | 建团队组件库；为需求产出页面原型；组件升级/废弃 |
-| 参数 | `<子命令与参数>`：`build` / `prototype STO-xxx` / `maintain <变更描述>`（缺省询问） |
-| 委派 | ui-designer subagent |
-| 前置 | prototype 需求编号已存在；遵循抽屉三 UI 规范 |
-| 产物 | 组件库代码（组件+测试+CHANGELOG）；`<抽屉三>/prototypes/<编号>/page-*.md` 原型；规范缺口清单 |
+| 用途 | 组件库建设（build）/ 页面原型（prototype）/ 组件维护升级（maintain） |
+| 参数 | `<子命令与参数>`，三个模式见下 |
+| 委派 | ui-designer subagent（三个模式均委派） |
+| 通用约定 | 遵循抽屉三 UI/交互规范；组件先测试后实现（TDD）；产物全中文 |
+
+### /agile:ui build —— 组件库建设
+
+| | |
+|---|---|
+| 用途 | 从 0 到 1 建设团队组件库（设计 token、基础组件 5-8 个起步、目录结构、README、测试） |
+| 前置 | 抽屉三 UI 规范、抽屉二前端工程规范已就位（缺失时先补规范或与负责人确认） |
+| 产物 | 组件库代码（组件 + 测试 + README）；建议随后 `agile init project <name> --template vue3-vite` 或 `react-vite` 落库并登记模板注册中心 |
+| 示例 | `/agile:ui build` |
+
+### /agile:ui prototype —— 页面原型
+
+| | |
+|---|---|
+| 用途 | 为需求产出页面原型，开发前对齐页面结构与交互 |
+| 参数 | `/agile:ui prototype <STO-xxx> [页面描述]` |
+| 前置 | `process-docs/<编号>/requirement.md` 已存在（否则先执行 `/agile:prd`） |
+| 产物 | `<抽屉三>/prototypes/<编号>/page-*.md`：页面结构、交互说明、mermaid 流程、规范缺口清单 |
 | 示例 | `/agile:ui prototype STO-001` |
+
+### /agile:ui maintain —— 组件维护 / 升级
+
+| | |
+|---|---|
+| 用途 | 既有组件的升级或废弃，并盘点受影响面 |
+| 参数 | `/agile:ui maintain <变更描述>` |
+| 产物 | 组件变更：升级 = 改实现 + 更新测试 + CHANGELOG 登记；废弃 = deprecated 标记 + 迁移指引；附受影响页面清单（grep 组件库引用，列出受影响仓库与文件）与批量验证建议 |
+| 示例 | `/agile:ui maintain 日期选择器增加范围快捷项` |
 
 ---
 

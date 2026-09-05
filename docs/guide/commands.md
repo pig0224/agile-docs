@@ -160,6 +160,8 @@ agile repo add biz-tech-docs git@gitlab.corp:kb/tech-docs.git   # 可选：团�
 
 `repoPath` 是相对 workspace 根的路径（如 `tech-specs`），也是 submodule 路径。合法字符：字母、数字、`_ . - /`；不允许绝对路径、`..`、位于 `.agile/` 内。
 
+**`pin` / `unpin` / `set-url` 语义**：`pin` 后 `agile sync` 不再前进到分支最新，始终精确 checkout 到 pin 的 commit——团队锁定规范版本（如冻结某版 tech-specs）时使用；`unpin` 恢复跟随分支。`set-url` 一次修正三处（registry.yaml、`.gitmodules`、本地 submodule 的 `origin`），**无需删除重建 submodule**。
+
 ---
 
 ## config
