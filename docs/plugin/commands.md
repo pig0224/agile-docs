@@ -105,7 +105,7 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 参数 | `<需求编号> [前端项目名]` |
 | 委派 | frontend-dev subagent（分批） |
 | 前置 | design.md 已填充（红线）；menu-tree/feature-tree 确定页面范围；工作区干净 |
-| 产物 | 分层代码 + 组件测试；浏览器验证记录；implementation-fe.md 更新 |
+| 产物 | 分层代码 + 组件测试；浏览器验证记录（关键路径固化项目 `e2e/` 目录，Playwright）；implementation-fe.md 更新 |
 | 示例 | `/agile:frontend STO-001 frontend-web` |
 
 每层都 TDD；浏览器验证走查关键路径对照 AC。
@@ -121,7 +121,7 @@ Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 参数 | `<需求编号> [--only P0] [--repo 仓库路径]` |
 | 委派 | test-engineer subagent |
 | 前置 | implementation-be/-fe.md 有已完成任务；gen-test.md 缺失时现场生成精简清单（报告注明） |
-| 产物 | `process-docs/<编号>/run-test.md`：范围/环境/逐案例结果表/失败清单/通过率/结论（通过/有条件通过/不通过） |
+| 产物 | `process-docs/<编号>/run-test.md`：范围/环境/逐案例结果表/失败清单/通过率/结论（通过/有条件通过/不通过）；关键截图归档 `assets/` 子目录（运行产物不提交 git） |
 | 示例 | `/agile:run-test STO-001` |
 
 **诚实原则**：没执行的标「未执行」，禁止推断填「通过」；测试命令与原始输出摘录写入报告。

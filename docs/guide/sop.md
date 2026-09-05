@@ -50,6 +50,14 @@
 
 使用 Claude Code 插件（`/agile:xxx` 命令 + agile agent）辅助开发。红线：**AI 不执行 git add**（人工审阅后自行 add）；add 后 AI 可汇总 commit（commit 前确认全部暂存）；**AI 不 push、不发版**。commit message 由 AI 按 Conventional Commits 起草、人工确认。
 
+**建议配合使用的工具**（可选增强，非流程强制，安装见各自仓库）：
+
+| 工具 | 类型 | 地址 | 建议配合场景 |
+|---|---|---|---|
+| ui-ux-pro-max | Claude Code skill | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | UI/UX 设计辅助——`/agile:ui` 原型与前端视觉实现 |
+| Playwright MCP | MCP Server | [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | AI 直接驱动浏览器——配合前端浏览器验证与 e2e（e2e 主工具即 Playwright） |
+| Chrome DevTools MCP | MCP Server | [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 浏览器调试（控制台/网络/性能）——配合问题定位 |
+
 ## 2. 一次性架构初始化（架构师交付）
 
 ```bash
@@ -149,6 +157,8 @@ agile plugin install agile                           # Claude Code 插件
 | release.md | 负责人 | 发布记录（如涉及发版） | 发布期才写 |
 
 单端需求：用不到的角色文件写一行「本需求无此端改动」；轻量通道（§4）的豁免文档统一填一行「本变更走轻量通道，此文档不适用」。
+
+**测试脚本与产物归属**：固化 e2e 脚本入项目 `e2e/`（长期资产，随页面同 PR 演进，供 /agile:run-test 与 stage 冒烟复用；**默认不进 PR CI 门禁**——e2e 依赖浏览器与环境，flaky 且慢，各项目可选跑关键路径冒烟子集）；临时验证/复现脚本放 `process-docs/<编号>/scripts/`，**严禁散落在 projects/ 下的项目内**；运行产物（`test-results/`、`playwright-report/`、截图、trace）一律 .gitignore 不提交；报告引用的关键截图归档 `process-docs/<编号>/assets/`。e2e 主要测试工具 **Playwright**，辅助调试 **Chrome DevTools**；项目尚无测试工具时建议引入 Playwright（经负责人确认）。
 
 ## 7. Git 纪律（全员红线）
 
