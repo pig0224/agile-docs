@@ -49,7 +49,6 @@ tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge`
   "version": 1,
   "name": "my-workspace",
   "created": "2026-09-01",
-  "defaultBranch": "main",
   "paths": {
     "techSpecs": "tech-specs",
     "bizTechDocs": "biz-tech-docs",
@@ -92,7 +91,7 @@ tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge`
 
 > **文件级隔离**：前后端并行开发（同一需求分支）时各写各的角色文件，git 合并零冲突。团队协作详见[团队协作 SOP](/guide/sop)。
 
-目录由 MCP 工具 `agile_task_create` 生成（无 CLI 命令——流程能力归插件）。
+目录无 CLI 命令——由创建它的插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建（幂等：已存在的文件不覆盖）。
 
 ## 自动同步
 
@@ -114,7 +113,7 @@ CLI 把模板注册中心仓库克隆到 `~/.agile/templates/<url哈希>`（用�
 
 | 仓库 | 分发 | 职责 |
 |---|---|---|
-| [agile-cli](https://github.com/pig0224/agile-cli) | npm（`fcc-agile-cli`） | CLI 本体 + MCP Server |
+| [agile-cli](https://github.com/pig0224/agile-cli) | npm（`fcc-agile-cli`） | CLI 本体 |
 | [agile-plugins](https://github.com/pig0224/agile-plugins) | git | Claude Code 插件市场 |
 | [agile-templates](https://github.com/pig0224/agile-templates) | git | 项目模板注册中心 |
 

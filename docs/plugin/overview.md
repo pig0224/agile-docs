@@ -48,12 +48,13 @@ agile plugin install agile
 
 **分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。个别命令（`/agile:knowledge`、`/agile:review`、`/agile:release`）因素材在主会话中，由命令文件显式声明例外、主会话直接执行。
 
-## 与 CLI / MCP 的协作
+## 与 CLI 的协作
 
-插件命令不手搓 git 和文件系统，统一经 CLI/MCP：
+插件命令不手搓 git 和文件系统，外部资源操作统一经 CLI（CLI 是插件的硬依赖）：
 
-- Bash 执行 `agile worktree create / sync / template list / plugin ls`
-- MCP 工具：`agile_task_create`（创建任务目录，**无 CLI 命令**）、`agile_sync`（默认 dry-run）等
+- Bash 执行 `agile worktree create / sync / config / template list / plugin ls`
+
+任务目录（`process-docs/<编号>/` 七文件）由创建它的命令按 sdd-tdd-method SKILL **附录 A 模板**直接创建（幂等，无 CLI 依赖）。
 
 抽屉路径不硬编码——命令先读 `.agile/settings.json` 的 `paths` 段。
 

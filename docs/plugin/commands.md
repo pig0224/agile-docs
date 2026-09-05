@@ -41,7 +41,7 @@ Agile 插件的 15 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 场景 | prd 完成后、进入设计前——为开发准备过程目录；**轻量通道（无 PRD 产物）时以一句话需求轻量创建**（STO 轻量 / OPS 的目录入口） |
 | 参数 | `<需求编号> [一句话需求]`（缺省列出 process-docs 现有编号供选择） |
 | 前置 | 完整同步需 `/agile:prd` 已产出；轻量形态无前置 |
-| 产物 | 调 MCP `agile_task_create` 创建任务目录（7 个 .md）。完整：PRD+AC 并入 `requirement.md`，功能树/菜单树复制（抽屉三原件保留）；轻量：`requirement.md` 落一句话需求 + 1–2 条 AC（头部轻量标记）、`gen-test.md` 填豁免行 |
+| 产物 | 按 SKILL 附录 A 模板直接创建任务目录（7 个 .md，幂等）。完整：PRD+AC 并入 `requirement.md`，功能树/菜单树复制（抽屉三原件保留）；轻量：`requirement.md` 落一句话需求 + 1–2 条 AC（头部轻量标记）、`gen-test.md` 填豁免行 |
 | 示例 | `/agile:sync-req STO-001`；轻量 `/agile:sync-req STO-013 导出按钮增加批量模式` |
 
 校验：完整同步 `requirement.md` 中 AC 至少 1 条，否则警告回到 `/agile:prd`。requirement 头部轻量标记使 `/agile:architect` 等命令自动按轻量深度执行。

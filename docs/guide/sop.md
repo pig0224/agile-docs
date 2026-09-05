@@ -117,7 +117,7 @@ agile plugin install agile                            # Claude Code 插件
 
 > **验收反馈挂靠原需求**：产品按 AC 验收提出的文案/样式调整，直接在原 STO 分支上修、结论记 review.md，随原需求合并——不另开编号；仅独立提出的变更才开新号。
 
-目录统一 `process-docs/<编号>/`（`agile_task_create` 标准七文件，结构不变）。**目录创建（谁建 process-docs）**：完整流程由 `/agile:sync-req` 创建；轻量通道不走 `/agile:prd`——STO 轻量 / OPS 用 `/agile:sync-req <编号> <一句话需求>` **轻量形态**创建（requirement 按下表填法 + 头部轻量标记），BUG 由 `/agile:fix-bug` 创建（无编号时顺延 BUG-xxx 并轻量初始化）。requirement.md 头部的轻量标记使 `/agile:architect` 等命令自动按轻量深度执行（design.md 三五行简述）。填写降级：
+目录统一 `process-docs/<编号>/`（按 sdd-tdd-method SKILL 附录 A 模板的七文件，结构不变）。**目录创建（谁建 process-docs）**：完整流程由 `/agile:sync-req` 创建；轻量通道不走 `/agile:prd`——STO 轻量 / OPS 用 `/agile:sync-req <编号> <一句话需求>` **轻量形态**创建（requirement 按下表填法 + 头部轻量标记），BUG 由 `/agile:fix-bug` 创建（无编号时顺延 BUG-xxx 并轻量初始化）。requirement.md 头部的轻量标记使 `/agile:architect` 等命令自动按轻量深度执行（design.md 三五行简述）。填写降级：
 
 | 文件 | 轻量通道填法 |
 |---|---|

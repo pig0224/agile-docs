@@ -13,11 +13,10 @@
 | [template](#template) | 项目模板缓存管理 |
 | [plugin](#plugin) | Claude Code 插件管理 |
 | [update](#update) | CLI 自更新 |
-| [mcp](#mcp) | 启动 MCP Server |
 
 > 另有辅助命令 `agile version`（等价 `agile --version` / `agile -v`）。
 
-> 任务目录（STO-xxx，7 个 .md）**没有 CLI 命令**——它是流程能力，仅通过 MCP 工具 `agile_task_create` 暴露，由 Claude Code 插件命令（/agile:sync-req 等）调用。见 [MCP 工具](/guide/mcp)。
+> 无 MCP Server——AI（Claude Code 等）经 Bash 直调上述 CLI 命令。任务目录（STO-xxx，7 个 .md）由 Claude Code 插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建。
 
 ---
 
@@ -30,7 +29,7 @@
 初始化工作区：生成唯一配置 `.agile/settings.json`、五个抽屉骨架（含 README）、git 仓库、`.gitignore` 与 `.gitattributes`。**幂等**——重复执行不会覆盖已有配置与文档。
 
 ```
-agile init workspace [--name <名称>] [--default-branch <分支>]
+agile init workspace [--name <名称>]
                      [--marketplace <url>] [--template-registry <url>]
                      [--tech-specs <url>] [--biz-tech-docs <url>]
 ```
@@ -38,7 +37,6 @@ agile init workspace [--name <名称>] [--default-branch <分支>]
 | 参数 | 默认 | 说明 |
 |---|---|---|
 | `--name` | 当前目录名 | workspace 名称，写入 settings.json |
-| `--default-branch` | `main` | workspace 仓库默认分支 |
 | `--marketplace` | 官方插件市场地址 | 插件市场 git 地址，写入 `plugins.marketplace` |
 | `--template-registry` | 官方模板源地址 | 模板注册中心 git 地址，写入 `templates.registry` |
 | `--tech-specs` | 不登记 | 公司级规范外部仓库 git 地址（也可之后 `agile config set tech-specs <url>`） |
@@ -292,14 +290,4 @@ agile update              # 更新 CLI
 
 ```
 agile version        # 等价 agile --version / agile -v
-```
-
----
-
-## mcp
-
-启动 stdio MCP Server，暴露 4 个工具供 AI 客户端调用。通常不直接运行——由 `.mcp.json` 或插件自动拉起。详见 [MCP 工具](/guide/mcp)。
-
-```
-agile mcp
 ```

@@ -31,10 +31,10 @@ features:
     link: /guide/commands#sync
     linkText: sync 命令
   - icon: 🤖
-    title: MCP 双通道
-    details: 人类用命令行，AI 用 MCP——4 个工具共享同一实现，agile_sync 默认 dry-run 防误操作。
-    link: /guide/mcp
-    linkText: MCP 工具
+    title: AI 直调 CLI
+    details: 无 MCP Server——AI（Claude Code 等）经 Bash 直调 agile CLI，与人共用同一入口；插件命令开箱即用。
+    link: /guide/commands
+    linkText: 命令参考
   - icon: 🧩
     title: SDD / TDD 插件
     details: 15 个斜杠命令 + 7 个角色 subagent：PRD → 设计 → 测试先行 → TDD 开发 → 验收门禁 → 发布闭环。
