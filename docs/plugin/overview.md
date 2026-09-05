@@ -44,6 +44,8 @@ agile plugin install agile
 
 轻量通道豁免：STO 轻量 / BUG-xxx / OPS-xxx（判定与填写规范见[团队协作 SOP](/guide/sop)）下 SDD 红线放宽——design.md 可由根因分析（BUG）或三五行方案简述替代；TDD 红线**不豁免**。
 
+**分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。
+
 ## 与 CLI / MCP 的协作
 
 插件命令不手搓 git 和文件系统，统一经 CLI/MCP：
