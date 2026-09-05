@@ -230,6 +230,8 @@ workspace 仓库必须有首次提交（unborn HEAD 时 create 会给出明确�
 |---|---|---|
 | `list` | `agile template list [--registry <url>] [--refresh] [--json]` | 列出全部模板（默认读本地缓存，`--refresh` 联网刷新） |
 | `update` | `agile template update [--registry <url>]` | 强制刷新模板缓存 |
+| `clean` | `agile template clean [--registry <url>] [--all]` | 删除模板缓存副本（缺省当前源的缓存，`--all` 清全部；下次使用自动重新克隆） |
+| `unregister` | `agile template unregister` | 取消注册模板仓库（移除 workspace.yaml 的 `templates.registry` 自定义配置，回退官方默认源；本地缓存不受影响） |
 | `check` | `agile template check [--registry <url>]` | 注册中心一致性校验（CI 用） |
 
 模板缓存位于 `~/.agile/templates/<url哈希>`（用户级，跨 workspace 共享）；失联时降级使用本地缓存。本地路径也可以直接作为 `--registry`（开发模板时用）。
@@ -285,6 +287,8 @@ Claude Code 插件管理。插件市场是独立 git 仓库（新增插件无需
 |---|---|---|
 | `install` | `agile plugin install [name] [--marketplace <url>] [--marketplace-name <名称>]` | 从市场安装（默认 `agile`） |
 | `update` | `agile plugin update [name] [--marketplace <url>] [--marketplace-name <名称>]` | 更新到市场最新版本：刷新市场克隆 → 强制重装 |
+| `uninstall` | `agile plugin uninstall [name] [--marketplace-name <名称>]` | 卸载插件并移除 workspace 登记（缺省 `agile`） |
+| `marketplace remove` | `agile plugin marketplace remove [名称]` | 取消注册插件市场仓库（Claude Code 层移除；缺省 `fcc`。重新 install 会自动再注册） |
 | `enable` | `agile plugin enable [name]` | 启用（缺省 `agile`） |
 | `disable` | `agile plugin disable [name]` | 禁用（缺省 `agile`） |
 | `list` | `agile plugin list` | 列出已登记插件与市场地址 |
