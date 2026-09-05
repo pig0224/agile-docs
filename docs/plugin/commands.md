@@ -1,6 +1,6 @@
 # 插件命令详解
 
-Agile 插件的 12 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使用场景 / 参数 / 前置条件 / 产物 / 示例**。
+Agile 插件的 13 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使用场景 / 参数 / 前置条件 / 产物 / 示例**。
 
 流程主线位置标注：`①prd → ②sync-req → ③architect → ④gen-test → ⑤backend|frontend → ⑥run-test`。
 
@@ -206,3 +206,25 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 前置 | 无（仅人工触发，模型不会自动调用） |
 | 产物 | `process-docs/<编号>/feedback-<日期>.md`：环境信息（agile version + doctor 摘要）、问题清单（现象/期望/严重级/建议归属）、原始错误摘录 |
 | 示例 | `/agile:feedback STO-001` |
+
+---
+
+## /agile:knowledge —— 知识库建设与沉淀
+
+| | |
+|---|---|
+| 用途 | `build` 辅助建设知识库（判库 → 调库调研 → 提纲 → 落盘骨架）；`capture` 从会话、过程产物、历史材料沉淀长期结论 |
+| 场景 | build：新团队/新技术栈初始化知识库；capture：会话形成的技术决策当场沉淀、design.md 中长期结论入库、公司规范缺失的提案 |
+| 参数 | `build <建设提示词>` 或 `capture <主题> [--from <编号/路径/项目>]`，均可选 `--to team/product/tech`；无参显示库概况 |
+| 委派 | 无（**分工红线显式例外**：素材在主会话对话历史中，主会话直接执行） |
+| 前置 | 无（需在 agile workspace 或知识库仓库内执行；落点经三问判别法推断后向用户确认） |
+| 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态）+ `README.md` 导航条目；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
+| 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012` |
+
+**运行环境**：agile workspace 内三库齐备（路径读 workspace.yaml）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用；biz-product-docs 绑定具体产品，始终随 workspace 使用。
+
+**三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs）；说业务规则、用户看到什么 → `product`（biz-product-docs）。
+
+**划分约定**（tech / team 库）：按「通用 + 技术栈」两维组织——通用领域（`architecture/`、`engineering/`）跨技术栈共享，技术栈领域（`frameworks/go-zero/`、`frameworks/springboot/` 等）每栈一目录；**调取时按当前项目技术栈选择性引用**（识别优先级：提示词 > 扫 projects 标志文件 > 询问），其他技术栈领域不混入——go-zero 工作区不读 springboot 领域，反之亦然。
+
+**通用硬规则**：知识禁止单文件堆积；**任何新文档必须登记 README 导航**（build 与 capture 一致）；知识过期不删文件，改「状态」字段移入导航归档分组；跨会话历史不可检索——旧材料需 `--from` 指认。

@@ -4,7 +4,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'FCC-Agile — 一个根，五个抽屉的研发工作区',
   description:
-    'FCC-Agile 生态官方文档：agile 工作区 CLI（git submodule 同步、worktree 开发环境、项目模板脚手架、健康检查）、Claude Code SDD/TDD 插件（12 个斜杠命令与 7 个角色 subagent）、项目模板注册中心，以及内置 MCP Server 的完整中文使用指南与开发指南。',
+    'FCC-Agile 生态官方文档：agile 工作区 CLI（git submodule 同步、worktree 开发环境、项目模板脚手架、健康检查）、Claude Code SDD/TDD 插件（13 个斜杠命令与 7 个角色 subagent）、项目模板注册中心，以及内置 MCP Server 的完整中文使用指南与开发指南。',
   base: '/agile-docs/',
 
   head: [

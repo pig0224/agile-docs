@@ -73,7 +73,7 @@ agile plugin install agile                           # Claude Code 插件
 | 交付物 | 落点 |
 |---|---|
 | 公司级技术规范 | tech-specs（外部 submodule） |
-| 团队技术知识库（多 workspace 时） | biz-tech-docs（登记为 submodule，单一事实源；单 workspace 保持普通目录） |
+| 团队技术知识库（多 workspace 时） | biz-tech-docs（登记为 submodule，单一事实源；单 workspace 保持普通目录）；沉淀入口 `/agile:knowledge` |
 | 产品文档模板（PRD/AC/功能树/菜单树） | `biz-product-docs/templates/`（init 已内置 PRD 模板） |
 | UI / 交互规范 | `biz-product-docs/` |
 | 项目模板 | [agile-templates](/templates/overview) 注册中心 |

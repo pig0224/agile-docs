@@ -2,7 +2,7 @@
 
 Agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓库 [agile-plugins](https://github.com/pig0224/agile-plugins)），以 **SDD（先设计后开发）/ TDD（测试驱动开发）** 方法论组织团队研发流程：
 
-- **12 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
+- **13 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
 - **7 个角色 subagent**——具体执行（[角色说明](/plugin/roles)）
 - **1 个方法论 skill**——共享知识（命令按需加载）
 
@@ -31,7 +31,7 @@ agile plugin install agile
   → review.md / release.md 归档闭环
 ```
 
-辅助命令随时可用：`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
+辅助命令随时可用：`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
 
 前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），git 合并零冲突——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop)。
 
