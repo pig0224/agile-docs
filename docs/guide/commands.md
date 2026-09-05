@@ -284,6 +284,7 @@ Claude Code 插件管理。插件市场是独立 git 仓库（新增插件无需
 | 子命令 | 语法 | 说明 |
 |---|---|---|
 | `install` | `agile plugin install [name] [--marketplace <url>] [--marketplace-name <名称>]` | 从市场安装（默认 `agile`） |
+| `update` | `agile plugin update [name] [--marketplace <url>] [--marketplace-name <名称>]` | 更新到市场最新版本：刷新市场克隆 → 强制重装 |
 | `enable` | `agile plugin enable [name]` | 启用（缺省 `agile`） |
 | `disable` | `agile plugin disable [name]` | 禁用（缺省 `agile`） |
 | `list` | `agile plugin list` | 列出已登记插件与市场地址 |
@@ -291,28 +292,24 @@ Claude Code 插件管理。插件市场是独立 git 仓库（新增插件无需
 ```bash
 agile plugin install agile                                  # 官方市场
 agile plugin install agile --marketplace git@corp:team/plugins.git   # 私有市场
+agile plugin update agile                                   # 更新到市场最新版本
 ```
 
 安装 = `claude plugin marketplace add <市场地址>` + `claude plugin install <name>@<市场名>`，重启 Claude Code 会话后 `/agile:xxx` 命令可用。
+
+更新（`plugin update`）= `marketplace add`（幂等注册）→ `marketplace update`（拉取市场仓库最新——`add` 对已注册市场不拉新，此步必须）→ uninstall + install 强制重装（git 分发无版本号，`claude plugin update` 会因 version 未变跳过）。更新后重启 Claude Code 会话生效。
 
 ---
 
 ## update
 
-自更新。
+自更新 CLI（npm）。
 
 ```
-agile update              # 默认：更新 CLI
-agile update --plugin     # 只更新插件
-agile update --all        # 全部更新
+agile update              # 更新 CLI
 ```
 
-| 参数 | 说明 |
-|---|---|
-| `--plugin` | 只更新插件（重新安装拉取插件市场最新版本） |
-| `--all` | 同时更新 CLI 与插件 |
-
-缺省两者都执行。
+插件更新走 `agile plugin update`（见 plugin 节）。
 
 ---
 

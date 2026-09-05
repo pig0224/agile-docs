@@ -22,7 +22,7 @@ CI（Validate workflow）在推送时自动校验清单；校验失败即红，�
 | 用户场景 | 拿到新版本的方式 |
 |---|---|
 | 新安装 | `agile plugin install <name>`（安装时拉取市场最新） |
-| 已安装 | `agile update --plugin`（重新安装刷新）或 Claude Code 内更新插件 |
+| 已安装 | `agile plugin update`（刷新市场 → 强制重装）或 Claude Code 内更新插件 |
 | 本地市场调试者 | 重启会话（本地目录直读，热加载） |
 
 ::: tip

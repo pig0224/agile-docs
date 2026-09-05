@@ -92,8 +92,8 @@ agile status                # 外部仓库状态
 ## 9. 升级
 
 ```bash
-agile update                # 更新 CLI（npm），--plugin 更新插件，--all 全部
-agile update --plugin       # 重装插件（拉市场最新）
+agile update                # 更新 CLI（npm）
+agile plugin update         # 更新插件（刷新市场 → 强制重装，重启会话生效）
 ```
 
 ## 完整流程图
