@@ -2,7 +2,7 @@
 
 Agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓库 [agile-plugins](https://github.com/pig0224/agile-plugins)），以 **SDD（先设计后开发）/ TDD（测试驱动开发）** 方法论组织团队研发流程：
 
-- **13 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
+- **15 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
 - **7 个角色 subagent**——具体执行（[角色说明](/plugin/roles)）
 - **1 个方法论 skill**——共享知识（命令按需加载）
 
@@ -28,6 +28,8 @@ agile plugin install agile
   → /agile:gen-test      Stage 1：测试案例文档（先于实现）
   → /agile:backend | /agile:frontend    TDD 开发（Red → Green → Refactor）
   → /agile:run-test      Stage 2：测试执行与验收报告
+  → /agile:review        验收汇总与门禁（可交付 PR 判定）
+  → 交付 PR → /agile:release   发布前置检查与记录（发布动作人工）
   → review.md / release.md 归档闭环
 ```
 
@@ -44,7 +46,7 @@ agile plugin install agile
 
 轻量通道豁免：STO 轻量 / BUG-xxx / OPS-xxx（判定与填写规范见[团队协作 SOP](/guide/sop)）下 SDD 红线放宽——design.md 可由根因分析（BUG）或三五行方案简述替代；TDD 红线**不豁免**。
 
-**分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。
+**分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。个别命令（`/agile:knowledge`、`/agile:review`、`/agile:release`）因素材在主会话中，由命令文件显式声明例外、主会话直接执行。
 
 ## 与 CLI / MCP 的协作
 

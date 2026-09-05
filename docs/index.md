@@ -37,7 +37,7 @@ features:
     linkText: MCP 工具
   - icon: 🧩
     title: SDD / TDD 插件
-    details: 13 个斜杠命令 + 7 个角色 subagent：PRD → 设计 → 测试先行 → TDD 开发 → 验收闭环。
+    details: 15 个斜杠命令 + 7 个角色 subagent：PRD → 设计 → 测试先行 → TDD 开发 → 验收门禁 → 发布闭环。
     link: /plugin/overview
     linkText: 插件概览
   - icon: 📦
