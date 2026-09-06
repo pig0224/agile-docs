@@ -12,6 +12,8 @@ agile init project <name> --template <模板名>   # 不带 --template 则创建
 
 模板源固定读 `.agile/settings.json` 的 `templates.registry`（默认官方源；`agile config set template-repo <git-url>` 可换团队私有仓库）。
 
+AI 陪同建项目（项目约定问答定制 + 团队库匹配确认 + 辅助开发能力配置）用插件命令 `/agile:init`，见[插件命令详解](/plugin/commands)。
+
 ## 内置模板
 
 | 模板名 | 说明 | 技术栈 |
@@ -22,7 +24,7 @@ agile init project <name> --template <模板名>   # 不带 --template 则创建
 | `java-springboot` | Spring Boot 3（Java 21, Maven）服务 | Java / Spring Boot |
 | `node-lib` | Node.js（TypeScript）库项目 | TypeScript / Node |
 
-每个模板自带可运行测试（TDD 起点）与写明运行/测试命令的 README——CLI 与插件依赖此约定执行测试。
+每个模板自带可运行测试（TDD 起点）与写明运行/测试命令的 README——CLI 与插件依赖此约定执行测试。每模板还内置**项目级规范骨架三文件**（`CLAUDE.md` / `docs/conventions.md` / `docs/architecture.md`），`init project` 生成项目时随模板带出，作为项目级规范入口；开发新模板可用插件命令 `/agile:add-template`。
 
 ## 占位符
 

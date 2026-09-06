@@ -29,10 +29,10 @@ templates:
 
 ## 新增一个模板：两步
 
-1. 新建目录 `<模板名>/`，放入项目骨架（含构建特征文件，见下）
+1. 新建目录 `<模板名>/`，放入项目骨架（含构建特征文件，见下）+ **项目级规范骨架三文件**（见「模板内容约定」）
 2. 在 `registry.yaml` 的 `templates:` 下登记
 
-提交推送后，用户侧 `agile init project <name> --template <模板名>` 即可用。
+提交推送后，用户侧 `agile init project <name> --template <模板名>` 即可用。AI 陪同建设模板（设计问答 + 骨架生成 + 校验 + 冒烟）用插件命令 `/agile:add-template`。
 
 ## 命名规范（防冲突四防线）
 
@@ -53,6 +53,11 @@ templates:
 - **占位符**：`{{name}}`（项目名）、`{{safeName}}`（小写安全段，Java 包目录如 `src/main/java/com/example/{{safeName}}/` 用目录名占位也会替换）
 - **README**：写清运行/测试命令（CLI 与插件按约定执行测试）
 - **至少一个可运行测试**（TDD 起点）
+- **项目级规范骨架三文件**（缺一不可，`scripts/check.mjs` 强制校验）：
+  - `CLAUDE.md`：项目级入口索引（技术栈 / 命令速查 / 硬规则 / 规范索引）；团队规范段指向 `../../biz-tech-docs/` 并带**「⛔ 栈领域待人工确认」**标记——插件 AI 首次在项目工作时列出 `frameworks/` 实际目录，经人工确认后改写为具体领域
+  - `docs/conventions.md`：目录 / 命名 / 测试默认值（如实描述模板初始骨架 + 增长建议）+ 团队补充约定节
+  - `docs/architecture.md`：ADR 骨架（背景 / 决策 / 后果三段式）+ ADR-001 初始条目
+  - `init project` 生成项目时三文件随模板带出，作为项目级规范入口
 - 模板内不要提交 `.git/`、锁文件按团队策略
 
 ## 本地开发与调试
@@ -83,4 +88,4 @@ agile init project demo --template <你的模板>
 
 ## CI
 
-仓库 Check workflow 自动执行 `scripts/check.mjs`，PR/push 时拦截不一致的 registry；CLI 侧 `init project` 加载注册中心时同样校验（issues 非空即拒绝生成）。
+仓库 Check workflow 自动执行 `scripts/check.mjs`，PR/push 时拦截不一致的 registry 与缺失的项目级规范骨架文件；CLI 侧 `init project` 加载注册中心时同样校验（issues 非空即拒绝生成）。

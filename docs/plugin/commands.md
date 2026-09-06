@@ -1,6 +1,6 @@
 # 插件命令详解
 
-Agile 插件的 15 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使用场景 / 参数 / 前置条件 / 产物 / 示例**。
+Agile 插件的 17 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使用场景 / 参数 / 前置条件 / 产物 / 示例**。
 
 流程主线位置标注：`①prd → ②sync-req → ③architect → ④gen-test → ⑤backend|frontend → ⑥run-test → ⑦review → ⑧release`。
 
@@ -212,6 +212,38 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 参数 | `/agile:ui maintain <变更描述>` |
 | 产物 | 组件变更：升级 = 改实现 + 更新测试 + CHANGELOG 登记；废弃 = deprecated 标记 + 迁移指引；附受影响页面清单（grep 组件库引用，列出受影响仓库与文件）与批量验证建议 |
 | 示例 | `/agile:ui maintain 日期选择器增加范围快捷项` |
+
+---
+
+## /agile:init —— AI 陪同初始化项目
+
+| | |
+|---|---|
+| 用途 | AI 陪同建项目：模板选择与骨架生成、项目约定问答定制（目录 / 命名 / 测试 / 依赖选型）、团队库匹配人工确认、辅助开发能力配置（环境检测 + 框架 AI 能力包推荐） |
+| 场景 | 新项目启动（"帮我建个 xx 项目"）；想让项目 CLAUDE.md / docs 约定与实际情况一致 |
+| 参数 | 无——**自动感知**：扫 `projects/` 检测 CLI 刚创建的未定制项目（CLAUDE.md 规范段带「⛔ 待人工确认」标记，技术栈节自带来源模板）则续接定制；无候选则进入全新创建交互（选模板 + 定名） |
+| 委派 | 无（主会话执行——问答素材在主会话上下文中，分工红线显式例外） |
+| 前置 | agile workspace 内 |
+| 产物 | `projects/<name>/`（CLI 生成 + 问答改写）：conventions.md 定制版；CLAUDE.md 团队规范段确认改写 + 新增「环境要求」「辅助开发配置」节 |
+| 示例 | `/agile:init`（先 `agile init project` 也可——命令会感知到刚创建的项目并续接） |
+
+要点：**默认值兜底**——开头一问「定制 or 全默认」（推荐全默认），全默认则产物与纯 CLI init 完全一致；**分级落盘**——只读环境检测直接做，MCP / design.md / llms.txt 确认后 AI 写入（MCP 进项目 `.mcp.json`），框架 CLI 确认后自动安装（优先 devDep + `npx`），**skills 安装与权限白名单只输出建议清单、人工自己配**。框架 AI 能力包推荐来源按序：团队库（仅团队库匹配已确认栈领域时）→ 命令内置映射（Vue / Vite / React / Node 官方 llms.txt、Ant Design AI 能力包等，2026-09 核实可达）→ 现场检索（WebSearch 核实存在才推荐，防幻觉包名）。定制不回写模板；团队库未确认前只引用通用领域。
+
+---
+
+## /agile:add-template —— AI 辅助建设模板
+
+| | |
+|---|---|
+| 用途 | AI 陪同一键建设 agile-templates 新模板：设计问答、骨架生成（含规范骨架三文件）、registry.yaml 登记、check.mjs 校验、init project 冒烟验证 |
+| 场景 | 团队沉淀新栈 / 新变体模板（"加一个 vue3-nuxt 模板"） |
+| 参数 | `[模板名或技术栈描述]`；无参进入交互设计 |
+| 委派 | 无（主会话执行——设计问答素材在主会话上下文中，分工红线显式例外） |
+| 前置 | 定位 agile-templates 仓库（workspace 内或独立检出） |
+| 产物 | 新模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + README + 构建特征文件 + 可运行测试）+ registry.yaml 登记 |
+| 示例 | `/agile:add-template vue3-nuxt` |
+
+要点：**占位符与 init 语义相反——`{{name}}` / `{{safeName}}` 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 六项校验全绿 + 冒烟验证（临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。
 
 ---
 
