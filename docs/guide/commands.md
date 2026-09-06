@@ -15,7 +15,7 @@
 | [update](#update) | CLI 自更新 |
 | [version](#version) | 显示版本号（等价 `--version` / `-v`） |
 
-> 无 MCP Server——AI（Claude Code 等）经 Bash 直调上述 CLI 命令。任务目录（STO-xxx，7 个 .md）由 Claude Code 插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建。
+> 无 MCP Server——AI（Claude Code 等）经 Bash 直调上述 CLI 命令。任务目录（STO-xxx，初始 7 个 .md；加上 gen-test/run-test 两份阶段产物共 9 个）由 Claude Code 插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建。
 
 ---
 
@@ -46,7 +46,7 @@ agile init workspace [--name <名称>]
 1. 写入 `.agile/settings.json`（唯一配置文件，结构见[核心概念](/guide/concepts)）
 2. 生成五抽屉骨架（各抽屉一份 README）与 `biz-product-docs/templates/PRD模板.md`
 3. `git init`（幂等，已存在则跳过）
-4. `.gitignore` **幂等追加三行**：`.worktrees/`、`tech-specs/`、`biz-tech-docs/`（外部资源不入库）
+4. `.gitignore` **幂等追加两行**：`.worktrees/`、`tech-specs/`（外部资源不入库；tech-specs 为公司级规范、天然外部仓库）。`biz-tech-docs/` 仅在登记为外部仓库时写入（`--biz-tech-docs` 或之后 `agile config set` + `agile sync` 拉取成功时自动补写）——未登记时它是 workspace 内普通目录，随仓库提交获得版本管理
 5. 生成 `.gitattributes`（换行符统一 LF，`.bat`/`.cmd` 保持 CRLF）
 
 ```bash
@@ -193,7 +193,7 @@ workspace 仓库必须有首次提交（unborn HEAD 时 create 会给出明确�
 ### 自动同步（autoSync）
 
 - **创建前**：主仓自动 sync 一次外部资源（基于同步后的状态创建）
-- **创建后**：在 worktree 内再 sync 一次——`git worktree` 只检出仓库内文件，tech-specs / biz-tech-docs 不入库，需在 worktree 内独立 clone/拉取
+- **创建后**：在 worktree 内再 sync 一次——`git worktree` 只检出仓库内文件，已登记的外部仓库（tech-specs / biz-tech-docs）不入库，需在 worktree 内独立 clone/拉取（未登记的 biz-tech-docs 是普通目录，随检出直接可用）
 - 两次 sync 失败均**仅警告不阻塞**（可进入 worktree 手动执行 `agile sync`）
 
 ```bash
@@ -227,18 +227,18 @@ Claude Code 插件管理（类 npm 心智）。插件市场是独立 git 仓库�
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `install` | `agile plugin install [name] [--marketplace <url>] [--marketplace-name <名称>]` | 从市场安装并登记依赖声明（类 npm install --save；默认 `agile`） |
-| `uninstall` | `agile plugin uninstall [name] [--marketplace-name <名称>]` | 卸载插件并移除依赖声明（缺省 `agile`） |
-| `update` | `agile plugin update [name] [--marketplace <url>] [--marketplace-name <名称>]` | 更新到市场最新：刷新市场克隆 → uninstall + install 强制重装 → 登记声明 |
+| `install` | `agile plugin install [name]` | 从市场安装并登记依赖声明（类 npm install --save；默认 `agile`） |
+| `uninstall` | `agile plugin uninstall [name]` | 卸载插件并移除依赖声明（缺省 `agile`） |
+| `update` | `agile plugin update [name]` | 更新到市场最新：刷新市场克隆 → uninstall + install 强制重装 → 登记声明 |
 | `ls` | `agile plugin ls` | 依赖声明 × 本机安装实况对照表 |
 
-- 市场地址解析：`--marketplace` 参数 > settings.json `plugins.marketplace` > 官方默认
+- 市场地址解析：settings.json `plugins.marketplace`（workspace 外用官方默认）；市场名固定 `fcc`——换源（`agile config set plugin-repo`）目标市场（如镜像）需保持 marketplace.json 的 name=`fcc`
 - workspace 外也可 install / update（仅跳过依赖声明登记）
 - 注册市场失败 / 安装失败 → 退出码 1，并给出可手动执行的命令（`claude plugin marketplace add <市场地址>` + `claude plugin install <name>@<市场名>`）
+- 异名第三方市场的插件：直接用 `claude plugin` 命令；要纳入 workspace 声明则手改 settings.json `plugins.dependencies`（`agile sync` 认声明照样补装）
 
 ```bash
 agile plugin install agile                                  # 官方市场
-agile plugin install agile --marketplace git@corp:team/plugins.git   # 私有市场
 agile plugin update agile                                   # 更新到市场最新版本
 agile plugin ls                                             # 声明与实况对照
 agile plugin uninstall agile                                # 卸载并删除声明

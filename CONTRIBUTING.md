@@ -24,7 +24,7 @@ pnpm docs:build     # 构建校验（死链/语法失败即红）
 
 ## 内容约定
 
-- **准确性高于一切**：命令参数对照 `../agile-cli/src/commands/*.ts`；MCP 参数对照 `../agile-cli/src/mcp/server.ts`；插件细节对照 `../agile-plugins/plugins/agile/`——改文档先看代码
+- **准确性高于一切**：命令参数对照 `../agile-cli/src/commands/*.ts`；插件细节对照 `../agile-plugins/plugins/agile/`——改文档先看代码
 - 新增页面必须同步 `docs/.vitepress/config.ts` 的 sidebar
 - 品牌词规范：FCC-Agile / Agile / FCC；命令语法保持小写（`agile sync`、`/agile:prd`）
 - 全站中文

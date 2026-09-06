@@ -8,10 +8,10 @@ fcc-agile 的工作区（workspace）是一个**单一 git 仓库**，内部按�
 workspace/                     # 单一 git 仓库（团队）
 ├── .agile/
 │   └── settings.json          # 唯一配置（抽屉路径 / 外部仓库 / 插件 / 模板源）
-├── .gitignore                 # 忽略 .worktrees/、tech-specs/、biz-tech-docs/（外部资源不入库）
+├── .gitignore                 # 忽略 .worktrees/、tech-specs/；biz-tech-docs 登记后由 sync 自动补写
 ├── .gitattributes             # 换行符统一（init workspace 生成）
 ├── tech-specs/                # 抽屉一：公司级技术规范（独立 git 仓库，不入库，sync 拉取）
-├── biz-tech-docs/             # 抽屉二：团队技术设计知识库（默认普通目录；多 workspace 团队登记为外部仓库）
+├── biz-tech-docs/             # 抽屉二：团队技术设计知识库（workspace 内普通目录，随仓库提交；多 workspace 团队登记为外部仓库后由 agile sync 管理、不入库）
 ├── biz-product-docs/          # 抽屉三：产品设计知识库（普通目录）
 ├── projects/                  # 抽屉四：项目代码（普通目录，多项目平铺）
 └── process-docs/              # 抽屉五：过程产物（STO-xxx 需求档案）
@@ -34,10 +34,10 @@ workspace/                     # 单一 git 仓库（团队）
 - 角色权限用托管平台原生的 **CODEOWNERS** 目录级 review 权限治理
 - **外部资源不入库**：由团队之外维护或需跨 workspace 共享的仓库不进 workspace 版本管理——目录写入 `.gitignore`，各自是独立 git 仓库，由 `agile sync` clone / 快进拉取。当前登记两类：
   - **tech-specs**：公司级规范仓库——跨团队共享、团队无写权限
-  - **biz-tech-docs**（可选登记）：团队技术知识库——团队有**多个 workspace** 时登记为外部仓库共享，保持单一事实源；单 workspace 团队保持普通目录即可（`agile config set biz-tech-docs <url>` + `agile sync`，骨架目录自动让位）
+  - **biz-tech-docs**（可选登记）：团队技术知识库——单 workspace 团队无需登记，它是 workspace 内普通目录，随仓库提交、版本管理天然具备；团队有**多个 workspace** 时登记为外部仓库共享，保持单一事实源（`agile config set biz-tech-docs <url>` + `agile sync`，骨架目录自动让位，忽略行由 sync 自动补写），此后沉淀产物的提交在库仓内人工完成
 
 ::: warning 可写工作区
-tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge` 直接落盘）。因此 sync 一律**本地优先**：有未提交改动（dirty）就跳过绝不覆盖、只 pull 不 reset、与远端分叉报人工处理。
+已登记的 tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge` 直接落盘）。因此 sync 一律**本地优先**：有未提交改动（dirty）就跳过绝不覆盖、只 pull 不 reset、与远端分叉报人工处理。
 :::
 
 ## settings.json：唯一配置

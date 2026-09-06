@@ -14,7 +14,7 @@ agile plugin install agile                            # Claude Code 插件
 | 交付物 | 落点 |
 |---|---|
 | 公司级技术规范 | tech-specs（外部 git 仓库，目录不入库，`agile sync` 拉取） |
-| 团队技术知识库（多 workspace 时） | biz-tech-docs（登记为外部仓库，单一事实源；单 workspace 保持普通目录）；沉淀入口 `/agile:knowledge` |
+| 团队技术知识库（多 workspace 时） | biz-tech-docs（登记为外部仓库，单一事实源；单 workspace 无需登记——普通目录随 workspace 仓库入库）；沉淀入口 `/agile:knowledge` |
 | 产品文档模板（PRD/AC/功能树/菜单树） | `biz-product-docs/templates/`（init 已内置 PRD 模板） |
 | UI / 交互规范 | `biz-product-docs/` |
 | 项目模板 | [agile-templates](/templates/overview) 注册中心 |
@@ -30,7 +30,7 @@ agile plugin install agile                            # Claude Code 插件
 $ agile init workspace --tech-specs git@corp:com/specs.git
 ✔ 五抽屉骨架已创建：tech-specs/ biz-tech-docs/ biz-product-docs/ projects/ process-docs/
 ✔ .agile/settings.json 已写入（techSpecs → git@corp:com/specs.git）
-✔ .gitignore 已配置：tech-specs/、biz-tech-docs/、.worktrees/ 不入库
+✔ .gitignore 已配置：tech-specs/、.worktrees/ 不入库（biz-tech-docs 登记后由 sync 自动补写）
 ✔ .gitattributes 已写入（换行符统一 LF）
 
 $ agile config set biz-tech-docs git@corp:team/kb.git
@@ -47,6 +47,8 @@ $ agile plugin install agile
 
 $ git add -A && git commit -m "chore: 初始化工作区" && git push -u origin main
 ```
+
+> 实录为示意：`agile sync` 输出含 [plugins] agile 安装动作、却排在 `agile plugin install agile` 之前，属时序简化——实际顺序是先 `agile plugin install agile`（写入 `plugins.dependencies` 声明），此后 `agile sync` 才会按声明安装插件。
 
 交付核对清单：
 

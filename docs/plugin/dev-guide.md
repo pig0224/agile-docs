@@ -89,7 +89,7 @@ git clone git@github.com:pig0224/agile-plugins.git && cd agile-plugins
 claude plugin validate .            # 清单校验（CI 同款）
 claude plugin marketplace add .     # 注册本地市场
 claude plugin install <name>@fcc    # 安装
-# 修改 commands/agents 文件 → 重启 Claude Code 会话即生效（热加载）
+# 修改 commands/agents 文件 → 本地目录直读，改完重启 Claude Code 会话生效
 ```
 
 直接用本地路径调试单个插件：`claude plugin marketplace add ./plugins/<name>`（需该目录自带 marketplace.json 或用根市场）。

@@ -2,16 +2,21 @@
 
 ## 常见问题
 
-### tech-specs / biz-tech-docs 目录为什么不入库？
+### tech-specs / biz-tech-docs 目录的入库规则？
 
-这两个抽屉是**外部资源**：公司级规范（跨团队共享、团队无写权限）与团队知识库（多 workspace 共享单一事实源）。它们各自是独立 git 仓库，目录写入 `.gitignore` 不进 workspace 版本管理，由 `agile sync` clone / 快进拉取。
+**tech-specs**（公司级规范，跨团队共享、团队无写权限）是天然的外部仓库：`init workspace` 恒把 `tech-specs/` 追加进 `.gitignore`，由 `agile sync` clone / 快进拉取，不进 workspace 版本管理。
 
-原因：
+**biz-tech-docs**（团队知识库）按登记与否分两种形态：
+
+- **未登记（默认）**：workspace 内普通目录，随仓库提交——版本管理随 workspace 天然具备
+- **登记为外部仓库**（`agile config set biz-tech-docs <url>` + `agile sync`）：目录改为独立 git 仓库，sync 自动把忽略行补写进 `.gitignore`，此后由 sync 拉取、沉淀产物的提交在库仓内人工完成
+
+原因（已登记形态）：
 
 - 这两个目录是**可写工作区**（如 `/agile:knowledge` 直接落盘），内容演进与 workspace 代码节奏不同
 - 不入库就没有 submodule 指针滚动，跨仓协作零 PR 负担
 
-`init workspace` 已自动把 `.worktrees/`、`tech-specs/`、`biz-tech-docs/` 追加进 `.gitignore`，无需手工维护。
+若 `.gitignore` 残留 `biz-tech-docs/` 但并未登记（如旧版本初始化的 workspace），sync 会提示：知识库内容不会随 workspace 入库，需入库请手动删除该行。
 
 ### sync 提示「存在未提交改动，跳过更新」是什么意思？
 
