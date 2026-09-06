@@ -58,6 +58,8 @@ templates:
   - `docs/conventions.md`：目录 / 命名 / 测试默认值（如实描述模板初始骨架 + 增长建议）+ 团队补充约定节
   - `docs/architecture.md`：ADR 骨架（背景 / 决策 / 后果三段式）+ ADR-001 初始条目
   - `init project` 生成项目时三文件随模板带出，作为项目级规范入口
+- **前端模板附赠 `docs/ui.md`**（vue3-vite / react-vite；**非强制**，check.mjs 不校验——非 UI 需求的项目可无此文件）：项目级 UI 设计约定骨架——token 清单空表（名称/值/用途）、Token 管理方式（CSS 变量 / JS token 文件 / 组件库主题配置）、使用规则、上层规范引用；经 `/agile:init` 约定问答「UI 约定」维度填充（未问到处保留「待定」）。页面原型与实现引用其 token 名；新增/修改 token 必须回写该表（单一事实源）
+- 模板中立原则：预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款
 - 模板内不要提交 `.git/`、锁文件按团队策略
 
 ## 本地开发与调试

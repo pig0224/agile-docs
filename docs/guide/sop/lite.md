@@ -1,0 +1,85 @@
+# 团队协作 SOP · 轻量通道（STO 轻量 / BUG / OPS）
+
+完整流程（[STO 全流程](/guide/sop/full-flow)）只留给「需要产品定稿 PRD/AC」的需求；不需要完整立项的走轻量通道——**负责人自判，PR 描述中声明**（例：`走轻量通道：BUG-012 回归修复`）。
+
+## 两个维度正交
+
+**性质**（编号前缀）决定谁拍板，**深度**（完整 / 轻量）决定文档写多少：
+
+| 形态 | 性质 / 拍板人 | 典型场景 | 编号分配 | 入口 |
+|---|---|---|---|---|
+| STO 轻量 | 业务需求 / 产品一句话确认 | 独立提出的 mini feat、文案/样式调整 | 产品确认后分配 | `/agile:backend` / `/agile:frontend` |
+| BUG | 缺陷 / 无需拍板（回归正确） | 行为与预期不符的修复 | 报告人/负责人顺延 | `/agile:fix-bug`（标准入口） |
+| OPS | 技术变更 / 运维拍板 | 重构、依赖升级、日志/配置/CI 微调、组件库维护升级（`/agile:ui maintain`） | 运维顺延分配 | `/agile:backend` / `/agile:frontend` |
+
+> **「小」不是 OPS 的判定维度**——文案/样式调整业务可见，归 STO 轻量；OPS 只收纯技术项。
+
+> **验收反馈挂靠原需求**：产品按 AC 验收提出的文案/样式调整，直接在原 STO 分支上修、结论记 review.md，随原需求合并——不另开编号；仅独立提出的变更才开新号。
+
+## 目录创建（谁建 process-docs）
+
+目录统一 `process-docs/<编号>/`（七文件结构不变）。轻量通道不走 `/agile:prd`：
+
+- **STO 轻量 / OPS**：`/agile:sync-req <编号> <一句话需求>` **轻量形态**创建（requirement 落一句话需求 + 1–2 条 AC（STO 轻量）或改动说明（OPS）+ 头部轻量标记）
+- **BUG**：`/agile:fix-bug` 创建（无编号时顺延 BUG-xxx 并轻量初始化）
+
+requirement.md 头部的轻量标记（`本变更走轻量通道`）使 `/agile:architect` 等命令自动按轻量深度执行（design.md 三五行简述）。
+
+## 填写降级
+
+| 文件 | 轻量通道填法 |
+|---|---|
+| requirement.md | 缺陷描述 + 复现步骤（BUG）；一句话需求 + 1–2 条 AC（STO 轻量）；改动说明（OPS） |
+| design.md | **根因分析**（BUG）或三五行方案简述（STO 轻量 / OPS）（SDD 红线按此放宽） |
+| implementation-be/-fe.md | 修复/改动记录 + **失败测试先行**（TDD 红线不放宽：bug 修复必须先有复现测试 Red→Green） |
+| gen-test.md | 一行 `> 本变更走轻量通道，此文档不适用` |
+| review.md | **一行验收确认**（`/agile:review` 轻量形态）：报告人确认修复生效（BUG）/ 提需求人确认（STO 轻量）/ 负责人自查（OPS）+ 确认时间 |
+| run-test.md | 回归结论（所在仓库全量测试通过） |
+| release.md | 涉及部署时 `/agile:release` 记一行（变更 + 回滚点）；不涉及部署不填 |
+
+## 不变的红线
+
+worktree 照建（`feat/<编号>`）、main 禁直推照守、PR 照走（标题标 `[编号]`）、CI 绿才能合。
+
+## 验收降级
+
+报告人确认修复生效（BUG）/ 提需求人确认（STO 轻量）/ 负责人自查（OPS）；不强制产品 AC 验收与交叉验收。review / release 相应降级（见[验收、发布与纪律](/guide/sop/release)）：一行确认记录；涉及部署时 release.md 记一行（变更 + 回滚点）。
+
+## 升级出口
+
+过程中发现影响面超出预期（涉及接口契约 / 数据模型 / 业务行为明显变化）→ 停止轻量通道，补全文档转[完整流程](/guide/sop/full-flow)；STO 编号不变，BUG / OPS 经产品确认后换 STO 编号。目录结构已就位，无需迁移。
+
+## 紧急 hotfix（线上事故）
+
+仍走 PR，只是加急——压缩验收范围（复现测试 + 冒烟）、审批人快速 approve；CI 绿 → 合并 main → 从 main 发版的顺序不变。
+
+---
+
+## 📌 实战示例（虚构）
+
+### STO-013（STO 轻量）：导出按钮增加批量模式
+
+1. 产品向负责人确认一句话需求「导出支持勾选批量模式」——STO 轻量立项，编号 STO-013
+2. `/agile:sync-req STO-013 导出按钮增加批量模式` 轻量建目录：requirement.md 头部带 `本变更走轻量通道` 标记 + 一句话需求 + AC 1 条（勾选多条时一次导出一个压缩包）
+3. `/agile:architect STO-013` 自动按轻量深度：design.md 三五行（复用 STO-012 导出任务，入参加 `ids[]`）
+4. TDD 开发 → PR 标题 `feat: STO-013 批量导出（走轻量通道）` → 提需求人一行确认 → 合并
+
+### BUG-018（BUG）：导出 CSV 中文乱码
+
+1. `/agile:fix-bug STO-012 导出 CSV 中文乱码`（挂靠原需求编号）——无独立编号时自动建 BUG-xxx
+2. bug-hunter 复现：写失败测试断言 BOM 头（**Red**）→ 根因：流式输出未写 BOM → 最小修复（**Green**）→ design.md 记根因分析
+3. 全量回归通过 → run-test.md 记回归结论 → `/agile:review` 轻量形态：报告人一行确认修复生效
+4. TDD 红线未豁免：先有复现测试，后写修复
+
+### OPS-007（OPS）：Playwright 浏览器版本升级
+
+1. 运维顺延分配 OPS-007，`/agile:sync-req OPS-007 升级 Playwright 浏览器基线` 轻量建目录（requirement = 改动说明）
+2. design.md 三五行：e2e/ 目录浏览器版本升级 + 回归范围
+3. worktree 照建、PR 照走（标题标 `[OPS-007]`）、CI 绿 → 负责人自查一行确认 → 合并
+
+### 组件库维护（OPS）：`/agile:ui maintain`
+
+1. `/agile:ui maintain 日期选择器增加范围快捷项`——命令默认引导走 OPS 轻量：`/agile:sync-req OPS-xxx <变更一句话>` 建目录，worktree / PR 照走
+2. 升级 = 改实现 + 更新测试 + CHANGELOG 登记；废弃 = deprecated 标记 + 迁移指引
+3. **改设计 token 须同步回写项目 `docs/ui.md`**（单一事实源）；grep 组件库引用列出受影响页面与批量验证建议
+4. 变更含业务可见行为时提醒升级 STO 轻量

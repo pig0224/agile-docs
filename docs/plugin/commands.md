@@ -140,7 +140,7 @@ Agile 插件的 17 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 产物 | `process-docs/<编号>/review.md`：验收矩阵（验收项/验收人/环境/结论/时间）+ 未闭环清单 + 门禁结论 |
 | 示例 | `/agile:review STO-001` |
 
-**硬规则**：AI 只记录、格式化与判定门禁，**不代替任何角色的验收**——交叉验收、AC 验收的结论必须由人做出。全部通过 → 可交付 PR；有未闭环 → 不得交付，缺陷走 `/agile:fix-bug` 修复后重走。轻量通道（STO 轻量 / BUG / OPS）降级为报告人/提需求人一行确认（[SOP](/guide/sop)）。
+**硬规则**：AI 只记录、格式化与判定门禁，**不代替任何角色的验收**——交叉验收、AC 验收的结论必须由人做出。全部通过 → 可交付 PR；有未闭环 → 不得交付，缺陷走 `/agile:fix-bug` 修复后重走。轻量通道（STO 轻量 / BUG / OPS）降级为报告人/提需求人一行确认（[SOP · 轻量通道](/guide/sop/lite)）。
 
 ---
 
@@ -165,7 +165,7 @@ Agile 插件的 17 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | | |
 |---|---|
 | 用途 | 自主完成「复现 → 定位 → 根因 → 最小修复 → 回归验证 → 登记」闭环 |
-| 场景 | **任意阶段**的缺陷：开发期、测试期、线上问题；团队 SOP 轻量通道中 **BUG 形态**的标准入口（[SOP](/guide/sop)） |
+| 场景 | **任意阶段**的缺陷：开发期、测试期、线上问题；团队 SOP 轻量通道中 **BUG 形态**的标准入口（[SOP · 轻量通道](/guide/sop/lite)） |
 | 参数 | `<问题描述或 编号+问题描述>`，如 `STO-001 下单接口 500`（无编号则创建 BUG-xxx 并轻量初始化目录） |
 | 委派 | bug-hunter subagent |
 | 前置 | 工作区干净（修复基于干净基线） |
@@ -180,37 +180,42 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 
 | | |
 |---|---|
-| 用途 | 组件库建设（build）/ 页面原型（prototype）/ 组件维护升级（maintain） |
+| 用途 | 组件库建设（build，含选型判定与立项）/ 页面原型（prototype）/ 组件维护升级（maintain，OPS 轻量） |
 | 参数 | `<子命令与参数>`，三个模式见下 |
 | 委派 | ui-designer subagent（三个模式均委派） |
-| 通用约定 | 遵循抽屉三 UI/交互规范；组件先测试后实现（TDD）；产物全中文 |
+| 通用约定 | 遵循抽屉三 UI/交互规范；组件先测试后实现（TDD）；产物全中文；**分工边界**——只管组件库与页面原型，页面实现归 `/agile:frontend`，长期结论沉淀归 `/agile:knowledge capture` |
 
 ### /agile:ui build —— 组件库建设
 
 | | |
 |---|---|
-| 用途 | 从 0 到 1 建设团队组件库（设计 token、基础组件 5-8 个起步、目录结构、README、测试） |
+| 用途 | 前置选型判定（现成库 or 自建）后从 0 到 1 建设团队组件库 |
 | 前置 | 抽屉三 UI 规范、抽屉二前端工程规范已就位（缺失时先补规范或与负责人确认） |
-| 产物 | 组件库代码（组件 + 测试 + README）；建议随后 `agile init project <name> --template vue3-vite` 或 `react-vite` 落库并登记模板注册中心 |
+| 产物 | 选型结论（现成库时）或组件库代码（组件 + 测试 + README + 设计 token，token 同步项目 `docs/ui.md`）；自建走独立 STO 立项，随后 `agile init project <name> --template vue3-vite` 或 `react-vite` 落库并登记模板注册中心 |
 | 示例 | `/agile:ui build` |
+
+**前置选型判定**：先问「现成组件库 or 自建」——选现成库（如 ant.design）**不进建设流程**，登记选型结论后引导 `/agile:init` 配框架 AI 能力包；自建才走建设流程。自建走**独立 STO 立项**（规模小经确认可走轻量通道），设计 token 是第一批产物；长期结论建议 `/agile:knowledge capture` 沉淀（组件用法 → `frameworks/<前端栈>/`）。
 
 ### /agile:ui prototype —— 页面原型
 
 | | |
 |---|---|
-| 用途 | 为需求产出页面原型，开发前对齐页面结构与交互 |
+| 用途 | 为需求产出页面原型，开发前对齐页面结构与交互（**prd 后、frontend 前的可选动作**——建议执行，不设门禁） |
 | 参数 | `/agile:ui prototype <STO-xxx> [页面描述]` |
 | 前置 | `process-docs/<编号>/requirement.md` 已存在（否则先执行 `/agile:prd`） |
 | 产物 | `<抽屉三>/prototypes/<编号>/page-*.md`：页面结构、交互说明、mermaid 流程、规范缺口清单 |
 | 示例 | `/agile:ui prototype STO-001` |
 
+必读链条（按优先级链、受团队库匹配状态约束）：项目 `docs/ui.md`（有则必读——视觉描述用 token 名，不写裸色值）→ 抽屉三 UI 规范 → `frameworks/<前端栈>/`（仅匹配确认后）。
+
 ### /agile:ui maintain —— 组件维护 / 升级
 
 | | |
 |---|---|
-| 用途 | 既有组件的升级或废弃，并盘点受影响面 |
+| 用途 | 既有组件的升级或废弃，并盘点受影响面；**默认走 OPS 轻量通道**（变更含业务可见行为时提醒升级 STO 轻量） |
 | 参数 | `/agile:ui maintain <变更描述>` |
-| 产物 | 组件变更：升级 = 改实现 + 更新测试 + CHANGELOG 登记；废弃 = deprecated 标记 + 迁移指引；附受影响页面清单（grep 组件库引用，列出受影响仓库与文件）与批量验证建议 |
+| 前置 | 经 `/agile:sync-req OPS-xxx <变更一句话>` 轻量创建过程目录；worktree / PR 照走 |
+| 产物 | 组件变更：升级 = 改实现 + 更新测试 + CHANGELOG 登记；废弃 = deprecated 标记 + 迁移指引；**token 变更同步回写项目 `docs/ui.md`**（单一事实源）；附受影响页面清单（grep 组件库引用，列出受影响仓库与文件）与批量验证建议 |
 | 示例 | `/agile:ui maintain 日期选择器增加范围快捷项` |
 
 ---
@@ -219,12 +224,12 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 
 | | |
 |---|---|
-| 用途 | AI 陪同建项目：模板选择与骨架生成、项目约定问答定制（目录 / 命名 / 测试 / 依赖选型）、团队库匹配人工确认、辅助开发能力配置（环境检测 + 框架 AI 能力包推荐） |
+| 用途 | AI 陪同建项目：模板选择与骨架生成、项目约定问答定制（目录 / 命名 / 测试 / UI 约定 / 依赖选型）、团队库匹配人工确认、辅助开发能力配置（环境检测 + 框架 AI 能力包推荐） |
 | 场景 | 新项目启动（"帮我建个 xx 项目"）；想让项目 CLAUDE.md / docs 约定与实际情况一致 |
 | 参数 | 无——**自动感知**：扫 `projects/` 检测 CLI 刚创建的未定制项目（CLAUDE.md 规范段带「⛔ 待人工确认」标记，技术栈节自带来源模板）则续接定制；无候选则进入全新创建交互（选模板 + 定名） |
 | 委派 | 无（主会话执行——问答素材在主会话上下文中，分工红线显式例外） |
 | 前置 | agile workspace 内 |
-| 产物 | `projects/<name>/`（CLI 生成 + 问答改写）：conventions.md 定制版；CLAUDE.md 团队规范段确认改写 + 新增「环境要求」「辅助开发配置」节 |
+| 产物 | `projects/<name>/`（CLI 生成 + 问答改写）：conventions.md 定制版；CLAUDE.md 团队规范段确认改写 + 新增「环境要求」「辅助开发配置」节；`docs/ui.md` 定制版（前端模板——UI 约定问答落 token 管理方式与基准值，未问到处保留「待定」） |
 | 示例 | `/agile:init`（先 `agile init project` 也可——命令会感知到刚创建的项目并续接） |
 
 要点：**默认值兜底**——开头一问「定制 or 全默认」（推荐全默认），全默认则产物与纯 CLI init 完全一致；**分级落盘**——只读环境检测直接做，MCP / design.md / llms.txt 确认后 AI 写入（MCP 进项目 `.mcp.json`），框架 CLI 确认后自动安装（优先 devDep + `npx`），**skills 安装与权限白名单只输出建议清单、人工自己配**。框架 AI 能力包推荐来源按序：团队库（仅团队库匹配已确认栈领域时）→ 命令内置映射（Vue / Vite / React / Node 官方 llms.txt、Ant Design AI 能力包等，2026-09 核实可达）→ 现场检索（WebSearch 核实存在才推荐，防幻觉包名）。定制不回写模板；团队库未确认前只引用通用领域。
@@ -240,7 +245,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 参数 | `[模板名或技术栈描述]`；无参进入交互设计 |
 | 委派 | 无（主会话执行——设计问答素材在主会话上下文中，分工红线显式例外） |
 | 前置 | 定位 agile-templates 仓库（workspace 内或独立检出） |
-| 产物 | 新模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + README + 构建特征文件 + 可运行测试）+ registry.yaml 登记 |
+| 产物 | 新模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + 前端栈模板另加 docs/ui.md + README + 构建特征文件 + 可运行测试）+ registry.yaml 登记 |
 | 示例 | `/agile:add-template vue3-nuxt` |
 
 要点：**占位符与 init 语义相反——`{{name}}` / `{{safeName}}` 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 六项校验全绿 + 冒烟验证（临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。
@@ -282,12 +287,12 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 参数 | `build <建设提示词>` 或 `capture <主题> [--from <编号/路径/项目>]`，均可选 `--to team/product/tech`；无参显示库概况 |
 | 委派 | 无（**分工红线显式例外**：素材在主会话对话历史中，主会话直接执行） |
 | 前置 | 无（需在 agile workspace 或知识库仓库内执行；落点经三问判别法推断后向用户确认） |
-| 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态）+ `README.md` 导航条目；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
+| 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态，`来源` 格式 `<workspace 名>/<素材>`——workspace 名读 settings.json 的 `name`，单库模式用当前仓库名）+ `README.md` 导航条目；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
 | 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012` |
 
 **运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用；biz-product-docs 绑定具体产品，始终随 workspace 使用。
 
-**三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs）；说业务规则、用户看到什么 → `product`（biz-product-docs）。
+**三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs；组件 API 约定、组件库用法落 `frameworks/<前端栈>/`）；说业务规则、用户看到什么 → `product`（biz-product-docs；视觉规则、交互模式含 token 语义）。
 
 **划分约定**（tech / team 库）：按「通用 + 技术栈」两维组织——通用领域（`architecture/`、`engineering/`）跨技术栈共享，技术栈领域（`frameworks/go-zero/`、`frameworks/springboot/` 等）每栈一目录；**调取时按当前项目技术栈选择性引用**（识别优先级：提示词 > 扫 projects 标志文件 > 询问），其他技术栈领域不混入——go-zero 工作区不读 springboot 领域，反之亦然。
 

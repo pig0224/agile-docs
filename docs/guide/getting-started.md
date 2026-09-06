@@ -88,7 +88,7 @@ agile plugin ls                           # 声明 × 本机实况对照
 
 安装即写入 `.agile/settings.json` 的 `plugins.dependencies` 依赖声明并随 workspace 提交——其他成员 clone 后 `agile sync` 一条命令补齐（缺的装、绝不卸载）。
 
-重启 Claude Code 会话后可用 `/agile:help` 查看全部命令，按 [插件概览](/plugin/overview) 的流程主线开发。团队分工（产品/负责人/后端/前端/运维）与需求全生命周期的协作规范见[团队协作 SOP](/guide/sop)。
+重启 Claude Code 会话后可用 `/agile:help` 查看全部命令，按 [插件概览](/plugin/overview) 的流程主线开发。团队分工（产品/负责人/后端/前端/运维）与需求全生命周期的协作规范见[团队协作 SOP](/guide/sop/)。
 
 ## 8. 排错
 

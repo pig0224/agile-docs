@@ -89,7 +89,7 @@ tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge`
 | `run-test.md` | 测试验收报告（Stage 2） | 开发兼任/测试（/agile:run-test） |
 | `review.md` / `release.md` | 评审与发布记录 | 负责人汇总 |
 
-> **文件级隔离**：前后端并行开发（同一需求分支）时各写各的角色文件，git 合并零冲突。团队协作详见[团队协作 SOP](/guide/sop)。
+> **文件级隔离**：前后端并行开发（同一需求分支）时各写各的角色文件，git 合并零冲突。团队协作详见[团队协作 SOP · 协作与文档规则](/guide/sop/collab)。
 
 目录无 CLI 命令——由创建它的插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建（幂等：已存在的文件不覆盖）。
 
