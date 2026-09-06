@@ -24,7 +24,7 @@ agile plugin install agile                            # Claude Code 插件
 
 ## 📌 实战示例：从零初始化工作区（虚构）
 
-终端实录（输出摘要）：
+终端实录（输出为示意，实际输出以所用 CLI 版本为准）：
 
 ```bash
 $ agile init workspace --tech-specs git@corp:com/specs.git

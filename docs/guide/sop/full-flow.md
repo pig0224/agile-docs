@@ -28,14 +28,14 @@
 
 ```bash
 $ agile worktree create feat/STO-012
-✔ 分支 feat/STO-012 已创建，检出于 .worktrees/feat/STO-012
+✔ 分支 feat/STO-012 已创建，检出于 .worktrees/feat__STO-012
 $ git push -u origin feat/STO-012
 ```
 :::
 
 ## #2 入仓 + 设计（负责人）
 
-**规则**：worktree 内执行 `/agile:sync-req STO-xxx`（把抽屉三需求产物同步到 `process-docs/<编号>/`，创建标准七文件目录并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口契约**、数据模型、任务分配表）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
+**规则**：worktree 内执行 `/agile:sync-req STO-xxx`（把抽屉三需求产物同步到 `process-docs/<编号>/`，创建标准七文件目录并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
 
 ::: tip 📌 STO-012 实录
 `/agile:architect STO-012` 产出 design.md，接口契约摘录：
@@ -45,12 +45,12 @@ $ git push -u origin feat/STO-012
 | `/api/orders/export` | POST | `{ from, to }`（≤90 天） | `{ taskId }` |
 | `/api/orders/export/{taskId}` | GET | — | `{ status: pending\|done\|timeout, url? }` |
 
-任务分配表：后端 = 导出任务 + 两个接口（大伟）；前端 = 列表页导出按钮 + 轮询下载（小琪）。
+任务分配表（design 冻结时填入 implementation.md）：后端 = 导出任务 + 两个接口（大伟）；前端 = 列表页导出按钮 + 轮询下载（小琪）。
 :::
 
 ### 页面原型（可选节点）
 
-涉及新页面 / 重交互的需求，建议在测试设计（#4）前后、开发（#5）前执行 `/agile:ui prototype <编号>`（prd 后、frontend 前的可选动作，**不设门禁**）——原型必读项目 `docs/ui.md`（视觉描述引用 token 名）与抽屉三 UI 规范，产出落 `biz-product-docs/prototypes/<编号>/`，规范缺口反馈产品；页面实现仍归 `/agile:frontend`。
+涉及新页面 / 重交互的需求，建议在测试设计（#4）前后、开发（#5）前执行 `/agile:ui prototype <编号>`（prd 后、frontend 前的可选动作，**不设门禁**）——原型读项目 `docs/ui.md`（**有则必读**，视觉描述引用 token 名）与抽屉三 UI 规范，产出落 `biz-product-docs/prototypes/<编号>/`，规范缺口反馈产品；页面实现仍归 `/agile:frontend`。
 
 ::: tip 📌 STO-012 实录
 `/agile:ui prototype STO-012` 产出 `page-order-export.md`：导出按钮用主色 token（引用项目 `docs/ui.md` 的 `--color-primary`，不写裸色值）、任务进行中显示进度态；标注一个规范缺口「批量导出上限未定义」反馈产品。
@@ -58,7 +58,7 @@ $ git push -u origin feat/STO-012
 
 ## #3 拉取环境（后端 + 前端）
 
-**规则**：对端在自己机器执行 `agile worktree create feat/STO-xxx`——分支已存在远程时**自动跟踪检出**，无需手工 checkout。
+**规则**：前置——对端本机已完成 workspace 初始化（`agile init workspace` + `agile sync`）。对端在自己机器执行 `agile worktree create feat/STO-xxx`——分支已存在远程时**自动跟踪检出**，无需手工 checkout。
 
 ::: tip 📌 STO-012 实录
 小琪执行 `agile worktree create feat/STO-012`，输出「远程分支已存在，已跟踪检出」。
@@ -121,7 +121,7 @@ $ git push -u origin feat/STO-012
 
 ## #9 交付（负责人）
 
-**规则**：PR（代码 + 全部过程文档随同一分支）→ CI 绿 → squash 合入 main。PR 描述写清需求编号与是否走轻量通道。
+**规则**：PR（代码 + 全部过程文档随同一分支）→ CI 绿 → squash 合入 main。PR 标题与描述均写清需求编号（含是否走轻量通道）。
 
 ::: tip 📌 STO-012 实录
 PR 标题 `feat: STO-012 会员订单导出`，描述含 AC 清单、设计要点、验收结论链接；CI 绿后产品确认 AC3 通过，squash 合入。
@@ -133,7 +133,7 @@ PR 标题 `feat: STO-012 会员订单导出`，描述含 AC 清单、设计要�
 
 ## #11 清理（负责人）
 
-**规则**：主工作区 `agile worktree remove feat/STO-xxx`；对端同步清理本地 worktree。
+**规则**：主工作区 `agile worktree remove feat/STO-xxx`（同时删除本地分支；分支未合并时保留并警告）；对端同步清理本地 worktree。
 
 ---
 

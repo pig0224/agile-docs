@@ -88,7 +88,7 @@ Agile 插件的 17 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 场景 | 测试案例就绪后的后端开发阶段 |
 | 参数 | `<需求编号> [项目名]`，如 `STO-001` 或 `STO-001 order-service` |
 | 委派 | backend-dev subagent（分批，每批 ≤5 任务） |
-| 前置 | design.md 已填充（红线）；建议先 `agile worktree create feature/<编号>`；工作区干净 |
+| 前置 | design.md 已填充（红线）；建议先 `agile worktree create feat/<编号>`；工作区干净 |
 | 产物 | worktree 内代码 + 测试；`implementation-be.md` 任务清单与 TDD 循环记录；`STO-xxx(red|green|refactor):` 序列 commit |
 | 示例 | `/agile:backend STO-001` |
 

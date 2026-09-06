@@ -65,6 +65,6 @@ agile plugin install agile
 | 需求评审后 | `/agile:prd STO-001 需求描述` → `/agile:sync-req STO-001` |
 | 设计阶段 | `/agile:architect STO-001` |
 | 测试先行 | `/agile:gen-test STO-001` |
-| 开发 | `agile worktree create feature/STO-001` → `/agile:backend STO-001` + `/agile:frontend STO-001` |
+| 开发 | `agile worktree create feat/STO-001` → `/agile:backend STO-001` + `/agile:frontend STO-001` |
 | 提测 | `/agile:run-test STO-001`（不通过 → `/agile:fix-bug STO-001 问题描述`） |
 | 收尾 | 填 review/release.md，worktree remove，PR 合并 |

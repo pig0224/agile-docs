@@ -2,7 +2,7 @@
 
 ## 验收与发布（review / release）
 
-run-test 通过后进入验收期；**门禁：review 全部通过才可交付 PR**。验收结论由人做出，`/agile:review` 负责汇总、门禁判定与记录（**AI 不代验收**）；发布动作由人工执行，`/agile:release` 只做前置检查与记录（**不执行任何发布动作**）。
+run-test 结论非『不通过』后进入验收期（有条件通过可进）；**门禁：review 全部通过才可交付 PR**。验收结论由人做出，`/agile:review` 负责汇总、门禁判定与记录（**AI 不代验收**）；发布动作由人工执行，`/agile:release` 只做前置检查与记录（**不执行任何发布动作**）。
 
 ### 验收矩阵（review）
 
@@ -23,7 +23,7 @@ run-test 通过后进入验收期；**门禁：review 全部通过才可交付 P
 
 | 动作 | 执行者 | 说明 |
 |---|---|---|
-| 前置检查 | `/agile:release`（只读） | review 门禁通过、run-test 结论通过、PR 已合入 main（人工确认） |
+| 前置检查 | `/agile:release`（只读） | review 门禁通过、run-test 结论非『不通过』、PR 已合入 main（人工确认） |
 | release.md 起草 | `/agile:release` 起草，负责人确认 | 版本/变更清单 + **回滚方案** |
 | 合并 / 部署 | **人工** | AI 不执行任何发布动作 |
 | 发布后登记 | `/agile:release` | 部署时间、环境、验证结论 → 闭环；提醒 worktree remove |
@@ -32,7 +32,7 @@ run-test 通过后进入验收期；**门禁：review 全部通过才可交付 P
 
 ## Git 纪律（全员红线）
 
-1. **main 禁止直推**——一切变更走 PR，CI 绿才能合；PR 描述写清需求编号
+1. **main 禁止直推**——一切变更走 PR，CI 绿才能合；PR 标题与描述均写清需求编号
 2. commit message 遵循 **Conventional Commits**：`feat:` 新功能 / `fix:` 修复 / `feat!:` 破坏性
 3. 依赖升级一律走 Dependabot PR，不手改 lockfile
 4. 不 force push、不删除他人分支

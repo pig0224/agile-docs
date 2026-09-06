@@ -13,8 +13,7 @@
 | [template](#template) | 项目模板缓存管理 |
 | [plugin](#plugin) | Claude Code 插件管理 |
 | [update](#update) | CLI 自更新 |
-
-> 另有辅助命令 `agile version`（等价 `agile --version` / `agile -v`）。
+| [version](#version) | 显示版本号（等价 `--version` / `-v`） |
 
 > 无 MCP Server——AI（Claude Code 等）经 Bash 直调上述 CLI 命令。任务目录（STO-xxx，7 个 .md）由 Claude Code 插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建。
 
@@ -185,7 +184,7 @@ agile config list
 | 远程 `origin/<branch>` 已有 | 创建跟踪分支检出——协作场景：负责人推了需求分支，另一端直接拉取 |
 | 本地远程都没有 | 以 `--base`（默认当前 HEAD）新建分支 |
 
-目录名转写：分支名中的 `/` 与 `\` 转写为 `__`（如 `feature/STO-001` → `.worktrees/feature__STO-001`）。
+目录名转写：分支名中的 `/` 与 `\` 转写为 `__`（如 `feat/STO-001` → `.worktrees/feat__STO-001`）。
 
 ::: warning 前置条件
 workspace 仓库必须有首次提交（unborn HEAD 时 create 会给出明确指引）。
@@ -198,12 +197,12 @@ workspace 仓库必须有首次提交（unborn HEAD 时 create 会给出明确�
 - 两次 sync 失败均**仅警告不阻塞**（可进入 worktree 手动执行 `agile sync`）
 
 ```bash
-agile worktree create feature/STO-001    # 自动 sync → 建环境 → worktree 内再 sync
-cd .worktrees/feature__STO-001           # 开发
-agile worktree remove feature/STO-001    # 清理
+agile worktree create feat/STO-001    # 自动 sync → 建环境 → worktree 内再 sync
+cd .worktrees/feat__STO-001           # 开发
+agile worktree remove feat/STO-001    # 清理
 
 # 协作场景：负责人已推送远程需求分支，前后端各自拉取
-agile worktree create feature/STO-001    # 自动跟踪检出 origin/feature/STO-001
+agile worktree create feat/STO-001    # 自动跟踪检出 origin/feat/STO-001
 ```
 
 ---

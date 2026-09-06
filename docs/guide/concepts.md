@@ -76,12 +76,12 @@ tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge`
 
 ## 过程产物（STO-xxx 需求档案）
 
-`process-docs/<需求编号>/` 是一个需求的完整档案（7 个 .md）：
+`process-docs/<需求编号>/` 是一个需求的完整档案（9 个 .md：附录 A 模板创建 7 个 + gen-test / run-test 两份阶段产物）：
 
 | 文档 | 内容 | 由谁填充 |
 |---|---|---|
 | `requirement.md` | 需求说明与验收标准（AC） | 产品（/agile:prd + /agile:sync-req） |
-| `design.md` | 技术设计（方案、接口契约、任务分配） | 负责人（/agile:architect） |
+| `design.md` | 技术设计（方案、接口设计） | 负责人（/agile:architect） |
 | `implementation.md` | 实施主文件：任务分配表（design 冻结时填写，之后只读）+ 联调约定 | 负责人建骨架 |
 | `implementation-be.md` | 后端任务清单、TDD 循环记录、变更清单（**后端专属**） | 后端（/agile:backend） |
 | `implementation-fe.md` | 前端任务清单、测试记录、变更清单（**前端专属**） | 前端（/agile:frontend） |

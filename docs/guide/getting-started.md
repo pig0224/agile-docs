@@ -66,15 +66,15 @@ git commit -m "chore: init workspace with tech-specs & projects"
 ## 6. 日常开发循环
 
 ```bash
-agile worktree create feature/STO-001     # 创建隔离开发环境（创建前后各自动 sync 一次）
-cd .worktrees/feature__STO-001
+agile worktree create feat/STO-001     # 创建隔离开发环境（创建前后各自动 sync 一次）
+cd .worktrees/feat__STO-001
 
 # ... 开发（多项目在同一 worktree 内，前后端一起改；测试进各项目目录执行）...
 cd projects/order-service && npm test
 
 git add -A && git commit -m "feat(STO-001): ..."
 
-agile worktree remove feature/STO-001     # 清理
+agile worktree remove feat/STO-001     # 清理
 ```
 
 推送 feature 分支、发 PR、merge——**一个 PR 包含前后端代码与过程文档**，天然原子。

@@ -71,10 +71,10 @@
 |---|---|---|---|---|
 | 0 | 需求立项 | 产品 | 仓库内 | `biz-product-docs/requirements/STO-xxx/`（背景/目标/AC）+ **分配编号 + 指派负责人** |
 | 1 | 建环境 | 负责人 | 主工作区 | `agile worktree create feat/STO-xxx`，推送远程分支 |
-| 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口契约**、任务分配表）→ 推送 |
+| 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口设计**）→ design 冻结时填 implementation.md 任务分配表 → 推送 |
 | 3 | 拉取环境 | 后端 + 前端 | 各自机器 | `agile worktree create feat/STO-xxx`（**自动跟踪已存在的远程分支**） |
 | 4 | 测试设计 | 负责人（有测试则测试先行） | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节；e2e 用例归前端节） |
-| 5 | 并行开发 | 负责人承其一端 + 对端 | 各自本地 | `/agile:backend` ‖ `/agile:frontend`（辅以 ui / bugfix / add-task / feedback），各自写 `implementation-be/-fe.md`，小步推送（自动 CI + stage CD） |
+| 5 | 并行开发 | 负责人承其一端 + 对端 | 各自本地 | `/agile:backend` ‖ `/agile:frontend`（辅以 ui / fix-bug / add-task / feedback），各自写 `implementation-be/-fe.md`，小步推送（自动 CI + stage CD） |
 | 6 | 联调 | 后端 + 前端 | worktree 内 | 集成测试通过 |
 | 7 | 自测验收 | 开发兼任（有测试则独立执行） | worktree 内 | `/agile:run-test` → run-test.md |
 | 8 | 验收汇总 | 负责人汇总（前端/后端/产品参与） | stage + worktree | 交叉验收 + AC 验收 → `/agile:review` → review.md（门禁：全通过才可交付，见[验收与发布](/guide/sop/release)） |
@@ -93,6 +93,7 @@
 | **STO-012 会员订单导出**（产品林悦立项，后端大伟任负责人，前端小琪对端） | 完整流程 STO | [完整流程](/guide/sop/full-flow)、[验收与发布](/guide/sop/release) 全程贯穿 |
 | STO-013 导出按钮增加批量模式 | STO 轻量 | [轻量通道](/guide/sop/lite) |
 | BUG-018 导出 CSV 中文乱码 | BUG | [轻量通道](/guide/sop/lite) |
+| BUG-019 导出任务偶发超时无提示 → 升级 STO-014 | 升级出口（换号） | [轻量通道](/guide/sop/lite) |
 | OPS-007 Playwright 浏览器版本升级 | OPS | [轻量通道](/guide/sop/lite) |
 | `/agile:ui maintain 日期选择器增加范围快捷项` | OPS（组件库维护） | [轻量通道](/guide/sop/lite) |
 
@@ -102,6 +103,6 @@
 |---|---|
 | [初始化](/guide/sop/init) | 架构师一次性交付：workspace、外部仓库、模板、插件、CI/CD |
 | [完整流程（STO）](/guide/sop/full-flow) | 11 步生命周期逐步展开：规则 + STO-012 实录 |
-| [轻量通道](/guide/sop/lite) | STO 轻量 / BUG / OPS 三形态：判定、填写降级、升级出口 + 三案例 |
+| [轻量通道](/guide/sop/lite) | STO 轻量 / BUG / OPS 三形态：判定、填写降级、升级出口与编号变更 + 实战案例 |
 | [协作与文档规则](/guide/sop/collab) | 并行防冲突（文件级隔离）、过程文档写作规则 + 并行时间线示例 |
 | [验收、发布与纪律](/guide/sop/release) | 验收矩阵与门禁、发布记录与回滚、Git 纪律、发版应急、常见异常 + 实录 |
