@@ -29,10 +29,27 @@ templates:
 
 ## 新增一个模板：两步
 
-1. 新建目录 `<模板名>/`，放入项目骨架（含构建特征文件，见下）+ **项目级规范骨架三文件**（见「模板内容约定」）
+1. 新建目录 `<模板名>/`，放入项目骨架（含 README 与可运行测试，约定见「模板内容约定」）+ **项目级规范骨架三文件**
 2. 在 `registry.yaml` 的 `templates:` 下登记
 
-提交推送后，用户侧 `agile init project <name> --template <模板名>` 即可用。AI 陪同建设模板（设计问答 + 骨架生成 + 校验 + 冒烟）用插件命令 `/agile:add-template`。
+提交推送后，用户侧 `agile init project <name> --template <模板名>` 即可用。AI 陪同建设用插件命令 `/agile:add-template`（见下节）。
+
+## AI 辅助建设：/agile:add-template
+
+不想从零手工搭骨架，可在本仓库（或 workspace 内定位到它）让 Claude Code 执行插件命令：
+
+```bash
+/agile:add-template vue3-nuxt        # 指定模板名或技术栈描述
+/agile:add-template                  # 无参数进入交互式设计问答
+```
+
+命令流程：**设计问答**（技术栈 / 变体 / 测试框架等）→ **骨架生成**（项目骨架 + 规范骨架三文件，前端栈另加 `docs/ui.md`）→ **registry.yaml 登记 + `node scripts/check.mjs` 校验** → **冒烟验证**（临时 workspace + 本地模板源执行 `agile init project`，验证占位符替换正确且项目测试可跑——必须实际执行）→ 汇报变更清单。
+
+要点（详见[插件命令详解](/plugin/commands)）：
+
+- **占位符与 init 语义相反**——模板源码里 <span v-pre>`{{name}}`</span> / <span v-pre>`{{safeName}}`</span> **原样保留**（init 生成项目时才替换）
+- **模板中立**：预填默认值只来自模板自身选型与社区惯例，不引入团队知识库条款
+- 命令**不执行 git add / commit / push**——推送即发版，由人工处理
 
 ## 命名规范（防冲突四防线）
 
@@ -49,8 +66,8 @@ templates:
 
 ## 模板内容约定
 
-- **构建特征文件**：模板根必须有 `package.json` / `go.mod` / `pom.xml` / `tsconfig.json` 之一——CLI 与插件按此识别项目类型
-- **占位符**：`{{name}}`（项目名）、`{{safeName}}`（小写安全段，Java 包目录如 `src/main/java/com/example/{{safeName}}/` 用目录名占位也会替换）
+- **构建特征文件**（建议，非强制——check.mjs 不校验）：如 `package.json`（Node）、`go.mod`（Go）、`pom.xml`（Maven）、`Makefile`——插件按其发现测试/构建命令（如 test-engineer 读 `package.json` scripts / `Makefile` / `pom.xml` 确定标准测试命令）；非主流栈用等价特征文件即可
+- **占位符**：<span v-pre>`{{name}}`</span>（项目名）、<span v-pre>`{{safeName}}`</span>（小写安全段，Java 包目录如 <span v-pre>`src/main/java/com/example/{{safeName}}/`</span> 用目录名占位也会替换）
 - **README**：写清运行/测试命令（CLI 与插件按约定执行测试）
 - **至少一个可运行测试**（TDD 起点）
 - **项目级规范骨架三文件**（缺一不可，`scripts/check.mjs` 强制校验）：

@@ -82,7 +82,7 @@ agile init project order-service --template go-service
 agile init project my-lib                    # 空项目骨架（不访问模板注册中心）
 ```
 
-模板中的占位符会被替换：`{{name}}` → 项目名，`{{safeName}}` → 小写字母数字段（Java 包名等场景）。
+模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → 项目名，<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
 
 ::: tip
 项目与 workspace 其余变更走**同一个 PR**——这是单仓模式的天然优势。

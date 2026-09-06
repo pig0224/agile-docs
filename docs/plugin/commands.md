@@ -248,7 +248,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | 新模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + 前端栈模板另加 docs/ui.md + README + 构建特征文件 + 可运行测试）+ registry.yaml 登记 |
 | 示例 | `/agile:add-template vue3-nuxt` |
 
-要点：**占位符与 init 语义相反——`{{name}}` / `{{safeName}}` 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 六项校验全绿 + 冒烟验证（临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。
+要点：**占位符与 init 语义相反——<span v-pre>`{{name}}`</span> / <span v-pre>`{{safeName}}`</span> 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 六项校验全绿 + 冒烟验证（临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。
 
 ---
 

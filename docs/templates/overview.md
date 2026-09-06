@@ -32,8 +32,8 @@ AI 陪同建项目（项目约定问答定制 + 团队库匹配确认 + 辅助�
 
 | 占位符 | 替换为 | 示例 |
 |---|---|---|
-| `{{name}}` | 项目名（保留大小写与连字符） | `Order-Service` |
-| `{{safeName}}` | 小写字母数字折叠段 | Java 包名 `com.example.orderservice` |
+| <span v-pre>`{{name}}`</span> | 项目名（保留大小写与连字符） | `Order-Service` |
+| <span v-pre>`{{safeName}}`</span> | 小写字母数字折叠段 | Java 包名 `com.example.orderservice` |
 
 ## 缓存机制
 
