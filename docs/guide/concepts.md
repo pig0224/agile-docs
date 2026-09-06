@@ -80,12 +80,12 @@ tech-specs / biz-tech-docs 目录是**可写工作区**（如 `/agile:knowledge`
 
 | 文档 | 内容 | 由谁填充 |
 |---|---|---|
-| `requirement.md` | 需求说明与验收标准（AC） | 产品（/agile:prd + /agile:sync-req） |
+| `requirement.md` | 需求说明与验收标准（AC） | 负责人（/agile:prd + /agile:sync-req） |
 | `design.md` | 技术设计（方案、接口设计） | 负责人（/agile:architect） |
 | `implementation.md` | 实施主文件：任务分配表（design 冻结时填写，之后只读）+ 联调约定 | 负责人建骨架 |
 | `implementation-be.md` | 后端任务清单、TDD 循环记录、变更清单（**后端专属**） | 后端（/agile:backend） |
 | `implementation-fe.md` | 前端任务清单、测试记录、变更清单（**前端专属**） | 前端（/agile:frontend） |
-| `gen-test.md` | 测试案例（Stage 1，分「后端用例/前端用例」两节） | 负责人/测试（/agile:gen-test） |
+| `gen-test.md` | 测试案例（Stage 1，分「后端用例/前端用例」两节） | 开发兼任/测试（/agile:gen-test） |
 | `run-test.md` | 测试验收报告（Stage 2） | 开发兼任/测试（/agile:run-test） |
 | `review.md` / `release.md` | 评审与发布记录 | 负责人汇总 |
 
