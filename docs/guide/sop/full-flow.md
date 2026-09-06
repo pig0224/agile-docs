@@ -8,10 +8,10 @@
 
 ## #0 需求立项（产品）
 
-**规则**：产品在仓库内编写 `biz-product-docs/requirements/<编号>/`（最低结构：背景、目标、AC ≥ 1 条），**分配编号 STO-xxx**（产品是唯一分配者）并**指派负责人**（后端或前端，按需求性质，见[总览](/guide/sop/)角色说明）。使用 `/agile:prd` 生成功能树/菜单树属可选增强。
+**规则**：产品在**外部平台**（腾讯文档 / 飞书等）编写需求文档（最低结构：背景、目标、AC ≥ 1 条），**分配编号 STO-xxx**（产品是唯一分配者）并**指派负责人**（后端或前端，按需求性质，见[总览](/guide/sop/)角色说明）。产品不直接操作仓库——需求文档链接/内容交给负责人，PRD 结构化产物由负责人在 #2 用 `/agile:prd` 生成入仓。
 
 ::: tip 📌 STO-012 实录
-产品林悦创建 `biz-product-docs/requirements/STO-012/PRD.md`（走 PR 提交入库），背景「运营每月手工导订单耗时 2 小时」，目标「页面自助导出 90 天内订单」，AC 摘录：
+产品林悦在飞书写需求文档，背景「运营每月手工导订单耗时 2 小时」，目标「页面自助导出 90 天内订单」，AC 摘录：
 
 - AC1：给定 90 天内的订单，当点击「导出 CSV」，则生成下载链接（保留 30 天）
 - AC2：当导出任务超过 5 分钟，则页面提示「导出超时，请缩小范围」
@@ -35,10 +35,10 @@ $ git push -u origin feat/STO-012
 
 ## #2 入仓 + 设计（负责人）
 
-**规则**：worktree 内执行 `/agile:sync-req STO-xxx`（把抽屉三需求产物同步到 `process-docs/<编号>/`，创建标准七文件目录并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
+**规则**：worktree 内执行 `/agile:prd STO-xxx <需求描述>`（把产品外部平台的需求文档结构化——产出 PRD/AC/功能树/菜单树入 `biz-product-docs/requirements/<编号>/`，随需求分支提交）→ `/agile:sync-req STO-xxx`（把抽屉三需求产物同步到 `process-docs/<编号>/`，创建标准七文件目录并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
 
 ::: tip 📌 STO-012 实录
-`/agile:architect STO-012` 产出 design.md，接口契约摘录：
+大伟执行 `/agile:prd STO-012 页面自助导出 90 天内订单（飞书需求文档：运营每月手工导订单耗时 2 小时…）` 生成结构化需求入抽屉三；`/agile:sync-req STO-012` 同步入 process-docs 后，`/agile:architect STO-012` 产出 design.md，接口契约摘录：
 
 | 接口 | 方法 | 入参 | 出参 |
 |---|---|---|---|

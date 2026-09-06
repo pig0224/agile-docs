@@ -33,10 +33,10 @@
 
 ### 产品
 
-- 在**仓库内**编写需求文档（`biz-product-docs/requirements/<编号>/`，GitHub Web 或 VS Code 编辑，走 PR 提交），**最低结构要求：背景、目标、验收标准 AC（≥ 1 条）**；写作模板见 `biz-product-docs/templates/PRD模板.md`
+- 在**外部平台**（腾讯文档 / 飞书等）编写需求文档（最低结构要求：背景、目标、验收标准 AC（≥ 1 条））——产品不直接操作仓库，把需求文档链接或内容交给负责人
 - **分配需求编号 STO-xxx**（递增，产品是唯一分配者）并**指定负责人**（后端或前端）
 - 开发完成后按 AC 做**业务验收**（stage 环境由运维支持）
-- 使用 `/agile:prd` 生成功能树/菜单树属可选增强，非前提
+- PRD 结构化产物（PRD/AC/功能树/菜单树入 `biz-product-docs/requirements/<编号>/`）由**负责人**执行 `/agile:prd` 生成，产品评审确认内容
 
 ### 运维
 
@@ -69,9 +69,9 @@
 
 | # | 阶段 | 执行人 | 在哪 | 产物 |
 |---|---|---|---|---|
-| 0 | 需求立项 | 产品 | 仓库内 | `biz-product-docs/requirements/STO-xxx/`（背景/目标/AC）+ **分配编号 + 指派负责人** |
+| 0 | 需求立项 | 产品 | 外部平台（腾讯文档/飞书） | 需求文档（背景/目标/AC）+ **分配编号 + 指派负责人** |
 | 1 | 建环境 | 负责人 | 主工作区 | `agile worktree create feat/STO-xxx`，推送远程分支 |
-| 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口设计**）→ design 冻结时填 implementation.md 任务分配表 → 推送 |
+| 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:prd`（需求结构化入抽屉三）→ `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口设计**）→ design 冻结时填 implementation.md 任务分配表 → 推送 |
 | 3 | 拉取环境 | 后端 + 前端 | 各自机器 | `agile worktree create feat/STO-xxx`（**自动跟踪已存在的远程分支**） |
 | 4 | 测试设计 | 负责人（有测试则测试先行） | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节；e2e 用例归前端节） |
 | 5 | 并行开发 | 负责人承其一端 + 对端 | 各自本地 | `/agile:backend` ‖ `/agile:frontend`（辅以 ui / fix-bug / add-task / feedback），各自写 `implementation-be/-fe.md`，小步推送（自动 CI + stage CD） |
