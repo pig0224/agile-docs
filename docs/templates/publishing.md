@@ -34,13 +34,13 @@ CI（Check workflow）在推送时自动跑一致性校验，registry 与目录�
 
 ## 删除/下架模板
 
-从 `registry.yaml` 移除条目 + 删除目录。用户侧下次 `template list` 刷新后不再展示；已生成项目不受影响。
+从 `registry.json` 移除条目 + 删除目录。用户侧下次 `template list` 刷新后不再展示；已生成项目不受影响。
 
 ## 私有模板源
 
 fork 或自建仓库，满足两点即可作为模板源：
 
-1. 根目录有合法的 `registry.yaml`（通过四防线校验）
+1. 根目录有合法的 `registry.json`（通过五防线校验）
 2. 模板目录与登记一致
 
 用户侧改 `.agile/settings.json` 的 `templates.registry` 指向它。官方模板可定期 `git merge` 上游同步。

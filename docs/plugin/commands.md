@@ -242,15 +242,15 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 
 | | |
 |---|---|
-| 用途 | AI 陪同一键建设 agile-templates 新模板：设计问答、骨架生成（含规范骨架三文件）、registry.yaml 登记、check.mjs 校验、init project 冒烟验证 |
-| 场景 | 团队沉淀新栈 / 新变体模板（"加一个 vue3-nuxt 模板"） |
-| 参数 | `[模板名或技术栈描述]`；无参进入交互设计 |
+| 用途 | AI 陪同一键建设 agile-templates 新模板：四流程（A 从零手写单例 / B 派生改造单例 / C 上游脚手架引入 / D 组合模板）× 统一收口（registry.json 登记、check.mjs 校验、init project 冒烟验证）；SDD/TDD 组织（设计定稿先行、骨架测试基线、冒烟验收清单先行） |
+| 场景 | 团队沉淀新栈 / 新变体模板（"加一个 vue3-nuxt 模板"）；模板化上游脚手架（"把 create-xxx 产物变成我们的模板"）；组合底座（"加一套 前台+后台 系统组合"） |
+| 参数 | `[模板名/组合名或技术栈描述]`；无参进入交互设计 |
 | 委派 | 无（主会话执行——设计问答素材在主会话上下文中，分工红线显式例外） |
-| 前置 | 定位 agile-templates 仓库（workspace 内或独立检出） |
-| 产物 | 新模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + 前端栈模板另加 docs/ui.md + README + 构建特征文件 + 可运行测试）+ registry.yaml 登记 |
-| 示例 | `/agile:add-template vue3-nuxt` |
+| 前置 | **仅限在 agile-templates 仓库根目录使用**（检测 `registry.json` + `scripts/check.mjs` + `singles/` 同时存在；其他位置如 workspace 内一律拒绝，先 cd 过去）；组合模板冒烟需支持 singles/solutions 布局的 CLI（当前 ≥ 2.1.0） |
+| 产物 | 单模板：模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + 前端栈模板另加 docs/ui.md + README + 构建特征文件 + 可运行测试）+ `singles` 数组登记。组合：`solutions/<组合>/<成员>/` 成员目录（复制单例起点）+ `solutions` 数组登记 |
+| 示例 | `/agile:add-template vue3-nuxt`（单模板，A/B/C 判定）；`/agile:add-template admin-base`（组合，进入成员构成问答） |
 
-要点：**占位符与 init 语义相反——<span v-pre>`{{name}}`</span> / <span v-pre>`{{safeName}}`</span> 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 八项校验全绿 + 冒烟验证（临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。组合模板（solutions 段）的创作流程为二期规划，本命令现面向单模板目录。
+要点：**位置硬性限定**——只能在模板仓根目录运行，不做仓库定位猜测；**设计定稿门**——设计问答全部决策经用户确认后才写盘；**测试基线**——每个新骨架自带可运行测试且骨架阶段跑绿。**占位符与 init 语义相反——<span v-pre>`{{name}}`</span> / <span v-pre>`{{safeName}}`</span> 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 全绿（条目形状 / JSON 重复键 / 数组重复登记 / 目录派生 / 双向一致 / 全局唯一 / 规范骨架 / 根白名单）+ 冒烟验证（验收清单先行，临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。**流程 D（组合模板）**：设计问答改问成员构成（组合名 + `projects` 成员问答 + 派生起点，前置查重三段全局唯一）；成员骨架**复制最接近的单例模板作起点**（跳过从零生成），组合专属深度定制按实际需求另行开发；登记进 `solutions` 数组（projects 条目与 singles 同形状 = name + 一句话 description，数组顺序 = 生成顺序）后 check.mjs 校验登记与成员目录双向一致、成员名全局唯一；冒烟验证成员平铺落盘、<span v-pre>`{{name}}`</span> 替换与重跑补缺（需支持 singles/solutions 布局的 CLI，当前 ≥ 2.1.0）。
 
 ---
 

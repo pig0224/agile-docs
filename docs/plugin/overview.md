@@ -33,7 +33,7 @@ agile plugin install agile
   → review.md / release.md 归档闭环
 ```
 
-辅助命令随时可用：`/agile:init`（AI 陪同建项目：问答定制 + 辅助能力配置）、`/agile:add-template`（AI 辅助建设新模板）、`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
+辅助命令随时可用：`/agile:init`（AI 陪同建项目：问答定制 + 辅助能力配置）、`/agile:add-template`（AI 辅助建设新模板/组合模板）、`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
 
 前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），git 合并零冲突——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop/)。
 

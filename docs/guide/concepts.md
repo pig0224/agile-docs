@@ -46,7 +46,7 @@ workspace/                     # 单一 git 仓库（团队）
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "name": "my-workspace",
   "created": "2026-09-01",
   "paths": {
@@ -70,6 +70,7 @@ workspace/                     # 单一 git 仓库（团队）
 }
 ```
 
+- `version` 为 settings 结构版本：当前为 2；1 为 2.0.x 存量，读取时自动兼容（内存归一为 2，下次写盘自然升级）
 - `repos` 两键均可缺省（不登记的资源由 sync 提示 `agile config set <key> <git-url>`）；`ref` 为版本锁定预留——出现即警告「锁定暂未实现，按最新拉取」，不阻断
 - `repos.*.url`、`plugins.marketplace`、`templates.registry` 用 `agile config set/get/unset` 管理（快捷键 `tech-specs` / `biz-tech-docs` / `plugin-repo` / `template-repo`，类 npm 换源体验；分发源两键 unset 恢复内置官方源）——**换配置即换源，CLI 无需发版**
 - 旧版三 yaml（`workspace.yaml` / `registry.yaml` / `plugin.yaml`）由 `agile init workspace` 自动迁移合并进 settings.json（旧文件保留，提示人工 `git rm`）
