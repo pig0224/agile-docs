@@ -66,11 +66,12 @@ worktree 基于已有 commit 创建。先完成初始提交：
 git add -A && git commit -m "chore: init workspace"
 ```
 
-### init project 报「目录已存在」或模板不存在
+### init project 报「目录已存在」或模板/组合不存在
 
 - 目录已存在：换项目名，或确认旧目录可删除
-- 模板不存在：`agile template list` 查可用模板；模板源不对就改 `.agile/settings.json` 的 `templates.registry`
-- 注册中心一致性问题：`agile template list` 会逐条输出 issues 并以退出码 1 结束，按提示修复模板仓库
+- 组合模板输出「已存在，跳过 + warn」：该成员的有效目录名（含 `--member` 覆盖）在 `projects/` 下已被占用——若是同名普通项目请人工核对（换 `--member` 覆盖名重跑，或确认旧目录可删除）；确认是本组合已生成的成员则为补缺语义（只补缺失成员，见 [init project](/guide/commands#agile-init-project)）
+- 模板或组合模板不存在：`agile template list` 查可用模板与组合模板；模板源不对就改 `.agile/settings.json` 的 `templates.registry`
+- 注册中心一致性问题（含「成员名与模板/组合名冲突」「成员目录不存在/未登记」）：`agile template list` 会逐条输出 issues 并以退出码 1 结束，按提示修复模板仓库（模板名/组合名/成员名须三段全局唯一，组合登记与成员目录双向一致）
 
 ### template list 提示「使用本地缓存」（stale）
 

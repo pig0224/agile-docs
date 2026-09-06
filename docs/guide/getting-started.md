@@ -45,7 +45,7 @@ agile config list             # settings.json 全量
 ## 4. 创建项目（模板脚手架）
 
 ```bash
-agile template list                              # 查看可用模板
+agile template list                              # 查看可用模板与组合模板
 agile init project order-service --template go-service
 agile init project frontend-web --template vue3-vite
 ```

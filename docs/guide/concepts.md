@@ -13,7 +13,7 @@ workspace/                     # 单一 git 仓库（团队）
 ├── tech-specs/                # 抽屉一：公司级技术规范（独立 git 仓库，不入库，sync 拉取）
 ├── biz-tech-docs/             # 抽屉二：团队技术设计知识库（workspace 内普通目录，随仓库提交；多 workspace 团队登记为外部仓库后由 agile sync 管理、不入库）
 ├── biz-product-docs/          # 抽屉三：产品设计知识库（普通目录）
-├── projects/                  # 抽屉四：项目代码（普通目录，多项目平铺）
+├── projects/                  # 抽屉四：项目代码（普通目录；单例与组合模板成员项目全部平铺）
 └── process-docs/              # 抽屉五：过程产物（STO-xxx 需求档案）
 ```
 

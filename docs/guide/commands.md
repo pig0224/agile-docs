@@ -62,27 +62,32 @@ agile init workspace --name my-workspace --tech-specs git@gitlab.corp:specs/tech
 
 ### agile init project
 
-在 `projects/<name>` 初始化项目（workspace 单仓内**普通目录**），并 `git add` 纳入版本管理（不自动 commit）。两种方式：
+在 `projects/` 下初始化项目（workspace 单仓内**普通目录**），并 `git add` 纳入版本管理（不自动 commit）。三种方式：
 
 - **`--template <模板名>`**：从模板注册中心脚手架（模板源固定读 settings.json `templates.registry`，默认走本地缓存）
+- **`--template <组合模板名>`**：组合模板一次平铺生成全部成员项目（见下「组合模板」）
 - **缺省 `--template`**：生成**空项目骨架**（仅一个 README.md）——不联网、不读模板缓存，适合尚无合适模板的场景
 
 ```
-agile init project <name> [--template <模板名>]
+agile init project <name> [--template <模板名>] [--member <成员名>=<目录名>]...
 ```
 
 | 参数 | 必填 | 说明 |
 |---|---|---|
-| `<name>` | ✅ | 项目名，将作为 `projects/` 下的目录名 |
-| `--template` | ❌ | 模板名，`agile template list` 查看；**缺省创建空项目骨架** |
+| `<name>` | ✅ | 单模板/空骨架 = 项目目录名（落 `projects/<name>/`）；组合模板 = 系统输出标签（**不落目录**，仅用于命令输出汇报） |
+| `--template` | ❌ | 模板名或组合模板名，`agile template list` 查看；**缺省创建空项目骨架** |
+| `--member` | ❌ | 组合模板成员目录名覆盖（`成员名=目录名`，可重复）；仅 `--template` 指向组合模板时可用 |
 
 ```bash
-agile template list                          # 先看可用模板
+agile template list                          # 先看可用模板与组合模板
 agile init project order-service --template go-service
+agile init project 通用后台 --template admin-base --member backend=admin-backend  # 组合：平铺生成 admin-backend/ + frontend/
 agile init project my-lib                    # 空项目骨架（不访问模板注册中心）
 ```
 
-模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → 项目名，<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
+**组合模板**：单模板之上的声明式组合层（registry.yaml `solutions` 段），一次 `init project` 把全部成员项目**平铺**落盘 `projects/<成员目录名>/`（无系统目录层级；`<name>` 仅为系统输出标签）。成员是**组合专属完整模板骨架**（模板仓 `solutions/<组合名>/<成员名>/`，不引用 singles），规范骨架三文件照常带出。`--member` 可自定义成员落地目录名（缺省 = 组合定义的成员名）。**命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘后直接占用 `projects/` 顶层目录名），组合登记与成员目录双向一致。**补缺语义（弱化）**：已存在的成员目录 → 跳过 + warn（组合定义演进后可后补成员；CLI 无法区分同名普通项目，warn 后人工核对，AI 层 `/agile:init` 生成前会先做撞名核对；补缺按本次调用的有效成员目录名判定，覆盖过的成员须带相同 `--member`）。
+
+模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → **实际落地目录名**（组合场景 = 平铺后的成员目录名），<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
 
 ::: tip
 项目与 workspace 其余变更走**同一个 PR**——这是单仓模式的天然优势。
@@ -213,7 +218,7 @@ agile worktree create feat/STO-001    # 自动跟踪检出 origin/feat/STO-001
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `list` | `agile template list` | 列出全部模板（默认读本地缓存，`agile sync` / `agile template update` 刷新）；注册中心存在一致性问题（issues）时逐条输出并退出码 1 |
+| `list` | `agile template list` | 列出全部模板与组合模板（默认读本地缓存，`agile sync` / `agile template update` 刷新）；注册中心存在一致性问题（issues）时逐条输出并退出码 1 |
 | `update` | `agile template update` | 强制刷新模板缓存到注册中心远端最新 |
 | `clean` | `agile template clean` | 清理全部模板缓存（下次使用自动重新克隆） |
 
