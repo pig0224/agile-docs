@@ -227,7 +227,7 @@ agile worktree create feat/STO-001    # 自动跟踪检出 origin/feat/STO-001
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `list` | `agile template list` | 列出全部模板与组合模板（默认读本地缓存，`agile sync` / `agile template update` 刷新）；注册中心存在一致性问题（issues）时逐条输出并退出码 1 |
+| `list` | `agile template list [--json]` | 列出全部模板与组合模板（默认读本地缓存，`agile sync` / `agile template update` 刷新）；组合模板树形多行展开成员（成员行缩进、按成员名对齐，顺序 = registry `projects` 数组顺序）；注册中心存在一致性问题（issues）时逐条输出并退出码 1。`--json` 输出结构化 JSON（singles / solutions 数组，含组合成员 name+description，顺序 = registry 顺序）供脚本消费——纯 JSON 走 stdout，stale/issues 提示走 stderr |
 | `update` | `agile template update` | 强制刷新模板缓存到注册中心远端最新 |
 | `clean` | `agile template clean` | 清理全部模板缓存（下次使用自动重新克隆） |
 
