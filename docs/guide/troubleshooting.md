@@ -69,7 +69,9 @@ git add -A && git commit -m "chore: init workspace"
 ### init project 报「目录已存在」或模板/组合不存在
 
 - 目录已存在：换项目名，或确认旧目录可删除
-- 组合模板输出「已存在，跳过 + warn」：该成员的有效目录名（含 `--member` 覆盖）在 `projects/` 下已被占用——若是同名普通项目请人工核对（换 `--member` 覆盖名重跑，或确认旧目录可删除）；确认是本组合已生成的成员则为补缺语义（只补缺失成员，见 [init project](/guide/commands#agile-init-project)）
+- 报「与生成清单不符（缺 N 文件 / 多 M 项），疑似上次生成残留」：目标目录有本 CLI 的生成清单（`.agile/manifests/<目录名>.json`）但实际文件对不上——通常是上次 init 中途失败留下的残缺残留，或生成后目录被改动。确认后删除该目录重跑，或 `agile init project <name> --template <模板名> --force` 原地重建
+- 组合模板输出「已存在，跳过 + warn」：该成员的有效目录名（含 `--member` 覆盖）在 `projects/` 下已被占用——有生成清单且一致 = 本组合已生成的成员（补缺语义，只补缺失成员，见 [init project](/guide/commands#agile-init-project)）；无清单 = 陌生目录（同名普通项目、手写项目或旧版 CLI 生成），CLI 不动它，请人工核对（换 `--member` 覆盖名重跑，或确认旧目录可删除）
+- `--force` 报「拒绝重建无生成清单的目录」：护栏防误删——目标目录没有本 CLI 生成清单，可能是手写项目。人工确认后手动删除该目录，再重跑
 - 模板或组合模板不存在：`agile template list` 查可用模板与组合模板；模板源不对就改 `.agile/settings.json` 的 `templates.registry`
 - 注册中心一致性问题（含「成员名与模板/组合名冲突」「成员目录不存在/未登记」）：`agile template list` 会逐条输出 issues 并以退出码 1 结束，按提示修复模板仓库（模板名/组合名/成员名须三段全局唯一，组合登记与成员目录双向一致）
 
