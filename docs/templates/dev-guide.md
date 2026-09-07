@@ -148,6 +148,8 @@ agile template list
 agile init project demo --template <你的模板>
 ```
 
+本地模板目录含 `node_modules` 等安装/构建产物、符号链接（junction）或锁文件（`pnpm-lock.yaml` 等）也没关系——init 复制时自动忽略并逐项 warn 提示，不会进入生成项目。
+
 ::: warning
 `templates.registry` 指向**本地目录**时直接读取、不走缓存；调试完记得把该键改回原地址。
 :::
