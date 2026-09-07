@@ -62,43 +62,67 @@ agile init workspace --name my-workspace --tech-specs git@gitlab.corp:specs/tech
 
 ### agile init project
 
-在 `projects/` 下初始化项目（workspace 单仓内**普通目录**），并 `git add` 纳入版本管理（不自动 commit）。三种方式：
+在 `projects/` 下初始化项目（workspace 单仓内**普通目录**），并 `git add` 纳入版本管理（不自动 commit）。三种场景：
 
-- **`--template <模板名>`**：从模板注册中心脚手架（模板源固定读 settings.json `templates.registry`，默认走本地缓存）
+- **`--template <单例模板名>`**：从单例模板脚手架生成一个项目（模板源固定读 settings.json `templates.registry`，默认走本地缓存）
 - **`--template <组合模板名>`**：组合模板一次平铺生成全部成员项目（见下「组合模板」）
 - **缺省 `--template`**：生成**空项目骨架**（仅一个 README.md）——不联网、不读模板缓存，适合尚无合适模板的场景
 
 ```
-agile init project <name> [--template <模板名>] [--member <成员名>=<目录名>]... [--force [成员名]]...
+agile init project [--template <模板名|组合名>] [--name <目录名 | 组合项目名称=目录名>]...
 ```
 
 | 参数 | 必填 | 说明 |
 |---|---|---|
-| `<name>` | ✅ | 单模板/空骨架 = 项目目录名（落 `projects/<name>/`）；组合模板 = 系统输出标签（**不落目录**，仅用于命令输出汇报） |
-| `--template` | ❌ | 模板名或组合模板名，`agile template list` 查看；**缺省创建空项目骨架** |
-| `--member` | ❌ | 组合模板成员目录名覆盖（`成员名=目录名`，可重复）；仅 `--template` 指向组合模板时可用 |
-| `--force` | ❌ | 强制重建已存在成员：无值 = 全部已存在成员；`--force <成员名>` = 指定成员（可重复），仅组合模板支持。仅对**有本 CLI 生成清单**的目录生效，陌生目录拒绝重建以防误删手写项目（见下「重跑与断点续建防护」） |
+| `--template` | ❌ | 单例模板名或组合模板名，`agile template list` 查看；**缺省创建空项目骨架** |
+| `--name` | 场景而定 | 项目目录命名（可重复），三模式对照见下表 |
+
+**`--name` 三模式**（值统一满足 `^[a-z][a-z0-9-]*$`——同时用作 `projects/` 目录名与 <span v-pre>`{{name}}`</span> 占位）：
+
+| 场景 | `--name` 形态 | 缺省（不带 `--name`） |
+|---|---|---|
+| 空项目骨架（缺省 `--template`） | 裸值**必填**，恰好 1 个：`--name <目录名>` | —（缺失即报错） |
+| 单例模板 | 裸值可选，至多 1 个：`--name <目录名>` | 单例项目名称（= 模板名） |
+| 组合模板 | 键值可重复：`--name <组合项目名称>=<目录名>` | 各成员用组合项目名称（= 登记成员名） |
+
+交叉形态报错：单例 / 空骨架收到键值、组合收到裸值，均报错并说明该场景的正确形态。
 
 ```bash
-agile template list                          # 先看可用模板与组合模板
-agile init project order-service --template go-service
-agile init project 通用后台 --template admin-base --member backend=admin-backend  # 组合：平铺生成 admin-backend/ + frontend/
-agile init project my-lib                    # 空项目骨架（不访问模板注册中心）
+agile template list                                         # 先看可用单例模板与组合模板
+agile init project --name my-lib                            # 空项目骨架（不访问模板注册中心）
+agile init project --template go-service                    # 单例：目录名 = go-service
+agile init project --template go-service --name order       # 单例：目录名 = order
+agile init project --template admin-base --name backend=be  # 组合：平铺生成 be/ + frontend/
 ```
 
-**重跑与断点续建防护**：每次成功生成成员后，CLI 在 workspace 级写**生成清单** `.agile/manifests/<成员目录名>.json`（来源模板/组合名、成员原名、文件相对路径、生成时间、模板 commit），并随项目一起 `git add` 入库。重跑 `init project` 遇到已存在目录时按清单校验：
+::: warning 2.4.0 破坏性变更（迁移对照）
+`init project` 不再接受位置参数 `<name>`，`--member` / `--force` 废除，目录命名统一为 `--name`：
 
-- **有清单且一致** → 单例模板报「目录已存在」；组合模板跳过 + warn（补缺语义，可后补组合演进的新成员）
-- **有清单但不一致**（缺文件/多文件，疑似上次 init 中途失败留下的残缺残留）→ **硬错误**退出码非 0：`✘ projects/pig-saas-mock 与生成清单不符（缺 5 文件 / 多 2 项），疑似上次生成残留；请删除该目录后重跑，或使用 --force 重生成`
-- **无清单**（陌生目录：同名普通项目、手写项目或旧版 CLI 生成）→ 维持原有行为（单例报「目录已存在」，组合跳过 + warn），**不升级为错误**（向后兼容既有 workspace）
+| 2.3.x 及以前 | 2.4.0 起 |
+|---|---|
+| `agile init project <name> --template <模板名>` | `agile init project --template <模板名> --name <目录名>`（`--name` 缺省 = 模板名） |
+| `agile init project <系统标签> --template <组合名> --member 成员名=目录名` | `agile init project --template <组合名> --name 成员名=目录名`（输出汇报用组合名；`--name` 缺省 = 各成员名） |
+| `--force` 强制重建已存在目录 | **已删除**——重跑防护四态见下表，清单不符唯一出路 = 删除该目录后重跑 |
 
-`--force` 重建仅对有清单的目录生效（先删后重建，成功后输出 `已强制重建` warn），陌生目录一律拒绝并提示人工确认。生成走**事务**：成员先复制到同卷临时目录再原子替换目标，任一成员失败自动回滚**本次运行新建**的成员（之前已存在被跳过的不动），不留残缺目录。
+旧写法执行时给出废弃指引并退出码非 0，不会静默变更行为。
+:::
 
-**组合模板**：单模板之上的声明式组合层（registry.json `solutions` 数组），一次 `init project` 把全部成员项目**平铺**落盘 `projects/<成员目录名>/`（无系统目录层级；`<name>` 仅为系统输出标签）。成员是**组合专属完整模板骨架**（模板仓 `solutions/<组合名>/<成员名>/`，不引用 singles），规范骨架三文件照常带出。`--member` 可自定义成员落地目录名（缺省 = 组合定义的成员名）。**命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘后直接占用 `projects/` 顶层目录名），组合登记与成员目录双向一致。**补缺语义（弱化）**：已存在的成员目录按生成清单校验（一致 → 跳过 + warn，组合定义演进后可后补成员；不符 → 硬错误，见上文「重跑与断点续建防护」）；无清单的陌生目录（同名普通项目）仍跳过 + warn 人工核对，AI 层 `/agile:init` 生成前会先做撞名核对。补缺按本次调用的有效成员目录名判定，覆盖过的成员须带相同 `--member`。
+**重跑防护四态**：每次成功生成后，CLI 在 workspace 级写**生成清单** `.agile/manifests/<落地目录名>.json`（来源模板/组合名、成员原名、文件相对路径、生成时间、模板 commit），并随项目一起 `git add` 入库。重跑 `init project` 遇到已存在目录时：
+
+| 目录状态 | 单例模板 | 组合模板 |
+|---|---|---|
+| 有清单且一致 | 报「目录已存在」 | 跳过 + warn（补缺语义，可后补组合演进的新成员） |
+| 有清单但不符（缺文件 / 多文件，疑似上次 init 中途失败残留） | **硬错误**退出码非 0：`✘ projects/xxx 与生成清单不符（缺 N 文件 / 多 M 项），疑似上次生成残留；请删除该目录后重跑` | 同左 |
+| 无清单（陌生目录：手写项目、旧版 CLI 生成） | 报「目录已存在」 | 跳过 + warn 人工核对（AI 层 `/agile:init` 生成前会先做撞名核对） |
+| 空目录 | 放行生成（无内容损失） | 放行生成（计入本次 created） |
+
+生成走**事务**：先复制到同卷临时目录再原子替换目标，任一成员失败自动回滚**本次运行新建**的成员（之前已存在被跳过的不动），不留残缺目录。补缺按本次调用的有效成员目录名判定——覆盖过的成员重跑须带相同 `--name` 键值。
+
+**组合模板**：单例模板之上的声明式组合层（registry.json `solutions` 数组），一次 `init project` 把全部成员项目**平铺**落盘 `projects/<成员目录名>/`（无系统目录层级），输出汇报以组合名为标签。成员是**组合专属完整模板骨架**（模板仓 `solutions/<组合名>/<成员名>/`，不引用 singles），规范骨架三文件照常带出。**命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘后直接占用 `projects/` 顶层目录名），组合登记与成员目录双向一致。
 
 **组合根耦合资产带出**：全部成员生成成功后，CLI 把模板仓组合根的 `CLAUDE.md`（组合导航）与 `docs/`（跨成员耦合的约定/规范，每篇 frontmatter 标 `类型: tech|product`）快照到 workspace `.agile/solutions/<组合名>/`（≥ 2.3.0；与生成清单一同 `git add` 入库，快照已存在则跳过不覆盖）——组合的知识资产不散落成员项目，符合「1 根 5 抽屉」范式。随后在 workspace 内运行 `/agile:knowledge sync-template <组合名>` 按资产类型同步进抽屉（tech → biz-tech-docs，product → biz-product-docs）。
 
-模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → **实际落地目录名**（组合场景 = 平铺后的成员目录名），<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
+模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → **实际落地目录名**（单例 = `--name` 裸值或单例项目名称；组合 = 平铺后的成员目录名），<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
 
 ::: tip
 项目与 workspace 其余变更走**同一个 PR**——这是单仓模式的天然优势。

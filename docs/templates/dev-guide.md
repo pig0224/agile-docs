@@ -9,11 +9,7 @@ agile-templates/
 ├── registry.json               # 注册中心 v2：singles / solutions 全数组（条目 = name + description + language?/framework?）
 ├── registry.schema.json        # JSON Schema（字段中文说明，编辑器补全校验）
 ├── singles/                    # 单例模板（一个模板一个完整项目骨架，目录名 = 模板名）
-│   ├── vue3-vite/
-│   ├── react-vite/
-│   ├── go-service/
-│   ├── java-springboot/
-│   └── node-lib/
+│   └── <模板名>/
 ├── solutions/                  # 组合模板（可选）：一组合一目录，成员 = 组合专属完整模板骨架
 │   └── <组合名>/
 │       ├── CLAUDE.md           # 组合根导航（组合定位 / 成员清单 / 耦合资产导航）
@@ -69,7 +65,7 @@ agile-templates/
 1. 按 A/B/C 之一生成骨架：`singles/<模板名>/`，含项目骨架（README + 可运行测试，约定见「模板内容约定」）+ **项目级规范骨架三文件**，测试跑绿
 2. 在 `registry.json` 的 `singles` 数组登记（无 path 字段，目录由名字派生）
 
-提交推送后，用户侧 `agile init project <name> --template <模板名>` 即可用。AI 陪同建设用插件命令 `/agile:add-template`（见下节）。
+提交推送后，用户侧 `agile init project --template <模板名> [--name <目录名>]` 即可用（`--name` 命名接口需 CLI ≥ 2.4.0）。AI 陪同建设用插件命令 `/agile:add-template`（见下节）。
 
 ### 新增一个组合模板（流程 D）
 
@@ -86,14 +82,14 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 在 **agile-templates 仓库根目录**（检测 `registry.json` + `scripts/check.mjs` + `singles/` 同时存在）让 Claude Code 执行插件命令；**其他位置（如 workspace 内）拒绝执行**，先 `cd` 到仓库根目录：
 
 ```bash
-/agile:add-template vue3-nuxt        # 单模板：指定模板名或技术栈描述（进入 A/B/C 判定）
+/agile:add-template vue3-nuxt        # 单例模板：指定模板名或技术栈描述（进入 A/B/C 判定）
 /agile:add-template admin-base       # 组合模板：进入成员构成问答（流程 D）
 /agile:add-template                  # 无参数进入交互式设计问答
 ```
 
 命令按 SDD/TDD 方法论组织，三道门不得跳过：**设计定稿门**（设计问答全部决策经确认后才写盘）→ **测试基线**（骨架阶段测试跑绿）→ **冒烟验收门**（验收清单先行，逐条实际执行）。骨架生成按 A/B/C/D 分支（见上表）→ **registry.json 登记 + `node scripts/check.mjs` 校验** → **冒烟验证**（临时 workspace + 本地模板源执行 `agile init project`，验证占位符替换正确且项目测试可跑——必须实际执行）→ 汇报变更清单。
 
-**流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点 + 耦合资产盘点：跨成员共享的约定/规范逐项标注 tech/product）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ 组合根两件套（CLAUDE.md 导航 + docs/ 归总跨成员耦合资产，逐篇标 `类型: tech|product`）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一 / 组合根耦合资产）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换、重跑补缺与组合根两件套快照带出（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0；组合根资产快照带出需 ≥ 2.3.0）。
+**流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点 + 耦合资产盘点：跨成员共享的约定/规范逐项标注 tech/product）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ 组合根两件套（CLAUDE.md 导航 + docs/ 归总跨成员耦合资产，逐篇标 `类型: tech|product`）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一 / 组合根耦合资产）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换、重跑补缺与组合根两件套快照带出（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0；组合根资产快照带出需 ≥ 2.3.0；`--name` 命名接口需 ≥ 2.4.0）。
 
 要点（详见[插件命令详解](/plugin/commands)）：
 
@@ -123,20 +119,14 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 
 ## 导出后如何发布
 
-`/agile:share-template` 产出的只是**本地检出的模板仓变更**（新模板目录 + registry.json 追加条目），发布要靠人工推送。语义同[模板发布](./publishing)：**git 仓库分发，推送即发版**——无版本号、无 npm、无构建，push 到 main 即全量上线，使用方刷新缓存即生效。
-
-发布步骤（人工执行，AI 不代办）：
-
-1. **审阅**：逐项过 AI 汇报的变更清单与处置清单（敏感数据剔除、团队定制中立化是否符合预期），`node scripts/check.mjs` 复核全绿
-2. **提交**：`git add <新增模板目录> registry.json` → commit——推荐走 PR（分支保护要求 PR + 1 approval + CI 绿；管理员保留直推通道）
-3. **推送**：`git push` 到 main——即发布
+`/agile:share-template` 产出的只是**本地检出的模板仓变更**（新模板目录 + registry.json 追加条目），发布要靠人工推送。流程与语义同[模板发布](./publishing)：**git 仓库分发，推送即发版**——审阅 AI 汇报的变更清单与处置清单（敏感数据剔除、团队定制中立化是否符合预期）→ `node scripts/check.mjs` 复核全绿 → commit（推荐走 PR）→ push 到 main 即全量上线，使用方刷新缓存即生效。
 
 使用方验证：
 
 ```bash
 agile template update                          # 刷新缓存（或 agile sync）
 agile template list                            # 新模板/组合可见
-agile init project demo --template <模板名或组合名>
+agile init project --template <模板名或组合名>
 ```
 
 团队私有分发：把模板仓 fork 或自建后作为私有源（`agile config set template-repo <git-url>`，见[模板概览 · 私有模板源](./overview#私有模板源)），打包进私有仓的模板只对团队可见。注意**目标仓形态决定打包处置默认建议**（公共仓默认中立化团队定制，私有仓默认保留）——打包前先确认目标仓是哪个。
@@ -151,7 +141,7 @@ agile init project demo --template <模板名或组合名>
 4. **登记与目录双向一致**：登记的模板/成员目录必须实际存在（幽灵登记报错）；组合目录下的子目录必须全部登记进 projects（幽灵成员目录报错，CLI 与 check.mjs 双重；组合根 `docs/` 豁免——耦合资产目录不是成员）；singles/ 与 solutions/ 整体反向——未登记的目录必须全部登记（幽灵单例/幽灵组合报错，仅 check.mjs 强制）
 5. **三段全局唯一**：模板名 / 组合名 / 成员名互不重名（init 后全部平铺落盘 `projects/`，同一命名空间）
 
-以上防线由 CLI（`init project` 加载注册中心时校验，不一致即拒绝生成）与仓库 CI（`scripts/check.mjs`）**双重强制**；仅 check.mjs 强制的是：JSON 重复键、未知字段（顶层与条目）、`singles/`/`solutions/` 整体反向完整性与根一级目录白名单。
+以上防线由 CLI（`init project` 加载注册中心时校验，不一致即拒绝生成）与仓库 CI（`scripts/check.mjs`）**双重强制**；仅 check.mjs 强制的是：JSON 重复键、未知字段（顶层与条目）、`singles/`/`solutions/` 整体反向完整性与根一级目录白名单。防冲突设计的完整细则见 agile-templates 仓的 [docs/registry.md](https://github.com/pig0224/agile-templates/blob/main/docs/registry.md)。
 
 **命名建议**：模板 `<技术栈/框架>-<变体>`，如 `vue3-vite`、`go-service`、`java-springboot`；扩展示例 `vue3-nuxt`、`go-grpc`、`node-cli`；组合 `<系统域>-<定位>`（如 `admin-base`、`crm-base`）；成员名取职责域（`backend`、`frontend`），避开既有模板名。
 

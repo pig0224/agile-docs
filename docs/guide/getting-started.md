@@ -107,7 +107,7 @@ agile plugin update         # 更新插件（刷新市场 → 强制重装，重
 npm i -g fcc-agile-cli
   → agile init workspace
   → agile config set tech-specs <url> → agile sync（再跑一次验证幂等）
-  → agile template list → agile init project <name> --template <t>
+  → agile template list → agile init project --template <t> [--name <目录>]
   → git commit（首个提交）
   → 日常：worktree create → 开发 → 各项目跑测试 → commit → PR
   → agile plugin install agile（可选，进入 SDD/TDD 流程）

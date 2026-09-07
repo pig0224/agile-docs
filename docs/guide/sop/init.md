@@ -39,7 +39,7 @@ $ agile config set biz-tech-docs git@corp:team/kb.git
 $ agile sync
 [repos] tech-specs    … done（clone）
 [repos] biz-tech-docs … done（clone）
-[templates] 模板缓存已刷新（5 个模板）
+[templates] 模板缓存已刷新
 [plugins] agile … done（按声明安装）
 
 $ agile plugin install agile
@@ -57,7 +57,7 @@ $ git add -A && git commit -m "chore: 初始化工作区" && git push -u origin 
 | 公司规范可见 | 打开 `tech-specs/` 确认目录与 README 导航 |
 | 团队知识库可见 | 打开 `biz-tech-docs/`，确认 `frameworks/` 领域目录 |
 | PRD 模板在位 | `biz-product-docs/templates/PRD模板.md` |
-| 模板可用 | `agile template list` 列出 5 个模板 |
+| 模板可用 | `agile template list` 列出单例模板与组合模板 |
 | 插件可用 | 重启 Claude Code 会话后 `/agile:help` 列出全部命令 |
 | main 分支保护 | 仓库设置确认 PR 必需 + CI 必需 |
 
