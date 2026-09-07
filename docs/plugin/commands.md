@@ -234,7 +234,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | `projects/<name>/`（CLI 生成 + 问答改写）：conventions.md 定制版；CLAUDE.md 团队规范段确认改写 + 新增「环境要求」「辅助开发配置」节；`docs/ui.md` 定制版（前端模板——UI 约定问答落 token 管理方式与基准值，未问到处保留「待定」）；组合场景另产出成员映射表（成员 → 成员模板（组合专属）→ 实际目录） |
 | 示例 | `/agile:init`（先 `agile init project` 也可——命令会感知到刚创建的项目并续接） |
 
-要点：**默认值兜底**——开头一问「定制 or 全默认」（推荐全默认），全默认则产物与纯 CLI init 完全一致；**组合模板场景**——生成前先做事前撞名核对（有效成员目录名扫 `projects/` 比对，撞名问用户）与成员目录命名问答（预选项 = 组合定义的成员名，可自定义短名，CLI 拼 `--member`），约定问答按成员逐项目循环（支持「沿用上一成员口径」），汇报附成员映射表；**分级落盘**——只读环境检测直接做，MCP / design.md / llms.txt 确认后 AI 写入（MCP 进项目 `.mcp.json`），框架 CLI 确认后自动安装（优先 devDep + `npx`），**skills 安装与权限白名单只输出建议清单、人工自己配**。框架 AI 能力包推荐来源按序：团队库（仅团队库匹配已确认栈领域时）→ 命令内置映射（Vue / Vite / React / Node 官方 llms.txt、Ant Design AI 能力包等，2026-09 核实可达）→ 现场检索（WebSearch 核实存在才推荐，防幻觉包名）。定制不回写模板；团队库未确认前只引用通用领域。
+要点：**默认值兜底**——开头一问「定制 or 全默认」（推荐全默认），全默认则产物与纯 CLI init 完全一致；**组合模板场景**——生成前先做事前撞名核对（有效成员目录名扫 `projects/` 比对，撞名问用户）与成员目录命名问答（预选项 = 组合定义的成员名，可自定义短名，CLI 拼 `--member`），约定问答按成员逐项目循环（支持「沿用上一成员口径」），汇报附成员映射表，生成完成后 CLI 自动带出组合根耦合资产快照（`.agile/solutions/<组合名>/`），可接 `/agile:knowledge sync-template <组合名>` 同步进抽屉；**分级落盘**——只读环境检测直接做，MCP / design.md / llms.txt 确认后 AI 写入（MCP 进项目 `.mcp.json`），框架 CLI 确认后自动安装（优先 devDep + `npx`），**skills 安装与权限白名单只输出建议清单、人工自己配**。框架 AI 能力包推荐来源按序：团队库（仅团队库匹配已确认栈领域时）→ 命令内置映射（Vue / Vite / React / Node 官方 llms.txt、Ant Design AI 能力包等，2026-09 核实可达）→ 现场检索（WebSearch 核实存在才推荐，防幻觉包名）。定制不回写模板；团队库未确认前只引用通用领域。
 
 ---
 
@@ -286,13 +286,13 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 
 | | |
 |---|---|
-| 用途 | `build` 辅助建设知识库（判库 → 调库调研 → 提纲 → 落盘骨架）；`capture` 从会话、过程产物、历史材料沉淀长期结论 |
-| 场景 | build：新团队/新技术栈初始化知识库；capture：会话形成的技术决策当场沉淀、design.md 中长期结论入库、公司规范缺失的提案 |
-| 参数 | `build <建设提示词>` 或 `capture <主题> [--from <编号/路径/项目>]`，均可选 `--to team/product/tech`；无参显示库概况 |
+| 用途 | `build` 辅助建设知识库（判库 → 调库调研 → 提纲 → 落盘骨架）；`capture` 从会话、过程产物、历史材料沉淀长期结论；`sync-template` 把组合模板根归总的耦合约定/规范按资产类型同步进抽屉 |
+| 场景 | build：新团队/新技术栈初始化知识库；capture：会话形成的技术决策当场沉淀、design.md 中长期结论入库、公司规范缺失的提案；sync-template：`agile init project --template <组合名>` 之后，把组合耦合知识落入知识库（最终符合「1 根 5 抽屉」范式） |
+| 参数 | `build <建设提示词>` 或 `capture <主题> [--from <编号/路径/项目>]`，均可选 `--to team/product/tech`；或 `sync-template [组合名]`（缺省列出 `.agile/solutions/` 下全部组合）；无参显示库概况 |
 | 委派 | 无（**分工红线显式例外**：素材在主会话对话历史中，主会话直接执行） |
-| 前置 | 无（需在 agile workspace 或知识库仓库内执行；落点经三问判别法推断后向用户确认） |
+| 前置 | 无（需在 agile workspace 或知识库仓库内执行；落点经三问判别法推断后向用户确认；sync-template 仅 workspace 内可用，依赖 `.agile/solutions/` 快照与两个知识库抽屉） |
 | 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态——状态取值「有效 / 已废弃 / 已被替代」，`来源` 格式 `<workspace 名>/<素材>`——workspace 名读 settings.json 的 `name`，单库模式用当前仓库名）+ 导航登记（根导航 + 所在模块导航）；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
-| 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012` |
+| 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012`；`/agile:knowledge sync-template admin-base` |
 
 **运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 提案不落盘、输出提案要点由人工带回团队走流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
 
@@ -301,3 +301,5 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 **划分约定**（tech / team 库）：按「通用 + 技术栈」两维组织——通用领域（`architecture/`、`engineering/`）跨技术栈共享，技术栈领域（`frameworks/go-zero/`、`frameworks/springboot/` 等）每栈一目录；**调取时按当前项目技术栈选择性引用**（识别优先级：提示词 > 扫 projects 标志文件 > 询问），其他技术栈领域不混入——go-zero 工作区不读 springboot 领域，反之亦然。
 
 **通用硬规则**：知识禁止单文件堆积；**任何新文档必须导航双登记**（根导航对应分组 + 所在模块导航，build 与 capture 一致；模块导航存在才登记——建立时机：`frameworks/<栈>/` 必建、通用领域 ≥ 3 篇才建；归档单一位置——只在根导航「归档」分组，模块导航只列有效文档）；知识过期不删文件，改「状态」字段移入归档分组；跨会话历史不可检索——旧材料需 `--from` 指认。
+
+**sync-template（组合模板耦合资产同步，仅 workspace 内）**：`init project --template <组合名>` 成功后 CLI 已把模板仓组合根两件套快照到 `.agile/solutions/<组合名>/`（组合定位/成员清单/耦合资产导航 + docs/ 耦合文档，见 [init project · 组合模板](/guide/commands#agile-init-project)）。本模式读该快照，逐篇按 frontmatter `类型` 定去向（`tech` → biz-tech-docs，`product` → biz-product-docs；缺失时按三问判别法推断并确认），正文复制进目标库并重写 frontmatter（`来源` = `<workspace 名>/模板 <组合名>`、`状态` = 有效），同名/同主题文档展示差异由人工决定 跳过/覆盖/另名，同样**导航双登记**。同步是复制不是移动：抽屉里的文档此后由团队演进，模板更新不自动回流，模板重度升级可重跑本模式逐篇对比。tech-specs 不接收（公司级只读，相关缺失走提案）。

@@ -15,8 +15,11 @@ agile-templates/
 │   ├── java-springboot/
 │   └── node-lib/
 ├── solutions/                  # 组合模板（可选）：一组合一目录，成员 = 组合专属完整模板骨架
-│   └── <组合名>/<成员名>/
-└── scripts/check.mjs           # 自含一致性校验（CI 同款，零依赖；含 JSON 重复键扫描）
+│   └── <组合名>/
+│       ├── CLAUDE.md           # 组合根导航（组合定位 / 成员清单 / 耦合资产导航）
+│       ├── docs/               # 跨成员耦合的约定/规范归总处（frontmatter「类型: tech|product」）
+│       └── <成员名>/
+└── scripts/check.mjs           # 自含一致性校验（CI 同款，零依赖；含 JSON 重复键扫描 + 组合根耦合资产）
 ```
 
 `registry.json`（无 path 字段——目录由名字约定派生：单例 `singles/<name>/`、成员 `solutions/<组合>/<name>/`）：
@@ -71,11 +74,12 @@ agile-templates/
 ### 新增一个组合模板（流程 D）
 
 1. 为每个成员新建 `solutions/<组合名>/<成员名>/`——**组合专属完整模板骨架**（复制最接近的单例模板作起点，按组合需求定制；仓库无对应技术栈单例的成员按流程 A 从零手写；成员与 singles 互不引用），同样要求规范骨架三文件
-2. 在 `registry.json` 的 `solutions` 数组登记组合（`description` + `projects` 成员数组，**数组顺序 = 生成顺序**）
+2. 建组合根耦合资产两件套——**跨成员共享的约定/规范/知识归总到这里，不写进成员项目**（成员平铺落盘后知识散落 `projects/` 会违背 workspace「1 根 5 抽屉」范式）：`solutions/<组合名>/CLAUDE.md`（组合定位 / 成员清单 / 耦合资产导航）+ `solutions/<组合名>/docs/`（≥1 篇，每篇 frontmatter 标 `类型: tech|product`——`/agile:knowledge sync-template` 按此同步进 biz-tech-docs / biz-product-docs）。归总判据：≥2 成员共享或跨成员协作协议；单成员内部约定留成员项目。组合根资产不做 <span v-pre>`{{name}}`</span> 占位替换
+3. 在 `registry.json` 的 `solutions` 数组登记组合（`description` + `projects` 成员数组，**数组顺序 = 生成顺序**）
 
-生成产物为成员**平铺**落盘 `projects/<成员目录名>/`（见[模板概览 · 组合模板](./overview#组合模板)）——因此成员名与模板名/组合名同命名空间，三段必须全局唯一。
+生成产物为成员**平铺**落盘 `projects/<成员目录名>/`（见[模板概览 · 组合模板](./overview#组合模板)）——因此成员名与模板名/组合名同命名空间，三段必须全局唯一。全部成员生成成功后，CLI 自动把组合根两件套快照到 workspace `.agile/solutions/<组合名>/`（与生成清单一同入库；快照已存在则跳过不覆盖），供 `/agile:knowledge sync-template` 按类型同步进抽屉。
 
-AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，见下节）——设计问答改问成员构成，成员骨架复制最接近的单例模板作起点。
+AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，见下节）——设计问答改问成员构成（含**耦合资产盘点**），成员骨架复制最接近的单例模板作起点。
 
 ## AI 辅助建设：/agile:add-template
 
@@ -89,7 +93,7 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 
 命令按 SDD/TDD 方法论组织，三道门不得跳过：**设计定稿门**（设计问答全部决策经确认后才写盘）→ **测试基线**（骨架阶段测试跑绿）→ **冒烟验收门**（验收清单先行，逐条实际执行）。骨架生成按 A/B/C/D 分支（见上表）→ **registry.json 登记 + `node scripts/check.mjs` 校验** → **冒烟验证**（临时 workspace + 本地模板源执行 `agile init project`，验证占位符替换正确且项目测试可跑——必须实际执行）→ 汇报变更清单。
 
-**流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换与重跑补缺（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0）。
+**流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点 + 耦合资产盘点：跨成员共享的约定/规范逐项标注 tech/product）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ 组合根两件套（CLAUDE.md 导航 + docs/ 归总跨成员耦合资产，逐篇标 `类型: tech|product`）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一 / 组合根耦合资产）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换、重跑补缺与组合根两件套快照带出（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0；组合根资产快照带出需 ≥ 2.3.0）。
 
 要点（详见[插件命令详解](/plugin/commands)）：
 
@@ -104,7 +108,7 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 1. **命名规范**：`^[a-z][a-z0-9-]*$`（小写字母开头，仅小写字母/数字/连字符）
 2. **重复即报错**：JSON 重复键由 check.mjs 显式扫描（JSON.parse 对重复键静默取后者）；singles / solutions / 同组合 projects 数组内 name 重复登记均拒绝
 3. **目录名 === name**：一个目录一个身份，目录由名字约定派生且必须实际存在
-4. **登记与目录双向一致**：登记的模板/成员目录必须实际存在（幽灵登记报错）；组合目录下的子目录必须全部登记进 projects（幽灵成员目录报错，CLI 与 check.mjs 双重）；singles/ 与 solutions/ 整体反向——未登记的目录必须全部登记（幽灵单例/幽灵组合报错，仅 check.mjs 强制）
+4. **登记与目录双向一致**：登记的模板/成员目录必须实际存在（幽灵登记报错）；组合目录下的子目录必须全部登记进 projects（幽灵成员目录报错，CLI 与 check.mjs 双重；组合根 `docs/` 豁免——耦合资产目录不是成员）；singles/ 与 solutions/ 整体反向——未登记的目录必须全部登记（幽灵单例/幽灵组合报错，仅 check.mjs 强制）
 5. **三段全局唯一**：模板名 / 组合名 / 成员名互不重名（init 后全部平铺落盘 `projects/`，同一命名空间）
 
 以上防线由 CLI（`init project` 加载注册中心时校验，不一致即拒绝生成）与仓库 CI（`scripts/check.mjs`）**双重强制**；仅 check.mjs 强制的是：JSON 重复键、未知字段（顶层与条目）、`singles/`/`solutions/` 整体反向完整性与根一级目录白名单。

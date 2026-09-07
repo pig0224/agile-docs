@@ -7,7 +7,9 @@ fcc-agile 的工作区（workspace）是一个**单一 git 仓库**，内部按�
 ```
 workspace/                     # 单一 git 仓库（团队）
 ├── .agile/
-│   └── settings.json          # 唯一配置（抽屉路径 / 外部仓库 / 插件 / 模板源）
+│   ├── settings.json          # 唯一配置（抽屉路径 / 外部仓库 / 插件 / 模板源）
+│   ├── manifests/             # 生成清单（init project 断点续建防护；随仓库入库）
+│   └── solutions/             # 组合模板耦合资产快照（init project 带出；/agile:knowledge sync-template 按类型同步进抽屉二/三）
 ├── .gitignore                 # 忽略 .worktrees/、tech-specs/；biz-tech-docs 登记后由 sync 自动补写
 ├── .gitattributes             # 换行符统一（init workspace 生成）
 ├── tech-specs/                # 抽屉一：公司级技术规范（独立 git 仓库，不入库，sync 拉取）
