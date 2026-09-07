@@ -101,6 +101,46 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 - **模板中立**：预填默认值只来自模板自身选型与社区惯例，不引入团队知识库条款
 - 命令**不执行 git add / commit / push**——推送即发版，由人工处理
 
+## 从 workspace 项目打包模板
+
+方向相反的姊妹命令：add-template 在模板仓里把想法建成模板（正向建设），`/agile:share-template` 在 workspace 里把**既有项目**（含沉淀的规范与知识）反向打包为模板——解决「现有项目想共享模板需人工搬运」。在 agile workspace 内执行（与 add-template 相反，源项目在 `projects/` 下）：
+
+```bash
+/agile:share-template order-service            # 单例：指定 projects/ 下目录名
+/agile:share-template admin-web order-center   # 组合：多个项目打包成一个组合模板
+/agile:share-template                          # 无参扫 projects/ 盘点列候选
+```
+
+六步流程：**盘点与目标仓定位**（读 `.agile/manifests/` 标注项目出身；目标仓 = 本地检出的模板仓，`registry.json` + `scripts/check.mjs` + `singles/` 三件识别）→ **方案问答**（打包形态 / 命名（三段全局唯一）/ description / 目标仓形态）→ **清理审计**（三维处置清单：敏感与业务数据剔除脱敏、团队定制公共仓默认中立化·私有仓默认保留、工程卫生一律剔除）→ **打包落盘 + registry.json 登记**（只追加不重排；组合根两件套优先回带 `.agile/solutions/` 快照）→ **校验 + 冒烟**（check.mjs 全绿 + 临时 workspace `init project` 冒烟 + round-trip 对照）→ **汇报移交**。
+
+要点（详见[插件命令详解](/plugin/commands)）：
+
+- **源项目只读铁律**：脱敏/中立化/占位符还原等一切修改只发生在目标仓副本，绝不回写 `projects/`
+- **三道门**（方案定稿门 / 处置确认门 / 冒烟验收门）不得跳过——处置清单逐项经用户确认后才执行
+- **占位符逆向还原**：init 把占位符替换为真实目录名，本命令做逆向——真实落地目录名改回 <span v-pre>`{{name}}`</span>、安全段改回 <span v-pre>`{{safeName}}`</span>（package.json `name` 严格为 <span v-pre>`{{name}}`</span>；包名/目录名等身份性出现必换，URL/文案等语义性出现逐处判断）
+- **沉淀知识去向**：项目内沉淀（conventions / architecture / ui.md / README）随项目打包；跨成员共享规范归总组合根 docs/（使用方经 `/agile:knowledge sync-template` 进抽屉）；workspace 抽屉知识不直接入模板（模板中立 + 防泄露）
+- 命令**不执行 git add / commit / push**——导出后如何发布见下节
+
+## 导出后如何发布
+
+`/agile:share-template` 产出的只是**本地检出的模板仓变更**（新模板目录 + registry.json 追加条目），发布要靠人工推送。语义同[模板发布](./publishing)：**git 仓库分发，推送即发版**——无版本号、无 npm、无构建，push 到 main 即全量上线，使用方刷新缓存即生效。
+
+发布步骤（人工执行，AI 不代办）：
+
+1. **审阅**：逐项过 AI 汇报的变更清单与处置清单（敏感数据剔除、团队定制中立化是否符合预期），`node scripts/check.mjs` 复核全绿
+2. **提交**：`git add <新增模板目录> registry.json` → commit——推荐走 PR（分支保护要求 PR + 1 approval + CI 绿；管理员保留直推通道）
+3. **推送**：`git push` 到 main——即发布
+
+使用方验证：
+
+```bash
+agile template update                          # 刷新缓存（或 agile sync）
+agile template list                            # 新模板/组合可见
+agile init project demo --template <模板名或组合名>
+```
+
+团队私有分发：把模板仓 fork 或自建后作为私有源（`agile config set template-repo <git-url>`，见[模板概览 · 私有模板源](./overview#私有模板源)），打包进私有仓的模板只对团队可见。注意**目标仓形态决定打包处置默认建议**（公共仓默认中立化团队定制，私有仓默认保留）——打包前先确认目标仓是哪个。
+
 ## 命名规范（防冲突五防线）
 
 **模板如何被找到**：条目 `name` = 模板目录名（组合成员 = `solutions/<组合>/<name>/`），一条链定位无歧义——registry 无 path 字段，杜绝别名指向。
