@@ -174,7 +174,7 @@ agile config get tech-specs
 agile config list
 ```
 
-::: tip 换源即生效，CLI 无需发版
+::: tip 换源即生效
 四键都支持本地路径（内网镜像直接 clone）。`plugin-repo` 换源后已安装插件不受影响（`agile sync` 绝不卸载）；私有市场须与官方同名（市场名 `fcc`）依赖声明才无缝衔接。
 :::
 

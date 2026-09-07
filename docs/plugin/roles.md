@@ -34,7 +34,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 |---|---|
 | 何时委派 | 后端开发任务（/agile:backend）；按 TDD 实现服务端逻辑 |
 | 输入 | design.md + 测试案例 + worktree 路径 + 任务清单（每批 ≤5） |
-| 产出 | worktree 内实现与测试；implementation-be.md 任务勾选与 TDD 循环记录表（**仅后端可写**）；`STO-xxx(red|green|refactor):` 序列 commit |
+| 产出 | worktree 内实现与测试；implementation-be.md 任务勾选与 TDD 循环记录表（**仅后端可写**）；`STO-xxx(red\|green\|refactor):` 序列 commit |
 | TDD 硬规则 | Red（写失败测试并记录输出）→ Green（最小实现）→ Refactor（保持绿色）；脚手架/接口签名之外不提前实现 |
 
 ## frontend-dev —— 前端工程师

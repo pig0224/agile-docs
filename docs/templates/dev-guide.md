@@ -89,7 +89,7 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 
 命令按 SDD/TDD 方法论组织，三道门不得跳过：**设计定稿门**（设计问答全部决策经确认后才写盘）→ **测试基线**（骨架阶段测试跑绿）→ **冒烟验收门**（验收清单先行，逐条实际执行）。骨架生成按 A/B/C/D 分支（见上表）→ **registry.json 登记 + `node scripts/check.mjs` 校验** → **冒烟验证**（临时 workspace + 本地模板源执行 `agile init project`，验证占位符替换正确且项目测试可跑——必须实际执行）→ 汇报变更清单。
 
-**流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换与重跑补缺（需支持 singles/solutions 布局的 CLI，当前 ≥ 2.1.0）。
+**流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换与重跑补缺（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0）。
 
 要点（详见[插件命令详解](/plugin/commands)）：
 
@@ -148,7 +148,7 @@ agile template list
 agile init project demo --template <你的模板>
 ```
 
-本地模板目录含 `node_modules` 等安装/构建产物、符号链接（junction）或锁文件（`pnpm-lock.yaml` 等）也没关系——init 复制时自动忽略并逐项 warn 提示，不会进入生成项目。
+本地模板目录含 `node_modules` 等安装/构建产物、符号链接（junction）或锁文件（`pnpm-lock.yaml` 等）也没关系——CLI ≥ 2.2.0 init 复制时自动忽略并逐项 warn 提示，不会进入生成项目（≤ 2.1.0 撞 junction 会直接崩溃，请先升级）；但模板仓提交入库前仍应清理产物（CI 的 check.mjs 产物黑名单会拦截）。
 
 ::: warning
 `templates.registry` 指向**本地目录**时直接读取、不走缓存；调试完记得把该键改回原地址。
