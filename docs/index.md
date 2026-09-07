@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: FCC-Agile
-  text: 一个根、五个抽屉
+  text: AI 驱动的敏捷工作流
   tagline: Agile 工作区 CLI · Claude Code SDD/TDD 插件 · 项目模板生态
   image:
     src: /logo.svg
@@ -42,7 +42,7 @@ features:
     linkText: 插件概览
   - icon: 📦
     title: 模板注册中心
-    details: 项目模板 git 仓库分发，命名防冲突四防线，新增模板零改 CLI。
+    details: 项目模板 git 仓库分发，命名防冲突五防线，新增模板零改 CLI。
     link: /templates/overview
     linkText: 模板概览
   - icon: 🚀

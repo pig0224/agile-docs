@@ -96,6 +96,8 @@ agile init project my-lib                    # 空项目骨架（不访问模板
 
 **组合模板**：单模板之上的声明式组合层（registry.json `solutions` 数组），一次 `init project` 把全部成员项目**平铺**落盘 `projects/<成员目录名>/`（无系统目录层级；`<name>` 仅为系统输出标签）。成员是**组合专属完整模板骨架**（模板仓 `solutions/<组合名>/<成员名>/`，不引用 singles），规范骨架三文件照常带出。`--member` 可自定义成员落地目录名（缺省 = 组合定义的成员名）。**命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘后直接占用 `projects/` 顶层目录名），组合登记与成员目录双向一致。**补缺语义（弱化）**：已存在的成员目录按生成清单校验（一致 → 跳过 + warn，组合定义演进后可后补成员；不符 → 硬错误，见上文「重跑与断点续建防护」）；无清单的陌生目录（同名普通项目）仍跳过 + warn 人工核对，AI 层 `/agile:init` 生成前会先做撞名核对。补缺按本次调用的有效成员目录名判定，覆盖过的成员须带相同 `--member`。
 
+**组合根耦合资产带出**：全部成员生成成功后，CLI 把模板仓组合根的 `CLAUDE.md`（组合导航）与 `docs/`（跨成员耦合的约定/规范，每篇 frontmatter 标 `类型: tech|product`）快照到 workspace `.agile/solutions/<组合名>/`（≥ 2.3.0；与生成清单一同 `git add` 入库，快照已存在则跳过不覆盖）——组合的知识资产不散落成员项目，符合「1 根 5 抽屉」范式。随后在 workspace 内运行 `/agile:knowledge sync-template <组合名>` 按资产类型同步进抽屉（tech → biz-tech-docs，product → biz-product-docs）。
+
 模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → **实际落地目录名**（组合场景 = 平铺后的成员目录名），<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
 
 ::: tip
@@ -174,7 +176,7 @@ agile config get tech-specs
 agile config list
 ```
 
-::: tip 换源即生效，CLI 无需发版
+::: tip 换源即生效
 四键都支持本地路径（内网镜像直接 clone）。`plugin-repo` 换源后已安装插件不受影响（`agile sync` 绝不卸载）；私有市场须与官方同名（市场名 `fcc`）依赖声明才无缝衔接。
 :::
 

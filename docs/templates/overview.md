@@ -23,7 +23,10 @@ agile-templates/
 ├── singles/                    # 单例模板（一个模板一个完整项目骨架，目录名 = 模板名）
 │   ├── vue3-vite/  react-vite/  go-service/  java-springboot/  node-lib/
 └── solutions/                  # 组合模板：一组合一目录，成员 = 组合专属完整模板骨架
-    └── <组合名>/<成员名>/
+    └── <组合名>/
+        ├── CLAUDE.md           # 组合根导航：组合定位 / 成员清单 / 耦合资产导航
+        ├── docs/               # 跨成员耦合的约定/规范/知识归总处（frontmatter「类型: tech|product」）
+        └── <成员名>/
 ```
 
 ## 内置模板
@@ -50,6 +53,7 @@ agile init project 通用后台 --template admin-base --member backend=admin-bac
 - **成员平铺落盘** `projects/<成员目录名>/`（无系统目录、无系统级 README）；`<系统标签>` 仅用于输出汇报
 - 成员模板 = `solutions/<组合>/<成员>/`（组合专属完整骨架：规范骨架三文件、`docs/ui.md`（前端）、占位符替换全部生效）
 - `--member 成员名=目录名` 可重复，自定义成员落地目录名（缺省 = 组合定义的成员名）
+- **组合根耦合资产**：跨成员共享的约定/规范/知识归总在组合根 `CLAUDE.md`（组合导航）+ `docs/`（每篇 frontmatter 标 `类型: tech|product`），**不写进成员项目**——成员平铺后知识散落 `projects/` 会违背 workspace「1 根 5 抽屉」范式。全部成员生成成功后，CLI 自动把两件套快照到 `.agile/solutions/<组合名>/`（与生成清单一同 git add 入库；快照已存在则跳过不覆盖）；随后用 `/agile:knowledge sync-template` 按类型同步进抽屉（tech → biz-tech-docs，product → biz-product-docs）
 - **命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘 `projects/` 后直接占用顶层目录名）；组合登记与成员目录双向一致（CLI 与模板仓 check.mjs 双重校验）
 - **补缺语义与生成清单**：每次成功生成成员后，CLI 在 workspace 写生成清单 `.agile/manifests/<成员目录名>.json`（随项目 git add 入库）。重跑时：清单一致 → 跳过 + warn（组合定义演进后可后补成员）；清单不符（缺文件/多文件，疑似上次 init 中途失败的残留）→ 硬错误，删除该目录重跑或 `--force` 重生成；无清单的陌生目录（同名普通项目、手写项目、旧版 CLI 生成）→ 维持跳过 + warn 人工核对（`/agile:init` 生成前会先做撞名核对）。`--force` 重建仅对有清单的目录生效（陌生目录拒绝以防误删）。补缺按本次的有效成员目录名判定，覆盖过的成员须带相同 `--member`
 

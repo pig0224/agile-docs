@@ -7,7 +7,9 @@ fcc-agile 的工作区（workspace）是一个**单一 git 仓库**，内部按�
 ```
 workspace/                     # 单一 git 仓库（团队）
 ├── .agile/
-│   └── settings.json          # 唯一配置（抽屉路径 / 外部仓库 / 插件 / 模板源）
+│   ├── settings.json          # 唯一配置（抽屉路径 / 外部仓库 / 插件 / 模板源）
+│   ├── manifests/             # 生成清单（init project 断点续建防护；随仓库入库）
+│   └── solutions/             # 组合模板耦合资产快照（init project 带出；/agile:knowledge sync-template 按类型同步进抽屉二/三）
 ├── .gitignore                 # 忽略 .worktrees/、tech-specs/；biz-tech-docs 登记后由 sync 自动补写
 ├── .gitattributes             # 换行符统一（init workspace 生成）
 ├── tech-specs/                # 抽屉一：公司级技术规范（独立 git 仓库，不入库，sync 拉取）
@@ -72,7 +74,7 @@ workspace/                     # 单一 git 仓库（团队）
 
 - `version` 为 settings 结构版本：当前为 2；1 为 2.0.x 存量，读取时自动兼容（内存归一为 2，下次写盘自然升级）
 - `repos` 两键均可缺省（不登记的资源由 sync 提示 `agile config set <key> <git-url>`）；`ref` 为版本锁定预留——出现即警告「锁定暂未实现，按最新拉取」，不阻断
-- `repos.*.url`、`plugins.marketplace`、`templates.registry` 用 `agile config set/get/unset` 管理（快捷键 `tech-specs` / `biz-tech-docs` / `plugin-repo` / `template-repo`，类 npm 换源体验；分发源两键 unset 恢复内置官方源）——**换配置即换源，CLI 无需发版**
+- `repos.*.url`、`plugins.marketplace`、`templates.registry` 用 `agile config set/get/unset` 管理（快捷键 `tech-specs` / `biz-tech-docs` / `plugin-repo` / `template-repo`，类 npm 换源体验；分发源两键 unset 恢复内置官方源）——**换配置即换源**
 - 旧版三 yaml（`workspace.yaml` / `registry.yaml` / `plugin.yaml`）由 `agile init workspace` 自动迁移合并进 settings.json（旧文件保留，提示人工 `git rm`）
 
 ## 过程产物（STO-xxx 需求档案）
@@ -118,4 +120,4 @@ CLI 把模板注册中心仓库克隆到 `~/.agile/templates/<url哈希>`（用�
 | [agile-plugins](https://github.com/pig0224/agile-plugins) | git | Claude Code 插件市场 |
 | [agile-templates](https://github.com/pig0224/agile-templates) | git | 项目模板注册中心 |
 
-三者解耦：新增插件/模板只改对应 git 仓库，CLI 永不发版。
+三者解耦：新增插件/模板只改对应 git 仓库。
