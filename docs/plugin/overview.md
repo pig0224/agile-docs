@@ -2,7 +2,7 @@
 
 Agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓库 [agile-plugins](https://github.com/pig0224/agile-plugins)），以 **SDD（先设计后开发）/ TDD（测试驱动开发）** 方法论组织团队研发流程：
 
-- **17 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
+- **18 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
 - **7 个角色 subagent**——具体执行（[角色说明](/plugin/roles)）
 - **1 个方法论 skill**——共享知识（命令按需加载）
 
@@ -33,7 +33,7 @@ agile plugin install agile
   → review.md / release.md 归档闭环
 ```
 
-辅助命令随时可用：`/agile:init`（AI 陪同建项目：问答定制 + 辅助能力配置）、`/agile:add-template`（AI 辅助建设新模板/组合模板）、`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
+辅助命令随时可用：`/agile:init`（AI 陪同建项目：问答定制 + 辅助能力配置）、`/agile:add-template`（AI 辅助建设新模板/组合模板）、`/agile:share-template`（把 workspace 既有项目反向打包为模板）、`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
 
 前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），git 合并零冲突——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop/)。
 
@@ -46,7 +46,7 @@ agile plugin install agile
 
 轻量通道豁免：STO 轻量 / BUG-xxx / OPS-xxx（判定与填写规范见[团队协作 SOP · 轻量通道](/guide/sop/lite)）下 SDD 红线放宽——design.md 可由根因分析（BUG）或三五行方案简述替代；TDD 红线**不豁免**。
 
-**分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。部分命令（`/agile:sync-req`、`/agile:add-task`、`/agile:feedback`、`/agile:help`、`/agile:init`、`/agile:add-template`、`/agile:knowledge`、`/agile:review`、`/agile:release`）因素材在主会话中，由命令文件显式声明例外、主会话直接执行。
+**分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。部分命令（`/agile:sync-req`、`/agile:add-task`、`/agile:feedback`、`/agile:help`、`/agile:init`、`/agile:add-template`、`/agile:share-template`、`/agile:knowledge`、`/agile:review`、`/agile:release`）因素材在主会话中，由命令文件显式声明例外、主会话直接执行。
 
 ## 与 CLI 的协作
 

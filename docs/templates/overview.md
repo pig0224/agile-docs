@@ -39,7 +39,7 @@ agile-templates/
 | `java-springboot` | Spring Boot 3（Java 21, Maven）服务 | Java / Spring Boot |
 | `node-lib` | Node.js（TypeScript）库项目 | TypeScript / Node |
 
-每个模板自带可运行测试（TDD 起点）与写明运行/测试命令的 README——CLI 与插件依赖此约定执行测试。每模板还内置**项目级规范骨架三文件**（`CLAUDE.md` / `docs/conventions.md` / `docs/architecture.md`），`init project` 生成项目时随模板带出，作为项目级规范入口；开发新模板（单例或组合）可用插件命令 `/agile:add-template`。前端模板（vue3-vite / react-vite）另附 `docs/ui.md`——项目级 UI 设计约定骨架（token 清单 / 管理方式 / 使用规则，非强制），经 `/agile:init` 约定问答填充。
+每个模板自带可运行测试（TDD 起点）与写明运行/测试命令的 README——CLI 与插件依赖此约定执行测试。每模板还内置**项目级规范骨架三文件**（`CLAUDE.md` / `docs/conventions.md` / `docs/architecture.md`），`init project` 生成项目时随模板带出，作为项目级规范入口；开发新模板（单例或组合）可用插件命令 `/agile:add-template`，反向把 workspace 既有项目（含沉淀的规范与知识）一键打包为模板则用 `/agile:share-template`（见[模板开发指南](/templates/dev-guide#从-workspace-项目打包模板)）。前端模板（vue3-vite / react-vite）另附 `docs/ui.md`——项目级 UI 设计约定骨架（token 清单 / 管理方式 / 使用规则，非强制），经 `/agile:init` 约定问答填充。
 
 ## 组合模板
 
