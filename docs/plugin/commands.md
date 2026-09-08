@@ -303,19 +303,19 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 项目 | 说明 |
 |---|---|
 | 用途 | `build` 辅助建设知识库（判库 → 调库调研 → 提纲 → 落盘骨架）；`capture` 从会话、过程产物、历史材料沉淀长期结论；`sync-template` 把组合模板根归总的耦合约定/规范按资产类型同步进知识库 |
-| 场景 | build：新团队/新技术栈初始化知识库；capture：会话形成的技术决策当场沉淀、design.md 中长期结论入库、公司规范缺失的提案；sync-template：`agile init project --template <组合名>` 之后，把组合耦合知识落入知识库 |
+| 场景 | build：新团队/新技术栈初始化知识库；capture：会话形成的技术决策当场沉淀、design.md 中长期结论入库、公司规范缺失的补条款或提案；sync-template：`agile init project --template <组合名>` 之后，把组合耦合知识落入知识库 |
 | 参数 | `build <建设提示词>` 或 `capture <主题> [--from <编号/路径/项目>]`，均可选 `--to team/product/tech`；或 `sync-template [组合名]`（缺省列出 `.agile/solutions/` 下全部组合）；无参显示库概况 |
 | 委派 | 无（主会话直接执行） |
-| 前置 | 无（需在 agile workspace 或知识库目录内执行；落点经三问判别法推断后向用户确认；sync-template 仅 workspace 内可用，依赖 `.agile/solutions/` 快照与两个知识库目录） |
-| 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态——状态取值「有效 / 已废弃 / 已被替代」，`来源` 格式 `<workspace 名>/<素材>`——workspace 名读 settings.json 的 `name`，单库模式用当前目录名）+ 导航登记（根导航 + 所在模块导航）；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
+| 前置 | 无（需在 agile workspace 或知识库目录内执行；落点由 AI 按三问判别法判断，汇报说明、可纠正；修改既有文档前先展示差异；sync-template 仅 workspace 内可用，依赖 `.agile/solutions/` 快照与目标知识库目录） |
+| 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态——状态取值「有效 / 已废弃 / 已被替代」，`来源` 格式 `<workspace 名>/<素材>`——workspace 名读 settings.json 的 `name`，单库模式用当前目录名）+ 导航登记（根导航 + 所在模块导航）；tech-specs 日常条款直接落库，重大变更落 `biz-tech-docs/proposals/` 提案 |
 | 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012`；`/agile:knowledge sync-template admin-base` |
 
-**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在独立检出的 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 提案不落盘，要点由人工带回团队走提案流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
+**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在独立检出的 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 日常条款直接落盘、重大变更提案要点由人工带回团队走流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
 
-**三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs；组件 API 约定、组件库用法落 `frameworks/<前端栈>/`）；说业务规则、用户看到什么 → `product`（biz-product-docs；视觉规则、交互模式含 token 语义）。
+**三问判别法**定落点：换产品还成立 → `tech`（tech-specs，日常直接落库、重大变更走提案）；说系统怎么实现 → `team`（biz-tech-docs；组件 API 约定、组件库用法落 `frameworks/<前端栈>/`）；说业务规则、用户看到什么 → `product`（biz-product-docs；视觉规则、交互模式含 token 语义）。
 
 **划分约定**（tech / team 库）：按「通用 + 技术栈」两维组织——通用领域（`architecture/`、`engineering/`）跨技术栈共享，技术栈领域（`frameworks/go-zero/`、`frameworks/springboot/` 等）每栈一目录；**调取时按当前项目技术栈选择性引用**（识别优先级：提示词 > 扫 projects 标志文件 > 询问），其他技术栈领域不混入——go-zero 工作区不读 springboot 领域，反之亦然。
 
 **约定**：知识禁止单文件堆积；**任何新文档必须导航双登记**（根导航对应分组 + 所在模块导航，build 与 capture 一致；模块导航存在才登记——建立时机：`frameworks/<栈>/` 必建、通用领域 ≥ 3 篇才建；归档单一位置——只在根导航「归档」分组，模块导航只列有效文档）；知识过期不删文件，改「状态」字段移入归档分组；跨会话历史不可检索——旧材料需 `--from` 指认。
 
-**sync-template（组合模板耦合资产同步，仅 workspace 内）**：`init project --template <组合名>` 成功后 CLI 已把模板仓组合根两件套快照到 `.agile/solutions/<组合名>/`（组合定位/成员清单/耦合资产导航 + docs/ 耦合文档，见 [init project · 组合模板](/guide/commands#agile-init-project)）。本模式读该快照，逐篇按 frontmatter `类型` 定去向（`tech` → biz-tech-docs，`product` → biz-product-docs；缺失时按三问判别法推断并确认），正文复制进目标库并重写 frontmatter（`来源` = `<workspace 名>/模板 <组合名>`、`状态` = 有效），同名/同主题文档展示差异由人工决定 跳过/覆盖/另名，同样**导航双登记**。同步是复制不是移动：知识库里的文档此后由团队演进，模板更新不自动回流，模板重度升级可重跑本模式逐篇对比。tech-specs 不接收（公司级只读，相关缺失走提案）。
+**sync-template（组合模板耦合资产同步，仅 workspace 内）**：`init project --template <组合名>` 成功后 CLI 已把模板仓组合根两件套快照到 `.agile/solutions/<组合名>/`（组合定位/成员清单/耦合资产导航 + docs/ 耦合文档，见 [init project · 组合模板](/guide/commands#agile-init-project)）。本模式读该快照，逐篇按 frontmatter `类型` 定去向（`tech` 按「换产品还成立吗」分诊——公司级硬规范落 tech-specs、团队级实现知识落 biz-tech-docs，`product` → biz-product-docs；缺失时按三问判别法推断，汇报附分诊清单），正文复制进目标库并重写 frontmatter（`来源` = `<workspace 名>/模板 <组合名>`、`状态` = 有效），同名/同主题文档展示差异由人工决定 跳过/覆盖/另名，同样**导航双登记**。同步是复制不是移动：知识库里的文档此后由团队演进，模板更新不自动回流，模板重度升级可重跑本模式逐篇对比。

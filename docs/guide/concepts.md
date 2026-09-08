@@ -19,7 +19,7 @@ workspace/
 
 | 目录 | 放什么 | 谁在用 |
 |---|---|---|
-| `tech-specs/` | 公司级技术栈/SQL/安全硬规范 | 公司规范团队维护，团队只读 |
+| `tech-specs/` | 公司级技术栈/SQL/安全硬规范 | 全员沉淀（重大变更走提案） |
 | `biz-tech-docs/` | 架构/状态机/技术方案/工程规范 | 团队架构师 |
 | `biz-product-docs/` | PRD 模板/产品规范/UI 规范 | 产品 |
 | `projects/` | 前后端项目代码 | 开发 |
@@ -36,7 +36,7 @@ workspace/
 
 tech-specs 与 biz-tech-docs 可登记为外部资源：地址写进配置后由 `agile sync` 自动拉取更新；未登记时它们是 workspace 内普通目录，随仓库提交：
 
-- **tech-specs**（可选）：公司级规范——公司统一维护，团队只读；多 workspace 团队登记一次（`agile config set tech-specs <url>` + `agile sync`），共享同一份
+- **tech-specs**（可选）：公司级规范——日常条款经 `/agile:knowledge` 直接沉淀（重大变更走 `biz-tech-docs/proposals/` 提案）；多 workspace 团队登记一次（`agile config set tech-specs <url>` + `agile sync`），共享同一份
 - **biz-tech-docs**（可选）：团队知识库——单 workspace 团队无需登记，作为普通目录随工作区维护；多个 workspace 共用时登记一次（`agile config set biz-tech-docs <url>` + `agile sync`），此后各 workspace 共享同一份
 
 ::: warning 本地改动优先

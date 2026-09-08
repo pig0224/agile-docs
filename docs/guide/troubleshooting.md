@@ -9,7 +9,7 @@
 - **未登记（默认）**：作为普通目录随工作区一起提交，获得版本管理
 - **登记为外部资源**（`agile config set tech-specs <url>` / `agile config set biz-tech-docs <url>` + `agile sync`）：由 sync 自动拉取维护，不随工作区提交；在目录内沉淀的产物在该知识库中提交（人工操作）
 
-**tech-specs**（公司级规范）团队只读——规范内容由公司规范团队维护；**biz-tech-docs**（团队知识库）可在目录内直接沉淀。
+两个目录都可在内直接沉淀（`/agile:knowledge`）：**biz-tech-docs**（团队知识库）随时落盘；**tech-specs**（公司级规范）日常条款直接落盘，重大变更（选型切换、跨团队影响）落 `biz-tech-docs/proposals/` 提案、由人工走公司评审流程。
 
 适合登记为外部资源的情形：
 
