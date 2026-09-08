@@ -234,7 +234,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | `projects/<name>/`（CLI 生成 + 问答改写）：conventions.md 定制版；CLAUDE.md 团队规范段确认改写 + 新增「环境要求」「辅助开发配置」节；`docs/ui.md` 定制版（前端模板——UI 约定问答落 token 管理方式与基准值，未问到处保留「待定」）；组合场景另产出成员映射表（成员 → 成员模板（组合专属）→ 实际目录） |
 | 示例 | `/agile:init`（先 `agile init project` 也可——命令会感知到刚创建的项目并续接） |
 
-要点：**默认值兜底**——开头一问「定制或全默认」（推荐全默认），全默认则产物与纯 CLI init 完全一致；**组合模板场景**——生成前先做事前撞名核对（有效成员目录名扫 `projects/` 比对，撞名问用户）与成员目录命名问答（预选项 = 组合定义的成员名，可自定义短名，CLI 拼 `--name`），约定问答按成员逐项目循环（支持「沿用上一成员口径」），汇报附成员映射表，生成完成后 CLI 自动带出组合根耦合资产快照（`.agile/solutions/<组合名>/`），可接 `/agile:knowledge sync-template <组合名>` 同步进知识库；**分级落盘**——只读环境检测直接做，MCP / design.md / llms.txt 确认后 AI 写入（MCP 进项目 `.mcp.json`），框架 CLI 确认后自动安装（优先 devDep + `npx`），**skills 安装与权限白名单只输出建议清单、人工自己配**。框架 AI 能力包推荐来源按序：团队库（仅团队库匹配已确认栈领域时）→ 命令内置映射（Vue / Vite / React / Node 官方 llms.txt、Ant Design AI 能力包等，2026-09 核实可达）→ 现场检索（WebSearch 核实存在才推荐，避免推荐不存在的包名）。定制不回写模板；团队库未确认前只引用通用领域。
+要点：**默认值兜底**——开头一问「定制或全默认」（推荐全默认），全默认则产物与纯 CLI init 完全一致；**组合模板场景**——生成前先做事前撞名核对（有效成员目录名扫 `projects/` 比对，撞名时提问确认）与成员目录命名问答（预选项 = 组合定义的成员名，可自定义短名，CLI 拼 `--name`），约定问答按成员逐项目循环（支持「沿用上一成员口径」），汇报附成员映射表，生成完成后 CLI 自动带出组合根耦合资产快照（`.agile/solutions/<组合名>/`），可接 `/agile:knowledge sync-template <组合名>` 同步进知识库；**分级落盘**——只读环境检测直接做，MCP / design.md / llms.txt 确认后 AI 写入（MCP 进项目 `.mcp.json`），框架 CLI 确认后自动安装（优先 devDep + `npx`），**skills 安装与权限白名单以建议清单交付，配置由人工完成**。框架 AI 能力包推荐来源按序：团队库（仅团队库匹配已确认栈领域时）→ 命令内置映射（Vue / Vite / React / Node 官方 llms.txt、Ant Design AI 能力包等）→ 现场检索（WebSearch 核实存在才推荐）。定制不回写模板；团队库未确认前只引用通用领域。
 
 ---
 
@@ -250,7 +250,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | 单例模板：模板目录（项目骨架 + CLAUDE.md / docs/conventions.md / docs/architecture.md + 前端栈模板另加 docs/ui.md + README + 构建特征文件 + 可运行测试）+ `singles` 数组登记。组合：`solutions/<组合>/<成员>/` 成员目录（复制单例起点）+ `solutions` 数组登记 |
 | 示例 | `/agile:add-template vue3-nuxt`（单例模板，A/B/C 判定）；`/agile:add-template admin-base`（组合，进入成员构成问答） |
 
-要点：**位置硬性限定**——只能在模板仓根目录运行，不做仓库定位猜测；**设计定稿门**——设计问答全部决策经用户确认后才写盘；**测试基线**——每个新骨架自带可运行测试且骨架阶段即全部通过，测试通过后、登记前清理安装/构建产物（`node_modules` / `.next` / `dist` 等，见命令文件的示例命令）。**占位符与 init 语义相反——<span v-pre>`{{name}}`</span> / <span v-pre>`{{safeName}}`</span> 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 全绿（条目形状 / JSON 重复键 / 数组重复登记 / 目录派生 / 双向一致 / 全局唯一 / 规范骨架 / 根白名单）+ 冒烟验证（验收清单先行，先核实模板目录无安装产物残留，临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）必须实际执行；**本仓全程不 add / 不 commit / 不 push**（推送即发版，人工处理）。**流程 D（组合模板）**：设计问答改问成员构成（组合名 + `projects` 成员问答 + 派生起点，前置查重三段全局唯一）；成员骨架**复制最接近的单例模板作起点**（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态），组合专属深度定制按实际需求另行开发；登记进 `solutions` 数组（projects 条目与 singles 同形状 = name + 一句话 description，数组顺序 = 生成顺序）后 check.mjs 校验登记与成员目录双向一致、成员名全局唯一；冒烟验证成员平铺落盘、<span v-pre>`{{name}}`</span> 替换与重跑补缺（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0；组合根耦合资产快照带出需 ≥ 2.3.0；`--name` 键值覆盖需 ≥ 2.4.0）。
+要点：**设计定稿门**——设计问答全部决策经用户确认后才写盘；**测试基线**——每个新骨架自带可运行测试且骨架阶段即全部通过，测试通过后、登记前清理安装/构建产物（`node_modules` / `.next` / `dist` 等，见命令文件的示例命令）。**占位符与 init 语义相反——<span v-pre>`{{name}}`</span> / <span v-pre>`{{safeName}}`</span> 原样保留**（init 替换、建模板保留）；模板中立原则（预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款，团队库领域只在项目级确认后引入）；check.mjs 全绿（条目形状 / JSON 重复键 / 数组重复登记 / 目录派生 / 双向一致 / 全局唯一 / 规范骨架 / 根白名单）+ 冒烟验证（验收清单先行，先核实模板目录无安装产物残留，临时 workspace + 本地模板源 `agile init project`，占位符替换正确且项目测试可跑）；**推送即发版**——变更留在本地，发布流程见[模板发布](/templates/publishing)。**流程 D（组合模板）**：设计问答改问成员构成（组合名 + `projects` 成员问答 + 派生起点，前置查重三段全局唯一）；成员骨架**复制最接近的单例模板作起点**（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态），组合专属深度定制按实际需求另行开发；登记进 `solutions` 数组（projects 条目与 singles 同形状 = name + 一句话 description，数组顺序 = 生成顺序）后 check.mjs 校验登记与成员目录双向一致、成员名全局唯一；冒烟验证成员平铺落盘、<span v-pre>`{{name}}`</span> 替换与重跑补缺（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0；组合根耦合资产快照带出需 ≥ 2.3.0；`--name` 键值覆盖需 ≥ 2.4.0）。
 
 ---
 
@@ -266,7 +266,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | 目标模板仓：`singles/<模板名>/`（单例）或 `solutions/<组合名>/<成员名>/` × N（组合）+ `registry.json` 追加条目；组合另含组合根两件套（CLAUDE.md + docs/） |
 | 示例 | `/agile:share-template order-service`（单例）；`/agile:share-template admin-web order-center`（组合） |
 
-要点：**源项目只读铁律**——脱敏/中立化/占位符还原等一切修改只发生在目标仓副本，一律不回写 `projects/`；**三道门**（方案定稿门 / 处置确认门 / 冒烟验收门）不得跳过；**清理审计三维**——敏感与业务数据剔除脱敏、团队定制公共仓默认中立化·私有仓默认保留、工程卫生（产物/锁文件/`.git`）一律剔除，处置清单逐项经用户确认后执行；**占位符逆向还原**——实际落地目录名改回 <span v-pre>`{{name}}`</span>、安全段改回 <span v-pre>`{{safeName}}`</span>（package.json name 严格 `{{name}}`；包名/目录名等身份性出现必换，URL/文案等语义性出现逐处判断）；组合根两件套优先回带 `.agile/solutions/` 快照（init ≥ 2.3.0 带出），无快照按契约 14 现建（每篇 docs 标 `类型: tech|product` frontmatter）；registry.json 只追加不重排；check.mjs 全绿 + 临时 workspace 冒烟（验收清单先行，单例三件事 / 组合六件事）+ round-trip 对照；**沉淀知识去向**——项目内沉淀随打包，跨成员规范归总组合根 docs/（使用方经 `/agile:knowledge sync-template` 进知识库），workspace 知识库内容不直接入模板；**全程不 add / 不 commit / 不 push**（模板仓推送即发版，发布步骤见[模板开发指南 · 导出后如何发布](/templates/dev-guide#导出后如何发布)）。
+要点：**源项目不受影响**——脱敏/中立化/占位符还原等修改全部发生在目标仓副本；**清理审计三维**——敏感与业务数据剔除脱敏、团队定制公共仓默认中立化·私有仓默认保留、工程卫生（产物/锁文件/`.git`）一律剔除，处置清单逐项经用户确认后执行；**占位符逆向还原**——实际落地目录名改回 <span v-pre>`{{name}}`</span>、安全段改回 <span v-pre>`{{safeName}}`</span>（package.json name 严格 `{{name}}`；包名/目录名等身份性出现必换，URL/文案等语义性出现逐处判断）；组合根两件套优先回带 `.agile/solutions/` 快照（init ≥ 2.3.0 带出），无快照按契约 14 现建（每篇 docs 标 `类型: tech|product` frontmatter）；registry.json 只追加不重排；check.mjs 全绿 + 临时 workspace 冒烟（验收清单先行，单例三件事 / 组合六件事）+ round-trip 对照；**沉淀知识去向**——项目内沉淀随打包，跨成员规范归总组合根 docs/（使用方经 `/agile:knowledge sync-template` 进知识库），workspace 知识库内容不直接入模板；**推送即发版**——变更留在本地，发布步骤见[模板开发指南 · 导出后如何发布](/templates/dev-guide#导出后如何发布)。
 
 ---
 
@@ -310,7 +310,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态——状态取值「有效 / 已废弃 / 已被替代」，`来源` 格式 `<workspace 名>/<素材>`——workspace 名读 settings.json 的 `name`，单库模式用当前目录名）+ 导航登记（根导航 + 所在模块导航）；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
 | 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012`；`/agile:knowledge sync-template admin-base` |
 
-**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 目录内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 提案不落盘、输出提案要点由人工带回团队走流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
+**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 目录内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 提案不落盘，要点由人工带回团队走提案流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
 
 **三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs；组件 API 约定、组件库用法落 `frameworks/<前端栈>/`）；说业务规则、用户看到什么 → `product`（biz-product-docs；视觉规则、交互模式含 token 语义）。
 
