@@ -73,6 +73,15 @@ git add -A && git commit -m "chore: init workspace"
 - 模板或组合模板不存在：`agile template list` 查可用单例模板与组合模板；模板源不对就改 `.agile/settings.json` 的 `templates.registry`
 - 注册中心一致性问题（含「成员名与模板/组合名冲突」「成员目录不存在/未登记」）：`agile template list` 会逐条输出 issues 并以退出码 1 结束，按提示修复模板仓库（模板名/组合名/成员名须三段全局唯一，组合登记与成员目录双向一致）
 
+### 项目内的 `.mcp.json` / `.claude/` 不生效
+
+Claude Code 只读取**启动目录**的会话层配置——从 workspace 根（或 worktree 根）启动的会话不会读取 `projects/<项目>/` 下的 `.mcp.json` 与 `.claude/`（写了不生效也不报错）。正确落点：
+
+- MCP 服务器：**workspace 根** `.mcp.json`（`/agile:init` 的辅助能力配置默认写这里；同名 server 已存在则跳过）
+- 权限白名单 / hooks：workspace 根 `.claude/settings.json`（`/agile:init` 只出建议清单，配置由人工完成）
+
+项目工程配置（lint / build / test / 依赖）不受影响——放项目内自包含，不提升到根。
+
 ### template list 提示「使用本地缓存」（stale）
 
 模板源失联时降级使用缓存。网络恢复后 `agile template update` 强制刷新。
