@@ -37,16 +37,16 @@ agile plugin install agile
 
 前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），互不覆盖——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop/)。
 
-## 两条红线
+## 两条核心约束
 
-写进 skill 与全部角色 agent，任何命令不得绕过：
+全部命令共同遵守：
 
-1. **SDD 红线**：没有 `design.md` 不进入开发——architect/backend/frontend 命令都有前置校验，缺失即停止
-2. **TDD 红线**：没有失败测试不写实现——每任务先写失败测试（Red），最小实现转绿（Green），重构保持绿色（Refactor），循环记录登记进角色文件（implementation-be.md / implementation-fe.md）
+1. **SDD 约束**：没有 `design.md` 不进入开发——architect/backend/frontend 命令都有前置校验，缺失即停止
+2. **TDD 约束**：没有失败测试不写实现——每任务先写失败测试（Red），最小实现转绿（Green），重构保持绿色（Refactor），循环记录登记进角色文件（implementation-be.md / implementation-fe.md）
 
-轻量通道豁免：STO 轻量 / BUG-xxx / OPS-xxx（判定与填写规范见[团队协作 SOP · 轻量通道](/guide/sop/lite)）下 SDD 红线放宽——design.md 可由根因分析（BUG）或三五行方案简述替代；TDD 红线**不豁免**。
+轻量通道豁免：STO 轻量 / BUG-xxx / OPS-xxx（判定与填写规范见[团队协作 SOP · 轻量通道](/guide/sop/lite)）下 SDD 约束放宽——design.md 可由根因分析（BUG）或三五行方案简述替代；TDD 约束**不豁免**。
 
-**分工模式（硬规则，不得反转）**：命令（主会话）负责前置校验、Task 委派与复核汇报，实施一律委派角色 subagent——禁止以「subagent 不可靠」等理由改由主会话直接实施、subagent 验收；subagent 拿不到主会话上下文，委派时必须显式传入任务编号、约束与验收要求，产出经主会话复核后才汇报。部分命令（`/agile:sync-req`、`/agile:add-task`、`/agile:feedback`、`/agile:help`、`/agile:init`、`/agile:add-template`、`/agile:share-template`、`/agile:knowledge`、`/agile:review`、`/agile:release`）因素材在主会话中，由命令文件显式声明例外、主会话直接执行。
+**分工模式**：命令负责前置校验、委派与汇总汇报，具体实施由对应角色 agent 完成。部分命令（`/agile:sync-req`、`/agile:add-task`、`/agile:feedback`、`/agile:help`、`/agile:init`、`/agile:add-template`、`/agile:share-template`、`/agile:knowledge`、`/agile:review`、`/agile:release`）由主会话直接执行。
 
 ## 与 CLI 的协作
 
@@ -54,7 +54,7 @@ agile plugin install agile
 
 - Bash 执行 `agile worktree create / sync / config / template list / plugin ls`
 
-任务目录（`process-docs/<编号>/`，初始 8 个 .md）由创建它的命令按 sdd-tdd-method SKILL **附录 A 模板**直接创建（幂等，无 CLI 依赖）。
+任务目录（`process-docs/<编号>/`，初始 8 个 .md）由创建它的命令按标准任务目录模板直接创建（幂等，无 CLI 依赖）。
 
 命令不硬编码目录路径——统一读 `.agile/settings.json` 的 `paths` 段（角色 agent 提示词中的路径为默认名）。
 

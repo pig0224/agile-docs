@@ -53,7 +53,7 @@
 
 ## AI 协作者（全员适用）
 
-使用 Claude Code 插件（`/agile:xxx` 命令 + agile agent）辅助开发。红线：**AI 不执行 git add**（人工审阅后自行 add）；add 后 AI 可汇总 commit（commit 前确认全部暂存）；**AI 不 push、不发版**。commit message 由 AI 按 Conventional Commits 起草、人工确认。
+使用 Claude Code 插件（`/agile:xxx` 命令 + agile agent）辅助开发。分工纪律：**AI 不执行 git add**（人工审阅后自行 add）；add 后 AI 可汇总 commit（commit 前确认全部暂存）；**AI 不 push、不发版**。commit message 由 AI 按 Conventional Commits 起草、人工确认。
 
 **建议配合使用的工具**（可选增强，非流程强制，安装见各自仓库）：
 

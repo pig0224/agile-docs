@@ -1,18 +1,18 @@
 # 角色 Subagent
 
-Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校验 → Task 委派 → 复核汇报」，角色 agent 做具体执行。`description` 用第三人称描述「何时使用」——这是模型自动委派的触发依据。
+Agile 插件的 7 个角色 subagent。命令做「前置校验 → 委派 → 汇总」，角色 agent 做具体执行。
 
 全部角色共同约束：
 
 - 产物**全中文**落盘到约定位置（目录路径以 `.agile/settings.json` 的 `paths` 段为准，下文路径为默认名）
 - 规范引用优先级：公司硬规范（tech-specs）> 团队技术设计（biz-tech-docs）> 产品/UI 规范（biz-product-docs）> 当前 design.md
-- 两条红线：无 design.md 不开发；无失败测试不写实现
+- 两条核心约束：无 design.md 不开发；无失败测试不写实现
 
 ---
 
 ## product-manager —— 产品经理
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 把模糊业务想法整理成结构化产品文档；为需求编号编写 PRD（/agile:prd） |
 | 输入 | 需求编号 + 需求描述 + 产品知识库路径 |
@@ -21,25 +21,25 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 
 ## tech-architect —— 技术架构师
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 为需求做架构/状态机/接口设计；SDD 设计阶段（/agile:architect） |
 | 输入 | `requirement.md`（含 AC）+ 三个知识库路径 + projects 现状 |
 | 产出 | `design.md`：方案概述与备选取舍、涉及模块表（模块/项目路径/改动类型）、接口设计、数据模型与状态机（mermaid）、关键流程、测试策略、风险与 TBD |
-| 硬约束 | 选型只能来自公司规范允许清单；复用优先，禁止重复实现既有能力；设计可追溯到 AC |
+| 约束 | 选型只能来自公司规范允许清单；复用优先，禁止重复实现既有能力；设计可追溯到 AC |
 
 ## backend-dev —— 后端 TDD 工程师
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 后端开发任务（/agile:backend）；按 TDD 实现服务端逻辑 |
 | 输入 | design.md + 测试案例 + worktree 路径 + 任务清单（每批 ≤5） |
 | 产出 | worktree 内实现与测试；implementation-be.md 任务勾选与 TDD 循环记录表（**仅后端可写**）；`STO-xxx(red\|green\|refactor):` 序列 commit |
-| TDD 硬规则 | Red（写失败测试并记录输出）→ Green（最小实现）→ Refactor（保持绿色）；脚手架/接口签名之外不提前实现 |
+| TDD 循环 | Red（写失败测试并记录输出）→ Green（最小实现）→ Refactor（保持绿色）；脚手架/接口签名之外不提前实现 |
 
 ## frontend-dev —— 前端工程师
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 前端开发任务（/agile:frontend）；Web 界面实现 |
 | 输入 | design.md + UI/交互规范（产品知识库）+ 既有组件清单（技术知识库）+ worktree 路径 |
@@ -48,7 +48,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 
 ## ui-designer —— UI / 组件库专家
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 组件库建设/扩展、页面原型产出、组件升级废弃（/agile:ui） |
 | 输入 | UI 规范 + 交互规范 + 变更需求 |
@@ -57,7 +57,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 
 ## test-engineer —— 测试工程师
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 生成测试案例（/agile:gen-test，Stage 1）；执行测试验收（/agile:run-test，Stage 2） |
 | 输入 | Stage1：requirement.md + design.md；Stage2：gen-test.md + 各项目实现 |
@@ -66,7 +66,7 @@ Agile 插件的 7 个角色 subagent。命令（人机入口）做「前置校�
 
 ## bug-hunter —— 缺陷诊断专家
 
-| | |
+| 项目 | 说明 |
 |---|---|
 | 何时委派 | 快速修复 bug（/agile:fix-bug）；定位需要根因分析的缺陷 |
 | 输入 | bug 描述 + 涉及项目 + 任务编号 |

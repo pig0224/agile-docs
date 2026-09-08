@@ -35,7 +35,7 @@ $ git push -u origin feat/STO-012
 
 ## #2 入仓 + 设计（负责人）
 
-**规则**：worktree 内执行 `/agile:prd STO-xxx <需求描述>`（把产品外部平台的需求文档结构化——产出 PRD/AC/功能树/菜单树入 `biz-product-docs/requirements/<编号>/`，随需求分支提交）→ `/agile:sync-req STO-xxx`（把产品知识库需求产物同步到 `process-docs/<编号>/`，创建标准任务目录（初始 8 个 .md）并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
+**规则**：worktree 内执行 `/agile:prd STO-xxx <需求描述>`（把产品外部平台的需求文档结构化——产出 PRD/AC/功能树/菜单树入 `biz-product-docs/requirements/<编号>/`，随需求分支提交）→ `/agile:sync-req STO-xxx`（把产品知识库需求产物同步到 `process-docs/<编号>/`，创建标准任务目录（初始 8 个 .md）并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 约束）**。完成后推送。
 
 ::: tip 📌 STO-012 实录
 大伟执行 `/agile:prd STO-012 页面自助导出 90 天内订单（飞书需求文档：运营每月手工导订单耗时 2 小时…）` 生成结构化需求入产品知识库；`/agile:sync-req STO-012` 同步入 process-docs 后，`/agile:architect STO-012` 产出 design.md，接口契约摘录：
@@ -78,7 +78,7 @@ $ git push -u origin feat/STO-012
 
 ## #5 并行开发（负责人承其一端 + 对端）
 
-**规则**：`/agile:backend STO-xxx` ‖ `/agile:frontend STO-xxx` 可并行（前端接口层先 mock）。按 design.md 以 Red-Green-Refactor 循环实现；**无失败测试不写实现（TDD 红线）**；各自只写 `implementation-be.md` / `implementation-fe.md`（文件级隔离，见[协作与文档规则](/guide/sop/collab)）；小步推送（自动 CI + stage CD）。
+**规则**：`/agile:backend STO-xxx` ‖ `/agile:frontend STO-xxx` 可并行（前端接口层先 mock）。按 design.md 以 Red-Green-Refactor 循环实现；**无失败测试不写实现（TDD 约束）**；各自只写 `implementation-be.md` / `implementation-fe.md`（文件级隔离，见[协作与文档规则](/guide/sop/collab)）；小步推送（自动 CI + stage CD）。
 
 ::: tip 📌 STO-012 实录
 大伟的 implementation-be.md 循环记录摘录：
@@ -137,7 +137,7 @@ PR 标题 `feat: STO-012 会员订单导出`，描述含 AC 清单、设计要�
 
 ---
 
-## 两条 SDD/TDD 红线（插件强制）
+## 两条 SDD/TDD 核心约束（插件强制）
 
 **无 design.md 不开发；无失败测试不写实现。**
 

@@ -20,7 +20,7 @@
 
 ## 目录创建（谁建 process-docs）
 
-目录统一 `process-docs/<编号>/`（按附录 A 模板创建，初始 8 个 .md；下表为各文档的轻量填法）。轻量通道不走 `/agile:prd`：
+目录统一 `process-docs/<编号>/`（按标准任务目录模板创建，初始 8 个 .md；下表为各文档的轻量填法）。轻量通道不走 `/agile:prd`：
 
 - **STO 轻量 / OPS**：`/agile:sync-req <编号> <一句话需求>` **轻量形态**创建（requirement 落一句话需求 + 1–2 条 AC（STO 轻量）或改动说明（OPS）+ 头部轻量标记）
 - **BUG**：`/agile:fix-bug` 创建（无编号时顺延 BUG-xxx 并轻量初始化）
@@ -32,14 +32,14 @@ requirement.md 头部的轻量标记（`本变更走轻量通道`）使 `/agile:
 | 文件 | 轻量通道填法 |
 |---|---|
 | requirement.md | 缺陷描述 + 复现步骤（BUG）；一句话需求 + 1–2 条 AC（STO 轻量）；改动说明（OPS） |
-| design.md | **根因分析**（BUG）或三五行方案简述（STO 轻量 / OPS）（SDD 红线按此放宽） |
-| implementation-be/-fe.md | 修复/改动记录 + **失败测试先行**（TDD 红线不放宽：bug 修复必须先有复现测试 Red→Green） |
+| design.md | **根因分析**（BUG）或三五行方案简述（STO 轻量 / OPS）（SDD 约束按此放宽） |
+| implementation-be/-fe.md | 修复/改动记录 + **失败测试先行**（TDD 约束不放宽：bug 修复必须先有复现测试 Red→Green） |
 | gen-test.md | 一行 `> 本变更走轻量通道，此文档不适用` |
 | review.md | **一行验收确认**（`/agile:review` 轻量形态）：报告人确认修复生效（BUG）/ 提需求人确认（STO 轻量）/ 负责人自查（OPS）+ 确认时间 |
 | run-test.md | 回归结论（所在仓库全量测试通过） |
 | release.md | 涉及部署时 `/agile:release` 记一行（变更 + 回滚点）；不涉及部署不填 |
 
-## 不变的红线
+## 不变的约束
 
 worktree 照常创建（`feat/<编号>`）、main 禁直推照常遵守、PR 照常提交（标题与描述均标 `[编号]`）、CI 绿才能合。
 
@@ -62,7 +62,7 @@ worktree 照常创建（`feat/<编号>`）、main 禁直推照常遵守、PR 照
 2. **知会对端**——对端可能持有旧分支 / 旧 worktree，先知会再执行
 3. **过程目录改名**——`git mv process-docs/<旧编号> process-docs/<新编号>`，目录内全部 .md 的编号引用（标题、TDD 循环记录、commit message 引用）批量替换
 4. **产品知识库产物改名**——`<bizProductDocs>/requirements/<旧编号>/` 存在则同样 `git mv`（完整需求）
-5. **升级出口的深度转换**——删除 requirement.md 头部 `> 本变更走轻量通道` 标记，按完整深度补全 requirement（AC ≥ 1 条）与 design.md（SDD 红线恢复全效）
+5. **升级出口的深度转换**——删除 requirement.md 头部 `> 本变更走轻量通道` 标记，按完整深度补全 requirement（AC ≥ 1 条）与 design.md（SDD 约束恢复全效）
 6. **worktree 换环境**——`agile worktree remove feat/<旧编号>` → `agile worktree create feat/<新编号>`
 7. ⛑ **人工收尾**——远程分支改名（push 新分支 + 删旧远程分支）、PR 标题/描述更新、知会对端重新 `agile worktree create feat/<新编号>` 跟踪检出
 
@@ -88,7 +88,7 @@ worktree 照常创建（`feat/<编号>`）、main 禁直推照常遵守、PR 照
 1. `/agile:fix-bug STO-012 导出 CSV 中文乱码`（挂靠原需求编号）——无独立编号时自动建 BUG-xxx
 2. bug-hunter 复现：写失败测试断言 BOM 头（**Red**）→ 根因：流式输出未写 BOM → 最小修复（**Green**）→ design.md 记根因分析
 3. 全量回归通过 → run-test.md 记回归结论 → `/agile:review` 轻量形态：报告人一行确认修复生效
-4. TDD 红线未豁免：先有复现测试，后写修复
+4. TDD 约束未豁免：先有复现测试，后写修复
 
 ### OPS-007（OPS）：Playwright 浏览器版本升级
 

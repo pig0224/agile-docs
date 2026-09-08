@@ -55,7 +55,7 @@ disable-model-invocation: true                                 ← 可选：仅�
 
 - **只做「前置校验 → Task 委派 agent → 复核汇报」**，不写实现细节
 - 开头 `先阅读 skill sdd-tdd-method`（共享方法论按需加载）
-- 文件系统/git 操作一律走 CLI（外部资源用 `agile sync` 等），不手工拼装命令；任务目录按 SKILL 附录 A 模板直接创建（幂等）
+- 文件系统/git 操作一律走 CLI（外部资源用 `agile sync` 等），不手工拼装命令；任务目录按标准任务目录模板直接创建（幂等）
 - 产物全中文、落盘位置写明（目录路径从 `.agile/settings.json` 读取）
 
 ## 角色 Agent（agents/*.md）
@@ -68,7 +68,7 @@ name: backend-dev
 description: 后端 TDD 开发工程师。按 design.md 在项目仓库中以 Red-Green-Refactor 循环实现接口与服务。当需要执行后端开发任务时使用。
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---
-角色提示词：职责 / 输入 / 产出 / 硬规则 / 自检清单…
+角色提示词：职责 / 输入 / 产出 / 约束 / 自检清单…
 ```
 
 ## Skill（`skills/<name>/SKILL.md`）
@@ -102,6 +102,6 @@ claude plugin install <name>@fcc    # 安装
 ## 开发约定
 
 1. 命令=入口、agent=执行、skill=知识，职责不混
-2. 两条 SDD/TDD 红线不得削弱（无 design.md 不开发；无失败测试不写实现）
+2. 两条 SDD/TDD 核心约束不得削弱（无 design.md 不开发；无失败测试不写实现）
 3. 不硬编码知识库目录路径与 git 命令，全部经 `.agile/settings.json` / CLI
 4. 破坏性写操作先 dry-run 或显式向用户确认

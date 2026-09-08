@@ -67,7 +67,7 @@ agile init project --template admin-base   # 缺省 --name：各成员用组合�
 
 - **`--name <组合项目名称>=<目录名>`** 可重复，自定义成员落地目录名（缺省 = 组合登记的成员名）
 - **组合根耦合资产**：跨成员共享的约定/规范/知识归总在组合根 `CLAUDE.md`（组合导航）+ `docs/`（每篇 frontmatter 标 `类型: tech|product`），**不写进成员项目**。全部成员生成成功后，CLI 自动把两件套快照到 `.agile/solutions/<组合名>/`（随生成清单一同入库；快照已存在则跳过不覆盖）；随后用 `/agile:knowledge sync-template` 按类型同步进知识库（tech → biz-tech-docs，product → biz-product-docs）
-- **命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘 `projects/` 后直接占用顶层目录名）；组合登记与成员目录双向一致（CLI 与模板仓 check.mjs 双重校验）
+- **命名约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘 `projects/` 后直接占用顶层目录名）；组合登记与成员目录双向一致（CLI 与模板仓 check.mjs 双重校验）
 
 重跑防护（清单一致 → 跳过补缺 / 不符 → 硬错误 / 空目录放行）与事务生成语义见 [init project（命令参考）](/guide/commands#agile-init-project)。
 
