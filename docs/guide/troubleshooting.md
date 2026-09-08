@@ -4,25 +4,25 @@
 
 ### tech-specs / biz-tech-docs 目录如何维护？
 
-**tech-specs**（公司级规范，团队只读）由 `agile sync` 自动维护：有更新时拉取最新内容，日常无需管理。`init workspace` 已把 `tech-specs/` 写入忽略规则——目录内容不随工作区提交。
+两个目录同一规则，按是否登记分两种用法：
 
-**biz-tech-docs**（团队知识库）按是否登记分两种用法：
+- **未登记（默认）**：作为普通目录随工作区一起提交，获得版本管理
+- **登记为外部资源**（`agile config set tech-specs <url>` / `agile config set biz-tech-docs <url>` + `agile sync`）：由 sync 自动拉取维护，不随工作区提交；在目录内沉淀的产物在该知识库中提交（人工操作）
 
-- **未登记（默认）**：作为普通目录随工作区一起提交
-- **登记为外部资源**（`agile config set biz-tech-docs <url>` + `agile sync`）：由 sync 自动拉取维护，不随工作区提交；在目录内沉淀的产物在该知识库中提交（人工操作）
+**tech-specs**（公司级规范）团队只读——规范内容由公司规范团队维护；**biz-tech-docs**（团队知识库）可在目录内直接沉淀。
 
 适合登记为外部资源的情形：
 
-- 多个 workspace 共用同一份知识库——登记后共享同一份内容，一处维护、处处一致（如 `/agile:knowledge` 会直接往目录里写文件）
+- 多个 workspace 共用同一份内容——登记后共享同一份，一处维护、处处一致（如 `/agile:knowledge` 会直接往 biz-tech-docs 目录里写文件）
 
-若未登记但 `biz-tech-docs/` 仍被忽略（旧版本初始化的 workspace 可能残留），sync 会提示——需随工作区提交时，按提示删除该忽略行。
+若未登记但目录仍被忽略（旧版本初始化的 workspace 可能残留忽略行），sync 会提示——需随工作区提交时，按提示删除该忽略行。
 
 ### sync 为何提示「存在未提交改动，跳过更新」？
 
-目录里的改动以本地为准，**本地改动优先**：sync 检测到目录 dirty 即跳过该目录（状态 `warn`），**不会覆盖未提交内容**。需要拉取远端最新时，先提交或 stash 本地改动：
+（已登记为外部资源的目录）目录里的改动以本地为准，**本地改动优先**：sync 检测到目录 dirty 即跳过该目录（状态 `warn`），**不会覆盖未提交内容**。需要拉取远端最新时，先提交或 stash 本地改动：
 
 ```bash
-cd tech-specs
+cd tech-specs                       # 已登记为外部资源时适用
 git status                          # 确认本地改动
 git add -A && git commit            # 提交（是否推送自行决定）
 cd ..
@@ -31,10 +31,10 @@ agile sync                          # 重新快进拉取
 
 ### sync 报「无法快进到远端，需人工处理」
 
-本地与远端分叉——sync 仅做快进拉取，分叉时暂停并交人工处理。进入目录核对分叉内容后自行决定处置方式：
+（已登记为外部资源的目录）本地与远端分叉——sync 仅做快进拉取，分叉时暂停并交人工处理。进入目录核对分叉内容后自行决定处置方式：
 
 ```bash
-cd tech-specs
+cd tech-specs                       # 已登记为外部资源时适用
 git fetch origin
 git merge --ff-only origin/main     # 或 rebase / merge 后推送，自行判断
 ```

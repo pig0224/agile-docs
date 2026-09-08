@@ -7,7 +7,7 @@
 | 命令 | 一句话说明 |
 |---|---|
 | [init](#init) | 初始化 workspace 或项目 |
-| [sync](#sync) | 同步外部资源：拉取规范与知识库 + 刷新模板缓存 + 安装声明的插件 |
+| [sync](#sync) | 同步外部资源：拉取已登记的规范库与知识库 + 刷新模板缓存 + 安装声明插件并保持更新 |
 | [config](#config) | 外部资源与源地址快捷配置（tech-specs / biz-tech-docs / plugin-repo / template-repo） |
 | [worktree](#worktree) | 隔离开发环境管理 |
 | [template](#template) | 项目模板缓存管理 |
@@ -38,7 +38,7 @@ agile init workspace [--name <名称>]
 | `--name` | 当前目录名 | workspace 名称，写入 settings.json |
 | `--marketplace` | 官方插件市场地址 | 插件市场地址，写入 `plugins.marketplace` |
 | `--template-registry` | 官方模板源地址 | 模板注册中心地址，写入 `templates.registry` |
-| `--tech-specs` | 不登记 | 公司级规范资源地址（也可之后 `agile config set tech-specs <url>`） |
+| `--tech-specs` | 不登记 | 公司级规范资源地址，可选（也可之后 `agile config set tech-specs <url>`） |
 | `--biz-tech-docs` | 不登记 | 团队知识库资源地址，可选（也可之后 `agile config set biz-tech-docs <url>`） |
 
 具体动作：
@@ -46,7 +46,7 @@ agile init workspace [--name <名称>]
 1. 写入 `.agile/settings.json`（结构见[核心概念](/guide/concepts)）
 2. 生成五个目录骨架（各含一份 README）与 `biz-product-docs/templates/PRD模板.md`
 3. 初始化版本管理（幂等，已存在则跳过）
-4. 忽略规则：`.worktrees/`、`tech-specs/` 自动写入 `.gitignore`（tech-specs 由 sync 维护，不随工作区提交）；`biz-tech-docs/` 仅在登记为外部资源时写入
+4. 忽略规则：`.worktrees/` 自动写入 `.gitignore`；`tech-specs/`、`biz-tech-docs/` 同一规则——**登记为外部资源时**写入（未登记则是工作区内普通目录，随工作区提交；后补登记由 `agile sync` 自动补写）
 5. 换行符统一为 LF（Windows 的 `.bat`/`.cmd` 保持 CRLF）
 
 ```bash
@@ -146,10 +146,10 @@ agile sync [--dry-run]
 
 依次处理四步（每步一条结果，状态 `done` / `skipped` / `warn` / `failed`）：
 
-1. **tech-specs 拉取**（公司级规范）：拉取最新内容
+1. **tech-specs 拉取**（公司级规范，可选）：已登记时拉取最新内容，未登记跳过
 2. **biz-tech-docs 拉取**（团队知识库，可选）：同上
 3. **模板缓存刷新**：更新到模板源最新；失联时沿用本地缓存
-4. **plugins 按声明安装**：对照 `plugins.dependencies` 补装缺失插件，**不会卸载**已安装插件
+4. **plugins 按声明安装并保持更新**：对照 `plugins.dependencies` 补装缺失插件；已安装的检查更新到市场最新（刷新失败沿用本地已装版本），**不会卸载**已安装插件
 
 外部资源拉取规则（**本地改动优先**）：
 
@@ -235,7 +235,7 @@ workspace 需至少一次提交（尚无提交时 create 会给出明确指引�
 ### 自动同步（autoSync）
 
 - **创建前**：主仓自动 sync 一次外部资源（基于同步后的状态创建）
-- **创建后**：在新环境内再 sync 一次——外部资源不随分支检出，需在新环境内重新拉取（未登记的 biz-tech-docs 是普通目录，随检出直接可用）
+- **创建后**：在新环境内再 sync 一次——已登记的外部资源不随分支检出，需在新环境内重新拉取（未登记的 tech-specs / biz-tech-docs 是普通目录，随检出直接可用）
 - 两次 sync 失败均**仅警告不阻塞**（可进入 worktree 手动执行 `agile sync`）
 
 ```bash

@@ -10,7 +10,7 @@ workspace/
 │   ├── settings.json          # 统一配置（目录路径 / 外部资源 / 插件 / 模板源）
 │   ├── manifests/             # 项目生成清单（init project 自动维护）
 │   └── solutions/             # 组合模板耦合资产快照（init project 自动带出）
-├── tech-specs/                # 公司级技术规范（agile sync 自动维护）
+├── tech-specs/                # 公司级技术规范
 ├── biz-tech-docs/             # 团队技术设计知识库
 ├── biz-product-docs/          # 产品设计知识库
 ├── projects/                  # 项目代码（全部平铺一层）
@@ -34,13 +34,13 @@ workspace/
 
 ## 外部资源
 
-tech-specs 与（可选的）biz-tech-docs 由团队之外维护，地址登记进配置后由 `agile sync` 自动拉取更新：
+tech-specs 与 biz-tech-docs 可登记为外部资源：地址写进配置后由 `agile sync` 自动拉取更新；未登记时它们是 workspace 内普通目录，随仓库提交：
 
-- **tech-specs**：公司级规范——公司统一维护，团队只读
+- **tech-specs**（可选）：公司级规范——公司统一维护，团队只读；多 workspace 团队登记一次（`agile config set tech-specs <url>` + `agile sync`），共享同一份
 - **biz-tech-docs**（可选）：团队知识库——单 workspace 团队无需登记，作为普通目录随工作区维护；多个 workspace 共用时登记一次（`agile config set biz-tech-docs <url>` + `agile sync`），此后各 workspace 共享同一份
 
 ::: warning 本地改动优先
-这两个目录里的未提交改动会被保留：sync 检测到即跳过、不覆盖；与远端分叉时暂停并提示人工处理。
+已登记为外部资源的目录，其未提交改动会被保留：sync 检测到即跳过、不覆盖；与远端分叉时暂停并提示人工处理。
 :::
 
 ## settings.json：唯一配置

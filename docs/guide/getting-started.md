@@ -24,17 +24,17 @@ agile init workspace --name my-workspace
 
 初始化完成：得到统一配置 `.agile/settings.json`、工作区根 `CLAUDE.md`（导航地图：五类目录表 + 配置与清单指针 + 常用命令 + AI 会话须知，按团队实际增补后随仓库提交；已存在则不覆盖）与五个目录骨架（公司规范、技术知识库、产品知识库、项目代码、过程产物，详见[核心概念](/guide/concepts)）。
 
-## 3. 登记外部资源并同步
+## 3. 登记外部资源并同步（可选）
 
 ```bash
-agile config set tech-specs git@gitlab.corp:specs/tech-specs.git
+agile config set tech-specs git@gitlab.corp:specs/tech-specs.git   # 可选：公司规范集中维护
 agile config set biz-tech-docs git@gitlab.corp:kb/tech-docs.git   # 可选：多 workspace 团队共享知识库
 agile sync
 ```
 
-`agile sync` 依次处理四步：tech-specs 拉取 → biz-tech-docs 拉取 → 模板缓存刷新 → 插件按声明安装。公司级规范 tech-specs 必选；团队知识库 biz-tech-docs 可选——多 workspace 团队共享同一份知识库，一处维护、处处一致。
+`agile sync` 依次处理四步：tech-specs 拉取 → biz-tech-docs 拉取 → 模板缓存刷新 → 插件按声明安装并保持更新。两个知识库登记均为可选：**未登记时它们是工作区内普通目录，随工作区提交获得版本管理**；登记为外部资源后由 sync 拉取维护——多 workspace 团队共享同一份，一处维护、处处一致。
 
-tech-specs 与 biz-tech-docs 目录由 CLI 自动维护：有更新时执行 `agile sync` 即拉取最新内容；目录内有未提交改动时 sync 跳过不覆盖，与远端分叉时暂停并提示人工处理。日常无需手动管理这两个目录。
+已登记的 tech-specs 与 biz-tech-docs 目录由 CLI 自动维护：有更新时执行 `agile sync` 即拉取最新内容；目录内有未提交改动时 sync 跳过不覆盖，与远端分叉时暂停并提示人工处理，日常无需手动管理。
 
 ```bash
 agile sync --dry-run    # 预先查看执行计划（已同步步骤显示 skipped，属预期行为）
@@ -106,7 +106,7 @@ agile plugin update         # 更新插件（刷新市场 → 强制重装，重
 ```
 npm i -g fcc-agile-cli
   → agile init workspace
-  → agile config set tech-specs <url> → agile sync（再次执行验证幂等）
+  → agile config set tech-specs <url>（可选）→ agile sync（再次执行验证幂等）
   → agile template list → agile init project --template <t> [--name <目录>]
   → git commit（首个提交）
   → 日常：worktree create → 开发 → 各项目内执行测试 → commit → PR

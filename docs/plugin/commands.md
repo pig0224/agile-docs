@@ -310,7 +310,7 @@ UI 设计与组件库全生命周期，按 `$ARGUMENTS` 中的子命令选择模
 | 产物 | 知识库领域目录下文档（frontmatter：领域/创建/来源/状态——状态取值「有效 / 已废弃 / 已被替代」，`来源` 格式 `<workspace 名>/<素材>`——workspace 名读 settings.json 的 `name`，单库模式用当前目录名）+ 导航登记（根导航 + 所在模块导航）；tech-specs 相关落 `biz-tech-docs/proposals/` 提案 |
 | 示例 | `/agile:knowledge build 我用的是 go-zero 后端 + ant.design 前端`；`/agile:knowledge capture 订单状态机设计结论 --from STO-012`；`/agile:knowledge sync-template admin-base` |
 
-**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在 tech-specs / biz-tech-docs 目录内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 提案不落盘，要点由人工带回团队走提案流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
+**运行环境**：agile workspace 内三库齐备（路径读 `.agile/settings.json`）；也可**脱离 workspace** 直接在独立检出的 tech-specs / biz-tech-docs 仓库内使用——单库模式仅支持 tech / team 操作，`--from <编号>` 不可用，tech 提案不落盘，要点由人工带回团队走提案流程；biz-product-docs 绑定具体产品，始终随 workspace 使用。
 
 **三问判别法**定落点：换产品还成立 → `tech`（tech-specs 团队只读，走提案）；说系统怎么实现 → `team`（biz-tech-docs；组件 API 约定、组件库用法落 `frameworks/<前端栈>/`）；说业务规则、用户看到什么 → `product`（biz-product-docs；视觉规则、交互模式含 token 语义）。
 

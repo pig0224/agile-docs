@@ -27,7 +27,7 @@ features:
     linkText: 核心概念
   - icon: 🔄
     title: 一处配置，自动同步
-    details: 外部资源地址写进 .agile/settings.json，执行 agile sync 即拉取最新规范与知识库、安装声明的插件；本地未提交改动始终优先，不会被覆盖。
+    details: 外部资源地址写进 .agile/settings.json，执行 agile sync 即拉取最新的规范与知识库、安装声明插件并保持更新；本地未提交改动始终优先，不会被覆盖。
     link: /guide/commands#sync
     linkText: sync 命令
   - icon: 🤖
