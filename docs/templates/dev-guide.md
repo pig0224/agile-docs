@@ -1,6 +1,6 @@
 # 模板开发指南
 
-如何为 agile-templates 仓库开发项目模板。**新增模板不需要动 agile-cli**。
+如何为 agile-templates 仓库开发项目模板。**新增模板无需改动 agile-cli**。
 
 ## 仓库结构
 
@@ -58,24 +58,24 @@ agile-templates/
 
 四流程共用统一收口：**登记 registry.json → `node scripts/check.mjs` → 冒烟验证 → 汇报变更清单**。
 
-**TDD 基线**：无论哪种流程，每个新骨架自带至少一个可运行测试，且骨架阶段就该跑绿——模板是起点不是半成品。**跑绿后、登记前，清理成员/模板目录内的安装与构建产物**（`node_modules` / `.next` / `dist` / `build` / `coverage` / 锁文件等，按栈取实际产生的）——产物不入库，CLI 直读模板仓复制时也不应受产物干扰；清理命令示例见[插件命令详解](/plugin/commands)。
+**TDD 基线**：无论哪种流程，每个新骨架自带至少一个可运行测试，且骨架阶段即全部通过。**测试通过后、登记前，清理成员/模板目录内的安装与构建产物**（`node_modules` / `.next` / `dist` / `build` / `coverage` / 锁文件等，按栈取实际产生的）——产物不提交，CLI 直读模板仓复制时也不应受产物干扰；清理命令示例见[插件命令详解](/plugin/commands)。
 
 ### 新增一个单例模板（流程 A/B/C）：两步收口
 
-1. 按 A/B/C 之一生成骨架：`singles/<模板名>/`，含项目骨架（README + 可运行测试，约定见「模板内容约定」）+ **项目级规范骨架三文件**，测试跑绿
+1. 按 A/B/C 之一生成骨架：`singles/<模板名>/`，含项目骨架（README + 可运行测试，约定见「模板内容约定」）+ **项目级规范骨架三文件**，测试全部通过
 2. 在 `registry.json` 的 `singles` 数组登记（无 path 字段，目录由名字派生）
 
-提交推送后，用户侧 `agile init project --template <模板名> [--name <目录名>]` 即可用（`--name` 命名接口需 CLI ≥ 2.4.0）。AI 陪同建设用插件命令 `/agile:add-template`（见下节）。
+提交推送后，用户侧 `agile init project --template <模板名> [--name <目录名>]` 即可用（`--name` 命名接口需 CLI ≥ 2.4.0）。AI 协助建设用插件命令 `/agile:add-template`（见下节）。
 
 ### 新增一个组合模板（流程 D）
 
 1. 为每个成员新建 `solutions/<组合名>/<成员名>/`——**组合专属完整模板骨架**（复制最接近的单例模板作起点，按组合需求定制；仓库无对应技术栈单例的成员按流程 A 从零手写；成员与 singles 互不引用），同样要求规范骨架三文件
-2. 建组合根耦合资产两件套——**跨成员共享的约定/规范/知识归总到这里，不写进成员项目**（成员平铺落盘后知识散落 `projects/` 会违背 workspace「1 根 5 抽屉」范式）：`solutions/<组合名>/CLAUDE.md`（组合定位 / 成员清单 / 耦合资产导航）+ `solutions/<组合名>/docs/`（≥1 篇，每篇 frontmatter 标 `类型: tech|product`——`/agile:knowledge sync-template` 按此同步进 biz-tech-docs / biz-product-docs）。归总判据：≥2 成员共享或跨成员协作协议；单成员内部约定留成员项目。组合根资产不做 <span v-pre>`{{name}}`</span> 占位替换
+2. 建组合根耦合资产两件套——**跨成员共享的约定/规范/知识归总到这里，不写进成员项目**：`solutions/<组合名>/CLAUDE.md`（组合定位 / 成员清单 / 耦合资产导航）+ `solutions/<组合名>/docs/`（≥1 篇，每篇 frontmatter 标 `类型: tech|product`——`/agile:knowledge sync-template` 按此同步进 biz-tech-docs / biz-product-docs）。归总判据：≥2 成员共享或跨成员协作协议；单成员内部约定留成员项目。组合根资产不做 <span v-pre>`{{name}}`</span> 占位替换
 3. 在 `registry.json` 的 `solutions` 数组登记组合（`description` + `projects` 成员数组，**数组顺序 = 生成顺序**）
 
-生成产物为成员**平铺**落盘 `projects/<成员目录名>/`（见[模板概览 · 组合模板](./overview#组合模板)）——因此成员名与模板名/组合名同命名空间，三段必须全局唯一。全部成员生成成功后，CLI 自动把组合根两件套快照到 workspace `.agile/solutions/<组合名>/`（与生成清单一同入库；快照已存在则跳过不覆盖），供 `/agile:knowledge sync-template` 按类型同步进抽屉。
+生成产物为成员**平铺**落盘 `projects/<成员目录名>/`（见[模板概览 · 组合模板](./overview#组合模板)）——因此成员名与模板名/组合名同命名空间，三段必须全局唯一。全部成员生成成功后，CLI 自动把组合根两件套快照到 workspace `.agile/solutions/<组合名>/`（与生成清单一同入库；快照已存在则跳过不覆盖），供 `/agile:knowledge sync-template` 按类型同步进知识库。
 
-AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，见下节）——设计问答改问成员构成（含**耦合资产盘点**），成员骨架复制最接近的单例模板作起点。
+AI 协助建设组合模板用插件命令 `/agile:add-template`（流程 D，见下节）——设计问答改问成员构成（含**耦合资产盘点**），成员骨架复制最接近的单例模板作起点。
 
 ## AI 辅助建设：/agile:add-template
 
@@ -87,7 +87,7 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 /agile:add-template                  # 无参数进入交互式设计问答
 ```
 
-命令按 SDD/TDD 方法论组织，三道门不得跳过：**设计定稿门**（设计问答全部决策经确认后才写盘）→ **测试基线**（骨架阶段测试跑绿）→ **冒烟验收门**（验收清单先行，逐条实际执行）。骨架生成按 A/B/C/D 分支（见上表）→ **registry.json 登记 + `node scripts/check.mjs` 校验** → **冒烟验证**（临时 workspace + 本地模板源执行 `agile init project`，验证占位符替换正确且项目测试可跑——必须实际执行）→ 汇报变更清单。
+命令按 SDD/TDD 方法论组织，三道门不得跳过：**设计定稿门**（设计问答全部决策经确认后才写盘）→ **测试基线**（骨架阶段测试全部通过）→ **冒烟验收门**（验收清单先行，逐条实际执行）。骨架生成按 A/B/C/D 分支（见上表）→ **registry.json 登记 + `node scripts/check.mjs` 校验** → **冒烟验证**（临时 workspace + 本地模板源执行 `agile init project`，验证占位符替换正确且项目测试可跑——必须实际执行）→ 汇报变更清单。
 
 **流程 D（组合）**：设计问答改问**成员构成**（组合名 + `projects` 成员问答 + 派生起点 + 耦合资产盘点：跨成员共享的约定/规范逐项标注 tech/product）→ 成员骨架复制最接近的单例模板作起点（仓库无对应技术栈单例的成员按**流程 A 从零手写**：依赖版本经 `npm dist-tags` 实查、工程配置对齐上游脚手架形态；`solutions/<组合名>/<成员名>/`，组合专属深度定制按实际需求另行开发）→ 组合根两件套（CLAUDE.md 导航 + docs/ 归总跨成员耦合资产，逐篇标 `类型: tech|product`）→ `solutions` 数组登记 + `node scripts/check.mjs` 校验（双向一致 / 成员名全局唯一 / 组合根耦合资产）→ 冒烟前核实模板目录无安装产物残留 → 冒烟验证成员**平铺**落盘、<span v-pre>`{{name}}`</span> 替换、重跑补缺与组合根两件套快照带出（布局自 2.1.0 引入；生成清单断点续建语义需 ≥ 2.2.0；组合根资产快照带出需 ≥ 2.3.0；`--name` 命名接口需 ≥ 2.4.0）。
 
@@ -99,7 +99,7 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 
 ## 从 workspace 项目打包模板
 
-方向相反的姊妹命令：add-template 在模板仓里把想法建成模板（正向建设），`/agile:share-template` 在 workspace 里把**既有项目**（含沉淀的规范与知识）反向打包为模板——解决「现有项目想共享模板需人工搬运」。在 agile workspace 内执行（与 add-template 相反，源项目在 `projects/` 下）：
+方向相反的配套命令：add-template 在模板仓里把想法建成模板（正向建设），`/agile:share-template` 在 workspace 里把**既有项目**（含沉淀的规范与知识）反向打包为模板——解决现有项目共享为模板时需人工搬运的问题。在 agile workspace 内执行（与 add-template 相反，源项目在 `projects/` 下）：
 
 ```bash
 /agile:share-template order-service            # 单例：指定 projects/ 下目录名
@@ -111,10 +111,10 @@ AI 陪同建设组合模板用插件命令 `/agile:add-template`（流程 D，�
 
 要点（详见[插件命令详解](/plugin/commands)）：
 
-- **源项目只读铁律**：脱敏/中立化/占位符还原等一切修改只发生在目标仓副本，绝不回写 `projects/`
+- **源项目只读铁律**：脱敏/中立化/占位符还原等一切修改只发生在目标仓副本，一律不回写 `projects/`
 - **三道门**（方案定稿门 / 处置确认门 / 冒烟验收门）不得跳过——处置清单逐项经用户确认后才执行
 - **占位符逆向还原**：init 把占位符替换为真实目录名，本命令做逆向——真实落地目录名改回 <span v-pre>`{{name}}`</span>、安全段改回 <span v-pre>`{{safeName}}`</span>（package.json `name` 严格为 <span v-pre>`{{name}}`</span>；包名/目录名等身份性出现必换，URL/文案等语义性出现逐处判断）
-- **沉淀知识去向**：项目内沉淀（conventions / architecture / ui.md / README）随项目打包；跨成员共享规范归总组合根 docs/（使用方经 `/agile:knowledge sync-template` 进抽屉）；workspace 抽屉知识不直接入模板（模板中立 + 防泄露）
+- **沉淀知识去向**：项目内沉淀（conventions / architecture / ui.md / README）随项目打包；跨成员共享规范归总组合根 docs/（使用方经 `/agile:knowledge sync-template` 进知识库）；workspace 知识库内容不直接入模板（模板中立 + 防泄露）
 - 命令**不执行 git add / commit / push**——导出后如何发布见下节
 
 ## 导出后如何发布
@@ -133,7 +133,7 @@ agile init project --template <模板名或组合名>
 
 ## 命名规范（防冲突五防线）
 
-**模板如何被找到**：条目 `name` = 模板目录名（组合成员 = `solutions/<组合>/<name>/`），一条链定位无歧义——registry 无 path 字段，杜绝别名指向。
+**模板如何被找到**：条目 `name` = 模板目录名（组合成员 = `solutions/<组合>/<name>/`）——registry 无 path 字段，不存在别名指向。
 
 1. **命名规范**：`^[a-z][a-z0-9-]*$`（小写字母开头，仅小写字母/数字/连字符）
 2. **重复即报错**：JSON 重复键由 check.mjs 显式扫描（JSON.parse 对重复键静默取后者）；singles / solutions / 同组合 projects 数组内 name 重复登记均拒绝
@@ -156,7 +156,7 @@ agile init project --template <模板名或组合名>
   - `docs/conventions.md`：目录 / 命名 / 测试默认值（如实描述模板初始骨架 + 增长建议）+ 团队补充约定节
   - `docs/architecture.md`：ADR 骨架（背景 / 决策 / 后果三段式）+ ADR-001 初始条目
   - `init project` 生成项目时三文件随模板带出，作为项目级规范入口
-- **前端模板附赠 `docs/ui.md`**（vue3-vite / react-vite；**非强制**，check.mjs 不校验——非 UI 需求的项目可无此文件）：项目级 UI 设计约定骨架——token 清单空表（名称/值/用途）、Token 管理方式（CSS 变量 / JS token 文件 / 组件库主题配置）、使用规则、上层规范引用；经 `/agile:init` 约定问答「UI 约定」维度填充（未问到处保留「待定」）。页面原型与实现引用其 token 名；新增/修改 token 必须回写该表（单一事实源）
+- **前端模板附赠 `docs/ui.md`**（vue3-vite / react-vite；**非强制**，check.mjs 不校验——非 UI 需求的项目可无此文件）：项目级 UI 设计约定骨架——token 清单空表（名称/值/用途）、Token 管理方式（CSS 变量 / JS token 文件 / 组件库主题配置）、使用规则、上层规范引用；经 `/agile:init` 约定问答「UI 约定」维度填充（未问到处保留「待定」）。页面原型与实现引用其 token 名；新增/修改 token 必须回写该表（以此为准）
 - 模板中立原则：预填默认值只来自模板自身选型与社区惯例，不引入 `frameworks/<栈>/` 条款
 - 模板内不要提交 `.git/`、锁文件按团队策略
 
@@ -179,13 +179,13 @@ node scripts/check.mjs                          # 一致性校验（无外部依
 
 ```bash
 agile template list
-agile init project demo --template <你的模板>
+agile init project --template <你的模板> --name demo
 ```
 
-本地模板目录含 `node_modules` 等安装/构建产物、符号链接（junction）或锁文件（`pnpm-lock.yaml` 等）也没关系——CLI ≥ 2.2.0 init 复制时自动忽略并逐项 warn 提示，不会进入生成项目（≤ 2.1.0 撞 junction 会直接崩溃，请先升级）；但模板仓提交入库前仍应清理产物（CI 的 check.mjs 产物黑名单会拦截）。
+本地模板目录含 `node_modules` 等安装/构建产物、符号链接（junction）或锁文件（`pnpm-lock.yaml` 等）亦无影响——CLI ≥ 2.2.0 init 复制时自动忽略并逐项提示，不会进入生成项目（≤ 2.1.0 复制 junction 会直接失败，请先升级）；但模板仓提交入库前仍应清理产物（CI 的 check.mjs 产物黑名单会拦截）。
 
 ::: warning
-`templates.registry` 指向**本地目录**时直接读取、不走缓存；调试完记得把该键改回原地址。
+`templates.registry` 指向**本地目录**时直接读取、不走缓存；调试完成后应将该键改回原地址。
 :::
 
 ## CI

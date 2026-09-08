@@ -4,15 +4,15 @@
 
 - **同一需求分支**：负责人推送后，另一端 `agile worktree create` 自动跟踪检出；后 push 者 `git pull --rebase`
 - **文件级隔离（防冲突核心）**：后端只写 `implementation-be.md`，前端只写 `implementation-fe.md`；主文件 `implementation.md`（任务分配表）design 冻结后**只读**；gen-test.md 各自只在自己节内补充
-- **代码隔离**：projects/ 下各项目目录天然隔离；共享契约产物（openapi / 生成的 types）由后端生成、前端只消费
-- **通用纪律**：小步提交、高频 push；不重排他人段落、不做全文批量替换；换行符由 `.gitattributes` 统一为 LF（init workspace 自动生成），杜绝跨平台假冲突
+- **代码隔离**：projects/ 下各项目目录相互隔离；共享契约产物（openapi / 生成的 types）由后端生成、前端只消费
+- **通用纪律**：小步提交、高频 push；不重排他人段落、不做全文批量替换；换行符统一为 LF（初始化时自动设置），杜绝跨平台假冲突
 
 ## 过程文档写作规则
 
 | 文件 | 谁写 | 内容 | 规则 |
 |---|---|---|---|
 | requirement.md | 负责人（sync-req 时并入） | 需求 + AC | 入仓后只读；需求变更 = 产品重新定稿 → 负责人重新 sync |
-| design.md | 负责人 | 方案、接口契约、任务分配 | **单一事实源**；变更先改这里 |
+| design.md | 负责人 | 方案、接口契约、任务分配 | **以此为准**；变更先改这里 |
 | implementation.md | 负责人建骨架 | 任务分配表 + 联调约定 | design 冻结时填写，之后**只读**；只允许 add-task 追加行 |
 | implementation-be.md | **仅后端**（无论是否负责人） | 后端任务清单、TDD 循环记录、变更清单 | 前端禁写 |
 | implementation-fe.md | **仅前端**（无论是否负责人） | 前端任务清单、测试记录、变更清单 | 后端禁写 |
@@ -25,9 +25,9 @@
 
 ## 测试脚本与产物归属
 
-- **固化 e2e 脚本**入项目 `e2e/`（长期资产，随页面同 PR 演进，供 `/agile:run-test` 与 stage 冒烟复用；**默认不进 PR CI 门禁**——e2e 依赖浏览器与环境，flaky 且慢，各项目可选跑关键路径冒烟子集）
-- **临时验证/复现脚本**放 `process-docs/<编号>/scripts/`，**严禁散落在 projects/ 下的项目内**
-- **运行产物**（`test-results/`、`playwright-report/`、截图、trace）一律 .gitignore 不提交；报告引用的关键截图归档 `process-docs/<编号>/assets/`
+- **固化 e2e 脚本**入项目 `e2e/`（长期资产，随页面同 PR 演进，供 `/agile:run-test` 与 stage 冒烟复用；**默认不进 PR CI 门禁**——e2e 依赖浏览器与环境，不稳定且耗时较长，各项目可选择执行关键路径冒烟子集）
+- **临时验证/复现脚本**放 `process-docs/<编号>/scripts/`，**严禁放置在 projects/ 下的项目内**
+- **运行产物**（`test-results/`、`playwright-report/`、截图、trace）一律不提交（已列入忽略规则）；报告引用的关键截图归档 `process-docs/<编号>/assets/`
 - e2e 主要测试工具 **Playwright**，辅助调试 **Chrome DevTools**；项目尚无测试工具时建议引入 Playwright（经负责人确认）
 
 ---
@@ -41,12 +41,12 @@ Day 1  小琪（前端）
        worktree create feat/STO-012（自动跟踪远程分支）
        各自开工：大伟只写 implementation-be.md，小琪只写 implementation-fe.md
 Day 2  小琪推送页面层 → 大伟后 push 前 git pull --rebase（零冲突：文件级隔离）
-Day 3  联调：stage 环境对真接口；接口出入 → 大伟改 design.md + 知会 → 小琪复验
+Day 3  联调：stage 环境对接真实接口；实现与契约不一致 → 大伟改 design.md + 知会 → 小琪复验
 ```
 
 正反例（文档规则）：
 
 - ✅ 小琪在 gen-test.md 的「前端用例」节追加 TC-F3（只动自己的节）
 - ❌ 小琪把 gen-test.md 全文重排并把后端用例节也改了一遍——违反文件级隔离
-- ✅ 接口出入：大伟先改 design.md 契约（单一事实源），再改代码，并知会小琪
+- ✅ 实现与契约不一致：大伟先改 design.md 契约（以此为准），再改代码，并知会小琪
 - ❌ 小琪直接改 design.md 的接口契约——对端不直接改 design.md

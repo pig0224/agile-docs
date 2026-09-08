@@ -1,4 +1,4 @@
-# Agile-Docs
+# Agile Docs
 
 [![CI](https://github.com/pig0224/agile-docs/actions/workflows/ci.yml/badge.svg)](https://github.com/pig0224/agile-docs/actions/workflows/ci.yml)
 [![Deploy Pages](https://github.com/pig0224/agile-docs/actions/workflows/pages.yml/badge.svg)](https://github.com/pig0224/agile-docs/actions/workflows/pages.yml)
@@ -8,7 +8,7 @@
 
 在线阅读：**https://pig0224.github.io/agile-docs/**
 
-覆盖的三个兄弟仓库：
+覆盖的三个组件仓库：
 
 | 仓库 | 职责 |
 |---|---|

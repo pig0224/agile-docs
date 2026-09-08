@@ -1,11 +1,11 @@
 # 快速上手
 
-从零搭建一个 FCC-Agile 工作区，走完「初始化 → 同步 → 建项目 → 开发 → 插件」全流程。
+从零搭建 FCC-Agile 工作区，按「初始化 → 同步 → 建项目 → 开发 → 插件」的顺序完成全流程。
 
 ## 前置条件
 
 - Node.js ≥ 24、git ≥ 2.30
-- （可选）[Claude Code](https://code.claude.com/docs)——使用 /agile:xxx 插件命令时需要
+- （可选）[Claude Code](https://code.claude.com/docs)——使用 /agile:xxx 插件命令时需要；仅使用 CLI 时可不安装
 
 ## 1. 安装 CLI
 
@@ -13,7 +13,7 @@
 npm install -g fcc-agile-cli
 ```
 
-> 插件与模板由各自 git 仓库分发（`agile-plugins` / `agile-templates`），无需额外安装。
+> 插件与模板由 CLI 自动获取，无需额外安装。
 
 ## 2. 初始化工作区
 
@@ -22,7 +22,7 @@ mkdir my-workspace && cd my-workspace
 agile init workspace --name my-workspace
 ```
 
-生成唯一配置 `.agile/settings.json`、五个抽屉骨架、git 仓库、`.gitignore`（外部资源不入库）与 `.gitattributes`。此时整个工作区是一个**空的单仓 git 仓库**。
+初始化完成：得到统一配置 `.agile/settings.json` 与五个目录骨架（公司规范、技术知识库、产品知识库、项目代码、过程产物，详见[核心概念](/guide/concepts)）。
 
 ## 3. 登记外部资源并同步
 
@@ -32,25 +32,25 @@ agile config set biz-tech-docs git@gitlab.corp:kb/tech-docs.git   # 可选：多
 agile sync
 ```
 
-`agile sync` 依次处理四步：tech-specs 拉取 → biz-tech-docs 拉取 → 模板缓存刷新 → 插件按声明安装。公司级规范 tech-specs 必选；团队知识库 biz-tech-docs 可选——团队有多个 workspace 时共享同一份知识库，保持单一事实源。
+`agile sync` 依次处理四步：tech-specs 拉取 → biz-tech-docs 拉取 → 模板缓存刷新 → 插件按声明安装。公司级规范 tech-specs 必选；团队知识库 biz-tech-docs 可选——多 workspace 团队共享同一份知识库，一处维护、处处一致。
 
-外部目录**不入库**（写入 `.gitignore`），各自是独立 git 仓库，由 sync clone/快进拉取——它们是**可写工作区**，sync 本地优先：有未提交改动就跳过绝不覆盖，分叉报人工。仓库后续更新时再次 `agile sync`（或创建 worktree 时的自动 sync）即可拉到最新。
+tech-specs 与 biz-tech-docs 目录由 CLI 自动维护：有更新时执行 `agile sync` 即拉取最新内容；目录内有未提交改动时 sync 跳过不覆盖，与远端分叉时暂停并提示人工处理。日常无需手动管理这两个目录。
 
 ```bash
-agile sync --dry-run    # 先看计划（幂等：再跑一次全是 skipped）
+agile sync --dry-run    # 预先查看执行计划（幂等：重复执行时全部显示 skipped）
 agile config get tech-specs   # 查看仓库地址
 agile config list             # settings.json 全量
 ```
 
-## 4. 创建项目（模板脚手架）
+## 4. 创建项目
 
 ```bash
-agile template list                              # 查看可用模板与组合模板
-agile init project order-service --template go-service
-agile init project frontend-web --template vue3-vite
+agile template list                                # 查看可用单例模板与组合模板（官方注册中心可能尚未登记模板）
+agile init project --name order-service            # 空项目骨架（始终可用）
+agile init project --template <模板名> --name <目录名>   # 从模板生成（需注册中心已登记对应模板）
 ```
 
-项目直接落在 `projects/` 下（workspace 单仓内普通目录），已 `git add`，commit 时机由你决定。团队私有模板见[模板概览](/templates/overview)。
+项目生成于 `projects/<目录名>/`，即建即用。团队私有模板见[模板概览](/templates/overview)。
 
 ## 5. 提交首个 commit
 
@@ -60,7 +60,7 @@ git commit -m "chore: init workspace with tech-specs & projects"
 ```
 
 ::: warning
-必须完成首次提交后 `agile worktree create` 才可用（worktree 基于已有 commit 创建）。
+创建 worktree 前需先完成至少一次提交（`agile worktree create` 依赖已有提交历史）。
 :::
 
 ## 6. 日常开发循环
@@ -69,7 +69,7 @@ git commit -m "chore: init workspace with tech-specs & projects"
 agile worktree create feat/STO-001     # 创建隔离开发环境（创建前后各自动 sync 一次）
 cd .worktrees/feat__STO-001
 
-# ... 开发（多项目在同一 worktree 内，前后端一起改；测试进各项目目录执行）...
+# ... 在同一 worktree 内开发（多个项目同时修改；测试在各项目目录内执行）...
 cd projects/order-service && npm test
 
 git add -A && git commit -m "feat(STO-001): ..."
@@ -77,7 +77,7 @@ git add -A && git commit -m "feat(STO-001): ..."
 agile worktree remove feat/STO-001     # 清理
 ```
 
-推送 feature 分支、发 PR、merge——**一个 PR 包含前后端代码与过程文档**，天然原子。
+推送分支并发起 PR——前后端代码与过程文档在同一 PR 中，一并评审。
 
 ## 7. 安装 Claude Code 插件（SDD/TDD 流程）
 
@@ -86,13 +86,13 @@ agile plugin install agile
 agile plugin ls                           # 声明 × 本机实况对照
 ```
 
-安装即写入 `.agile/settings.json` 的 `plugins.dependencies` 依赖声明并随 workspace 提交——其他成员 clone 后 `agile sync` 一条命令补齐（缺的装、绝不卸载）。
+安装后插件登记进 `.agile/settings.json` 并随工作区提交——其他成员执行一次 `agile sync` 即自动补装（只补缺失，不动已有）。
 
 重启 Claude Code 会话后可用 `/agile:help` 查看全部命令，按 [插件概览](/plugin/overview) 的流程主线开发。团队分工（产品/负责人/后端/前端/运维）与需求全生命周期的协作规范见[团队协作 SOP](/guide/sop/)。
 
 ## 8. 排错
 
-同步计划有 `failed`/`warn`？先 `agile sync --dry-run` 看计划，再到 [故障排查](/guide/troubleshooting) 对照处置（外部目录 dirty 跳过、分叉人工、切换仓库地址用 `agile config set` 覆盖 url）。
+同步结果出现 `failed` / `warn` 时，先执行 `agile sync --dry-run` 查看计划，再到[故障排查](/guide/troubleshooting)对照处置（外部目录 dirty 时跳过、分叉报请人工处理、仓库地址切换使用 `agile config set` 覆盖 url）。
 
 ## 9. 升级
 
@@ -106,10 +106,10 @@ agile plugin update         # 更新插件（刷新市场 → 强制重装，重
 ```
 npm i -g fcc-agile-cli
   → agile init workspace
-  → agile config set tech-specs <url> → agile sync（再跑一次验证幂等）
+  → agile config set tech-specs <url> → agile sync（再次执行验证幂等）
   → agile template list → agile init project --template <t> [--name <目录>]
   → git commit（首个提交）
-  → 日常：worktree create → 开发 → 各项目跑测试 → commit → PR
+  → 日常：worktree create → 开发 → 各项目内执行测试 → commit → PR
   → agile plugin install agile（可选，进入 SDD/TDD 流程）
   → agile sync（例行收敛外部资源与插件）
 ```

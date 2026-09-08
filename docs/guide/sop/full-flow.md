@@ -8,7 +8,7 @@
 
 ## #0 需求立项（产品）
 
-**规则**：产品在**外部平台**（腾讯文档 / 飞书等）编写需求文档（最低结构：背景、目标、AC ≥ 1 条），**分配编号 STO-xxx**（产品是唯一分配者）并**指派负责人**（后端或前端，按需求性质，见[总览](/guide/sop/)角色说明）。产品不直接操作仓库——需求文档链接/内容交给负责人，PRD 结构化产物由负责人在 #2 用 `/agile:prd` 生成入仓。
+**规则**：产品在**外部平台**（腾讯文档 / 飞书等）编写需求文档（最低结构：背景、目标、AC ≥ 1 条），**分配编号 STO-xxx**（产品是唯一分配者）并**指派负责人**（后端或前端，按需求性质，见[总览](/guide/sop/)角色说明）。产品不直接操作工作区——需求文档链接/内容交给负责人，PRD 结构化产物由负责人在 #2 用 `/agile:prd` 生成入仓。
 
 ::: tip 📌 STO-012 实录
 产品林悦在飞书写需求文档，背景「运营每月手工导订单耗时 2 小时」，目标「页面自助导出 90 天内订单」，AC 摘录：
@@ -35,10 +35,10 @@ $ git push -u origin feat/STO-012
 
 ## #2 入仓 + 设计（负责人）
 
-**规则**：worktree 内执行 `/agile:prd STO-xxx <需求描述>`（把产品外部平台的需求文档结构化——产出 PRD/AC/功能树/菜单树入 `biz-product-docs/requirements/<编号>/`，随需求分支提交）→ `/agile:sync-req STO-xxx`（把抽屉三需求产物同步到 `process-docs/<编号>/`，创建标准七文件目录并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
+**规则**：worktree 内执行 `/agile:prd STO-xxx <需求描述>`（把产品外部平台的需求文档结构化——产出 PRD/AC/功能树/菜单树入 `biz-product-docs/requirements/<编号>/`，随需求分支提交）→ `/agile:sync-req STO-xxx`（把产品知识库需求产物同步到 `process-docs/<编号>/`，创建标准任务目录（初始 8 个 .md）并做 AC 校验）→ `/agile:architect STO-xxx`（产出 design.md：方案概述、涉及模块、**接口设计**、数据模型）→ **design 冻结时把任务分配表填入 implementation.md**（主文件，写法见[协作与文档规则](/guide/sop/collab)）。design.md 单写者 = 负责人；**无 design.md 不开发（SDD 红线）**。完成后推送。
 
 ::: tip 📌 STO-012 实录
-大伟执行 `/agile:prd STO-012 页面自助导出 90 天内订单（飞书需求文档：运营每月手工导订单耗时 2 小时…）` 生成结构化需求入抽屉三；`/agile:sync-req STO-012` 同步入 process-docs 后，`/agile:architect STO-012` 产出 design.md，接口契约摘录：
+大伟执行 `/agile:prd STO-012 页面自助导出 90 天内订单（飞书需求文档：运营每月手工导订单耗时 2 小时…）` 生成结构化需求入产品知识库；`/agile:sync-req STO-012` 同步入 process-docs 后，`/agile:architect STO-012` 产出 design.md，接口契约摘录：
 
 | 接口 | 方法 | 入参 | 出参 |
 |---|---|---|---|
@@ -50,7 +50,7 @@ $ git push -u origin feat/STO-012
 
 ### 页面原型（可选节点）
 
-涉及新页面 / 重交互的需求，建议在测试设计（#4）前后、开发（#5）前执行 `/agile:ui prototype <编号>`（prd 后、frontend 前的可选动作，**不设门禁**）——原型读项目 `docs/ui.md`（**有则必读**，视觉描述引用 token 名）与抽屉三 UI 规范，产出落 `biz-product-docs/prototypes/<编号>/`，规范缺口反馈产品；页面实现仍归 `/agile:frontend`。
+涉及新页面 / 重交互的需求，建议在测试设计（#4）前后、开发（#5）前执行 `/agile:ui prototype <编号>`（prd 后、frontend 前的可选动作，**不设门禁**）——原型读项目 `docs/ui.md`（**有则必读**，视觉描述引用 token 名）与产品知识库 UI 规范，产出落 `biz-product-docs/prototypes/<编号>/`，规范缺口反馈产品；页面实现仍归 `/agile:frontend`。
 
 ::: tip 📌 STO-012 实录
 `/agile:ui prototype STO-012` 产出 `page-order-export.md`：导出按钮用主色 token（引用项目 `docs/ui.md` 的 `--color-primary`，不写裸色值）、任务进行中显示进度态；标注一个规范缺口「批量导出上限未定义」反馈产品。
@@ -90,7 +90,7 @@ $ git push -u origin feat/STO-012
   - commit: STO-012(green): 导出任务超时状态机
 ```
 
-小琪接口层先按契约 mock `{ taskId }`，页面层等 #6 联调对真接口。
+小琪接口层先按契约 mock `{ taskId }`，页面层待 #6 联调时对接真实接口。
 :::
 
 ## #6 联调（后端 + 前端）
@@ -117,7 +117,7 @@ $ git push -u origin feat/STO-012
 
 ## #8 验收汇总（负责人汇总；前端/后端/产品参与）
 
-**规则**：交叉验收（前端验后端接口、后端验前端页面）+ AC 验收（产品按 AC 逐条，stage 环境）→ `/agile:review STO-xxx` 生成 review.md 验收矩阵并判定门禁——**全通过才可交付 PR**；未闭环项修复后重走。验收结论由人做出，**AI 不代验收**。矩阵与门禁完整实录见[验收、发布与纪律](/guide/sop/release)。
+**规则**：交叉验收（前端验后端接口、后端验前端页面）+ AC 验收（产品按 AC 逐条，stage 环境）→ `/agile:review STO-xxx` 生成 review.md 验收矩阵并判定门禁——**全通过才可交付 PR**；未闭环项修复后重新执行。验收结论由人做出，**AI 不代验收**。矩阵与门禁完整实录见[验收、发布与纪律](/guide/sop/release)。
 
 ## #9 交付（负责人）
 
@@ -147,4 +147,4 @@ PR 标题 `feat: STO-012 会员订单导出`，描述含 AC 清单、设计要�
 
 ## 发版与合并顺序
 
-合并先于生产发版（main 始终等于生产在跑的代码），紧急 hotfix 也不例外——走[轻量通道](/guide/sop/lite)的加急通道（压缩验收与审批），CI 绿 → 合并 main → 从 main 发版的顺序不变。
+合并先于生产发版（main 始终对应生产运行中的代码），紧急 hotfix 也不例外——走[轻量通道](/guide/sop/lite)的加急通道（压缩验收与审批），CI 绿 → 合并 main → 从 main 发版的顺序不变。

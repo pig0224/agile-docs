@@ -13,7 +13,7 @@ git add -A && git commit -m "feat: add go-grpc template"
 git push origin main
 ```
 
-CI（Check workflow）在推送时自动跑一致性校验，registry 与目录不一致的变更会红。
+CI（Check workflow）在推送时自动执行一致性校验，registry 与目录不一致的变更将被拦截。
 
 ## 用户侧生效路径
 

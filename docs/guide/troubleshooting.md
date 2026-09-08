@@ -2,37 +2,36 @@
 
 ## 常见问题
 
-### tech-specs / biz-tech-docs 目录的入库规则？
+### tech-specs / biz-tech-docs 目录如何维护？
 
-**tech-specs**（公司级规范，跨团队共享、团队无写权限）是天然的外部仓库：`init workspace` 恒把 `tech-specs/` 追加进 `.gitignore`，由 `agile sync` clone / 快进拉取，不进 workspace 版本管理。
+**tech-specs**（公司级规范，团队只读）由 `agile sync` 自动维护：有更新时拉取最新内容，日常无需管理。`init workspace` 已把 `tech-specs/` 写入忽略规则——目录内容不随工作区提交。
 
-**biz-tech-docs**（团队知识库）按登记与否分两种形态：
+**biz-tech-docs**（团队知识库）按是否登记分两种用法：
 
-- **未登记（默认）**：workspace 内普通目录，随仓库提交——版本管理随 workspace 天然具备
-- **登记为外部仓库**（`agile config set biz-tech-docs <url>` + `agile sync`）：目录改为独立 git 仓库，sync 自动把忽略行补写进 `.gitignore`，此后由 sync 拉取、沉淀产物的提交在库仓内人工完成
+- **未登记（默认）**：作为普通目录随工作区一起提交
+- **登记为外部资源**（`agile config set biz-tech-docs <url>` + `agile sync`）：由 sync 自动拉取维护，不随工作区提交；在目录内沉淀的产物在该知识库中提交（人工操作）
 
-原因（已登记形态）：
+适合登记为外部资源的情形：
 
-- 这两个目录是**可写工作区**（如 `/agile:knowledge` 直接落盘），内容演进与 workspace 代码节奏不同
-- 不入库就没有 submodule 指针滚动，跨仓协作零 PR 负担
+- 多个 workspace 共用同一份知识库——登记后共享同一份内容，一处维护、处处一致（如 `/agile:knowledge` 会直接往目录里写文件）
 
-若 `.gitignore` 残留 `biz-tech-docs/` 但并未登记（如旧版本初始化的 workspace），sync 会提示：知识库内容不会随 workspace 入库，需入库请手动删除该行。
+若未登记但 `biz-tech-docs/` 仍被忽略（旧版本初始化的 workspace 可能残留），sync 会提示——需随工作区提交时，按提示删除该忽略行。
 
-### sync 提示「存在未提交改动，跳过更新」是什么意思？
+### sync 为何提示「存在未提交改动，跳过更新」？
 
-外部目录是可写工作区，**本地改动优先**：sync 发现目录 dirty 就跳过该仓库（状态 `warn`），**绝不覆盖你的未提交内容**。想拉取远端最新，先自行提交或 stash：
+目录里的改动以本地为准，**本地改动优先**：sync 检测到目录 dirty 即跳过该目录（状态 `warn`），**不会覆盖未提交内容**。需要拉取远端最新时，先提交或 stash 本地改动：
 
 ```bash
 cd tech-specs
 git status                          # 确认本地改动
-git add -A && git commit            # 提交（推不推由你）
+git add -A && git commit            # 提交（是否推送自行决定）
 cd ..
 agile sync                          # 重新快进拉取
 ```
 
 ### sync 报「无法快进到远端，需人工处理」
 
-本地与远端分叉（sync 只做 `--ff-only` 快进，分叉即停下，不会自动 reset 丢提交）。进入目录看清分叉内容后自行决定：
+本地与远端分叉——sync 仅做快进拉取，分叉时暂停并交人工处理。进入目录核对分叉内容后自行决定处置方式：
 
 ```bash
 cd tech-specs
@@ -40,9 +39,9 @@ git fetch origin
 git merge --ff-only origin/main     # 或 rebase / merge 后推送，自行判断
 ```
 
-处理完再 `agile sync` 确认恢复 `done`。**绝不 force push**。
+处理完成后再次执行 `agile sync`，确认状态恢复 `done`。**禁止 force push**。
 
-### 如何切换 / 移除外部仓库地址？
+### 如何切换 / 移除外部资源地址？
 
 `config set` 覆盖 url 即可（写入 `.agile/settings.json` 对应键），下次 `agile sync` 生效：
 
@@ -52,11 +51,11 @@ agile config unset biz-tech-docs                                      # 移除�
 agile config list                                                     # 查看全量配置
 ```
 
-若目录里已 clone 了旧仓库且要换源，删除该目录（或清成仅剩 README 骨架）后 `agile sync` 会按新地址重新 clone。插件市场与模板源同理：`config set plugin-repo / template-repo` 换私有源，`config unset` 恢复内置官方源。
+若目录已存在旧资源内容且要更换源，删除该目录（或恢复为仅含 README 骨架）后，`agile sync` 将按新地址重新拉取。插件市场与模板源同理：`config set plugin-repo / template-repo` 切换私有源，`config unset` 恢复内置官方源。
 
 ### sync 报「目录已存在且非空且不是 git 仓库」
 
-目标目录有非骨架内容，sync 不会动它。`init workspace` 生成的抽屉骨架（仅 README.md）会自动让位；其他内容需你确认后手工清理再 sync。
+目标目录包含非骨架内容时，sync 不会改动它。`init workspace` 生成的目录骨架（仅 README.md）会自动让位；其余内容需经确认后手工清理，再执行 sync。
 
 ### worktree create 报「workspace 仓库还没有首次提交」
 
@@ -68,7 +67,7 @@ git add -A && git commit -m "chore: init workspace"
 
 ### init project 报「目录已存在」或模板/组合不存在
 
-- 目录已存在：单例模板 / 空项目骨架重跑遇到非空目录直接报「目录已存在」——换 `--name` 目录名，或确认旧目录可删除后手工删除重跑（空目录放行生成，无内容损失）
+- 目录已存在：空项目骨架对已存在目录（含空目录）一律报「目录已存在」；单例 / 组合模板遇空目录则放行生成——换 `--name` 目录名，或确认旧目录可删除后手工删除重跑（空目录放行时无内容损失）
 - 报「与生成清单不符（缺 N 文件 / 多 M 项），疑似上次生成残留；请删除该目录后重跑」：目标目录有本 CLI 的生成清单（`.agile/manifests/<目录名>.json`）但实际文件对不上——通常是上次 init 中途失败留下的残缺残留，或生成后目录被改动。确认后删除该目录重跑（2.4.0 起 `--force` 已删除，删除目录重跑是唯一出路；生成物可再生，目录内的手工改动请先迁移）
 - 组合模板输出「已存在，跳过 + warn」：该成员的有效目录名（含 `--name` 覆盖）在 `projects/` 下已被占用——有生成清单且一致 = 本组合已生成的成员（补缺语义，只补缺失成员，见 [init project](/guide/commands#agile-init-project)）；无清单 = 陌生目录（同名普通项目、手写项目或旧版 CLI 生成），CLI 不动它，请人工核对（换 `--name` 覆盖名重跑，或确认旧目录可删除）
 - 模板或组合模板不存在：`agile template list` 查可用单例模板与组合模板；模板源不对就改 `.agile/settings.json` 的 `templates.registry`
@@ -85,10 +84,10 @@ git add -A && git commit -m "chore: init workspace"
 3. 手动安装定位：`claude plugin marketplace add <市场地址>` + `claude plugin install agile@fcc`
 4. 命令文件修改后需**重启 Claude Code 会话**才生效
 
-### Windows 下「Access is denied」删不掉目录
+### Windows 下删除目录报「Access is denied」
 
 通常是进程占用（编辑器索引、esbuild 常驻进程、vitest watcher）。关闭占用进程后重试；`.worktrees/`、`node_modules` 是高发区。
 
 ---
 
-仍未解决？运行 `agile sync --dry-run` 与 `agile config list`，把输出附到 [issue](https://github.com/pig0224/agile-cli/issues)。
+以上处置仍未解决问题时，运行 `agile sync --dry-run` 与 `agile config list`，将输出附至 [issue](https://github.com/pig0224/agile-cli/issues)。

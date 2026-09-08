@@ -22,7 +22,7 @@ agile plugin install agile
 
 ```
 需求输入
-  → /agile:prd           PRD / AC / 功能树 / 菜单树（写入抽屉三）
+  → /agile:prd           PRD / AC / 功能树 / 菜单树（写入产品知识库）
   → /agile:sync-req      需求产物同步到 process-docs/STO-xxx（创建任务目录）
   → /agile:architect     技术设计 design.md（SDD：先设计后开发）
   → /agile:gen-test      Stage 1：测试案例文档（先于实现）
@@ -33,9 +33,9 @@ agile plugin install agile
   → review.md / release.md 归档闭环
 ```
 
-辅助命令随时可用：`/agile:init`（AI 陪同建项目：问答定制 + 辅助能力配置）、`/agile:add-template`（AI 辅助建设新模板/组合模板）、`/agile:share-template`（把 workspace 既有项目反向打包为模板）、`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
+辅助命令随时可用：`/agile:init`（AI 协助建项目：问答定制 + 辅助能力配置）、`/agile:add-template`（AI 辅助建设新模板/组合模板）、`/agile:share-template`（把 workspace 既有项目反向打包为模板）、`/agile:fix-bug`（任意阶段修缺陷，轻量通道标准入口）、`/agile:add-task`（补充遗漏任务）、`/agile:ui`（组件库工作）、`/agile:knowledge`（知识库建设与沉淀）、`/agile:feedback`（反馈报告）、`/agile:help`（总览）。
 
-前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），git 合并零冲突——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop/)。
+前后端并行开发时各写各的角色文件（implementation-be.md / implementation-fe.md），互不覆盖——团队分工与全生命周期协作见[团队协作 SOP](/guide/sop/)。
 
 ## 两条红线
 
@@ -50,13 +50,13 @@ agile plugin install agile
 
 ## 与 CLI 的协作
 
-插件命令不手搓 git 和文件系统，外部资源操作统一经 CLI（CLI 是插件的硬依赖）：
+插件命令的外部资源与开发环境操作统一经 CLI 完成（CLI 是插件的硬依赖）：
 
 - Bash 执行 `agile worktree create / sync / config / template list / plugin ls`
 
-任务目录（`process-docs/<编号>/` 七文件）由创建它的命令按 sdd-tdd-method SKILL **附录 A 模板**直接创建（幂等，无 CLI 依赖）。
+任务目录（`process-docs/<编号>/`，初始 8 个 .md）由创建它的命令按 sdd-tdd-method SKILL **附录 A 模板**直接创建（幂等，无 CLI 依赖）。
 
-抽屉路径不硬编码——命令先读 `.agile/settings.json` 的 `paths` 段。
+命令不硬编码目录路径——统一读 `.agile/settings.json` 的 `paths` 段（角色 agent 提示词中的路径为默认名）。
 
 ## 典型一周
 
@@ -67,4 +67,4 @@ agile plugin install agile
 | 测试先行 | `/agile:gen-test STO-001` |
 | 开发 | `agile worktree create feat/STO-001` → `/agile:backend STO-001` + `/agile:frontend STO-001` |
 | 提测 | `/agile:run-test STO-001`（不通过 → `/agile:fix-bug STO-001 问题描述`） |
-| 收尾 | 填 review/release.md，worktree remove，PR 合并 |
+| 收尾 | 完成 review/release.md，worktree remove，PR 合并 |

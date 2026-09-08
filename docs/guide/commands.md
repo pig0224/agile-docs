@@ -7,15 +7,15 @@
 | 命令 | 一句话说明 |
 |---|---|
 | [init](#init) | 初始化 workspace 或项目 |
-| [sync](#sync) | 同步外部资源：外部仓库拉取 + 模板缓存刷新 + 插件按声明安装 |
-| [config](#config) | 外部仓库与分发源地址快捷配置（tech-specs / biz-tech-docs / plugin-repo / template-repo） |
-| [worktree](#worktree) | 开发环境（git worktree）管理 |
+| [sync](#sync) | 同步外部资源：拉取规范与知识库 + 刷新模板缓存 + 安装声明的插件 |
+| [config](#config) | 外部资源与源地址快捷配置（tech-specs / biz-tech-docs / plugin-repo / template-repo） |
+| [worktree](#worktree) | 隔离开发环境管理 |
 | [template](#template) | 项目模板缓存管理 |
 | [plugin](#plugin) | Claude Code 插件管理 |
 | [update](#update) | CLI 自更新 |
 | [version](#version) | 显示版本号（等价 `--version` / `-v`） |
 
-> 无 MCP Server——AI（Claude Code 等）经 Bash 直调上述 CLI 命令。任务目录（STO-xxx，初始 7 个 .md；加上 gen-test/run-test 两份阶段产物共 9 个）由 Claude Code 插件命令（/agile:sync-req、/agile:fix-bug 等）按 sdd-tdd-method SKILL 附录 A 模板直接创建。
+> AI（Claude Code 等）直接执行上述命令即可。任务目录（STO-xxx，初始 8 个 .md；run-test.md 由验收阶段产出，完整档案 9 个）由插件命令（/agile:sync-req、/agile:fix-bug 等）按统一模板自动创建。
 
 ---
 
@@ -25,7 +25,7 @@
 
 ### agile init workspace
 
-初始化工作区：生成唯一配置 `.agile/settings.json`、五个抽屉骨架（含 README）、git 仓库、`.gitignore` 与 `.gitattributes`。**幂等**——重复执行不会覆盖已有配置与文档。
+初始化工作区：生成统一配置 `.agile/settings.json`、五个目录骨架（各含 README）与版本管理基础配置。**幂等**——重复执行不会覆盖已有配置与文档。
 
 ```
 agile init workspace [--name <名称>]
@@ -36,18 +36,18 @@ agile init workspace [--name <名称>]
 | 参数 | 默认 | 说明 |
 |---|---|---|
 | `--name` | 当前目录名 | workspace 名称，写入 settings.json |
-| `--marketplace` | 官方插件市场地址 | 插件市场 git 地址，写入 `plugins.marketplace` |
-| `--template-registry` | 官方模板源地址 | 模板注册中心 git 地址，写入 `templates.registry` |
-| `--tech-specs` | 不登记 | 公司级规范外部仓库 git 地址（也可之后 `agile config set tech-specs <url>`） |
-| `--biz-tech-docs` | 不登记 | 团队知识库外部仓库 git 地址，可选（也可之后 `agile config set biz-tech-docs <url>`） |
+| `--marketplace` | 官方插件市场地址 | 插件市场地址，写入 `plugins.marketplace` |
+| `--template-registry` | 官方模板源地址 | 模板注册中心地址，写入 `templates.registry` |
+| `--tech-specs` | 不登记 | 公司级规范资源地址（也可之后 `agile config set tech-specs <url>`） |
+| `--biz-tech-docs` | 不登记 | 团队知识库资源地址，可选（也可之后 `agile config set biz-tech-docs <url>`） |
 
 具体动作：
 
-1. 写入 `.agile/settings.json`（唯一配置文件，结构见[核心概念](/guide/concepts)）
-2. 生成五抽屉骨架（各抽屉一份 README）与 `biz-product-docs/templates/PRD模板.md`
-3. `git init`（幂等，已存在则跳过）
-4. `.gitignore` **幂等追加两行**：`.worktrees/`、`tech-specs/`（外部资源不入库；tech-specs 为公司级规范、天然外部仓库）。`biz-tech-docs/` 仅在登记为外部仓库时写入（`--biz-tech-docs` 或之后 `agile config set` + `agile sync` 拉取成功时自动补写）——未登记时它是 workspace 内普通目录，随仓库提交获得版本管理
-5. 生成 `.gitattributes`（换行符统一 LF，`.bat`/`.cmd` 保持 CRLF）
+1. 写入 `.agile/settings.json`（结构见[核心概念](/guide/concepts)）
+2. 生成五个目录骨架（各含一份 README）与 `biz-product-docs/templates/PRD模板.md`
+3. 初始化版本管理（幂等，已存在则跳过）
+4. 忽略规则：`.worktrees/`、`tech-specs/` 自动写入 `.gitignore`（tech-specs 由 sync 维护，不随工作区提交）；`biz-tech-docs/` 仅在登记为外部资源时写入
+5. 换行符统一为 LF（Windows 的 `.bat`/`.cmd` 保持 CRLF）
 
 ```bash
 mkdir my-workspace && cd my-workspace
@@ -62,9 +62,9 @@ agile init workspace --name my-workspace --tech-specs git@gitlab.corp:specs/tech
 
 ### agile init project
 
-在 `projects/` 下初始化项目（workspace 单仓内**普通目录**），并 `git add` 纳入版本管理（不自动 commit）。三种场景：
+在 `projects/` 下初始化项目。三种场景：
 
-- **`--template <单例模板名>`**：从单例模板脚手架生成一个项目（模板源固定读 settings.json `templates.registry`，默认走本地缓存）
+- **`--template <单例模板名>`**：从单例模板脚手架生成一个项目（模板源读 settings.json `templates.registry`，默认用本地缓存）
 - **`--template <组合模板名>`**：组合模板一次平铺生成全部成员项目（见下「组合模板」）
 - **缺省 `--template`**：生成**空项目骨架**（仅一个 README.md）——不联网、不读模板缓存，适合尚无合适模板的场景
 
@@ -89,11 +89,13 @@ agile init project [--template <模板名|组合名>] [--name <目录名 | 组�
 
 ```bash
 agile template list                                         # 先看可用单例模板与组合模板
-agile init project --name my-lib                            # 空项目骨架（不访问模板注册中心）
+agile init project --name my-lib                            # 空项目骨架（不联网）
 agile init project --template go-service                    # 单例：目录名 = go-service
 agile init project --template go-service --name order       # 单例：目录名 = order
 agile init project --template admin-base --name backend=be  # 组合：平铺生成 be/ + frontend/
 ```
+
+> 示例中的模板名（go-service 等）为示意——实际可用模板以 `agile template list` 输出为准（官方注册中心可能尚未登记模板）。
 
 ::: warning 2.4.0 破坏性变更（迁移对照）
 `init project` 不再接受位置参数 `<name>`，`--member` / `--force` 废除，目录命名统一为 `--name`：
@@ -107,7 +109,7 @@ agile init project --template admin-base --name backend=be  # 组合：平铺生
 旧写法执行时给出废弃指引并退出码非 0，不会静默变更行为。
 :::
 
-**重跑防护四态**：每次成功生成后，CLI 在 workspace 级写**生成清单** `.agile/manifests/<落地目录名>.json`（来源模板/组合名、成员原名、文件相对路径、生成时间、模板 commit），并随项目一起 `git add` 入库。重跑 `init project` 遇到已存在目录时：
+**重跑防护四态**：每次成功生成后，CLI 在 workspace 级写**生成清单** `.agile/manifests/<落地目录名>.json`（来源模板/组合名、成员原名、文件相对路径、生成时间、模板版本），并随项目一同入库。重跑 `init project` 遇到已存在目录时：
 
 | 目录状态 | 单例模板 | 组合模板 |
 |---|---|---|
@@ -116,23 +118,23 @@ agile init project --template admin-base --name backend=be  # 组合：平铺生
 | 无清单（陌生目录：手写项目、旧版 CLI 生成） | 报「目录已存在」 | 跳过 + warn 人工核对（AI 层 `/agile:init` 生成前会先做撞名核对） |
 | 空目录 | 放行生成（无内容损失） | 放行生成（计入本次 created） |
 
-生成走**事务**：先复制到同卷临时目录再原子替换目标，任一成员失败自动回滚**本次运行新建**的成员（之前已存在被跳过的不动），不留残缺目录。补缺按本次调用的有效成员目录名判定——覆盖过的成员重跑须带相同 `--name` 键值。
+生成过程有**事务保护**：任一成员失败即整体回滚本次新建的成员目录（之前已存在被跳过的不动），不留残缺目录。补缺按本次调用的有效成员目录名判定——覆盖过的成员重跑须带相同 `--name` 键值。
 
-**组合模板**：单例模板之上的声明式组合层（registry.json `solutions` 数组），一次 `init project` 把全部成员项目**平铺**落盘 `projects/<成员目录名>/`（无系统目录层级），输出汇报以组合名为标签。成员是**组合专属完整模板骨架**（模板仓 `solutions/<组合名>/<成员名>/`，不引用 singles），规范骨架三文件照常带出。**命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘后直接占用 `projects/` 顶层目录名），组合登记与成员目录双向一致。
+**组合模板**：一个组合一次生成全部成员项目，**平铺**落盘 `projects/<成员目录名>/`（无系统目录层级），输出汇报以组合名为标签。成员是**组合专属的完整模板骨架**（`solutions/<组合名>/<成员名>/`，不引用 singles），规范骨架三文件照常带出。**命名硬约束**：模板名 / 组合名 / 成员名三段全局唯一（成员平铺落盘后直接占用 `projects/` 顶层目录名），组合登记与成员目录双向一致。
 
-**组合根耦合资产带出**：全部成员生成成功后，CLI 把模板仓组合根的 `CLAUDE.md`（组合导航）与 `docs/`（跨成员耦合的约定/规范，每篇 frontmatter 标 `类型: tech|product`）快照到 workspace `.agile/solutions/<组合名>/`（≥ 2.3.0；与生成清单一同 `git add` 入库，快照已存在则跳过不覆盖）——组合的知识资产不散落成员项目，符合「1 根 5 抽屉」范式。随后在 workspace 内运行 `/agile:knowledge sync-template <组合名>` 按资产类型同步进抽屉（tech → biz-tech-docs，product → biz-product-docs）。
+**组合根耦合资产带出**：全部成员生成成功后，CLI 把组合根的 `CLAUDE.md`（组合导航）与 `docs/`（跨成员共享的约定/规范）快照到 workspace `.agile/solutions/<组合名>/`（≥ 2.3.0，快照已存在则跳过不覆盖）。随后执行 `/agile:knowledge sync-template <组合名>`，把资产按类型同步进知识库（tech → biz-tech-docs，product → biz-product-docs）。
 
 模板中的占位符会被替换：<span v-pre>`{{name}}`</span> → **实际落地目录名**（单例 = `--name` 裸值或单例项目名称；组合 = 平铺后的成员目录名），<span v-pre>`{{safeName}}`</span> → 小写字母数字段（Java 包名等场景）。
 
 ::: tip
-项目与 workspace 其余变更走**同一个 PR**——这是单仓模式的天然优势。
+项目与 workspace 其余变更纳入**同一个 PR**，一并提交评审。
 :::
 
 ---
 
 ## sync
 
-把 `.agile/settings.json` 声明的**外部资源**同步到本地，幂等，可随时重跑。
+把 `.agile/settings.json` 声明的**外部资源**同步到本地，幂等，可随时重复执行。
 
 ```
 agile sync [--dry-run]
@@ -144,19 +146,19 @@ agile sync [--dry-run]
 
 依次处理四步（每步一条结果，状态 `done` / `skipped` / `warn` / `failed`）：
 
-1. **tech-specs 拉取**（公司级规范外部仓库）：目录缺失 → clone；已有 → fetch + `--ff-only` 快进
-2. **biz-tech-docs 拉取**（团队知识库外部仓库，可选）：同上
-3. **templates 缓存刷新**：拉取模板注册中心远端最新；失联降级沿用本地缓存
-4. **plugins 按声明安装**：对照 `plugins.dependencies` 补装缺失插件，**绝不卸载**已安装插件
+1. **tech-specs 拉取**（公司级规范）：拉取最新内容
+2. **biz-tech-docs 拉取**（团队知识库，可选）：同上
+3. **模板缓存刷新**：更新到模板源最新；失联时沿用本地缓存
+4. **plugins 按声明安装**：对照 `plugins.dependencies` 补装缺失插件，**不会卸载**已安装插件
 
-外部仓库拉取语义（**本地优先**——这两个目录是可写工作区，知识库命令直接落盘）：
+外部资源拉取规则（**本地改动优先**）：
 
-- 未配置仓库地址 → `skipped`，提示 `agile config set <key> <git-url>`
-- 目录只有 init 生成的骨架 README.md → **自动让位**后 clone
-- 目录非空且不是 git 仓库 → `failed`，请手动处理后重试
-- 目录是 git 仓库但有未提交改动（dirty）→ `warn` 跳过更新，**绝不覆盖本地改动**
-- 目录干净 → 拉取远端最新；与远端分叉 → `failed` 交人工（只 pull 不 reset）
-- 声明了 `ref`（版本锁定）→ 追加一条 `warn`（锁定暂未实现，按远端最新拉取），不阻断
+- 未配置资源地址 → `skipped`，提示 `agile config set <key> <git-url>`
+- 目录只有初始化时的骨架 README.md → **自动让位**后拉取
+- 目录非空且无法识别 → `failed`，请手动处理后重试
+- 目录有未提交改动 → `warn` 跳过更新，**不覆盖本地改动**
+- 目录干净 → 拉取最新；与远端分叉 → `failed` 交人工处理
+- 声明了 `ref`（版本锁定）→ 追加一条 `warn`（锁定暂未实现，按最新拉取），不阻断
 
 任一步 `failed` 退出码为 1，**其余步骤继续执行**。
 
@@ -165,8 +167,8 @@ agile sync --dry-run       # 先看计划
 agile sync                 # 执行
 ```
 
-::: warning 安全设计
-本地未提交改动优先——sync 只做快进拉取，**绝不覆盖、绝不 reset 丢失你的提交**；分叉时停下交人工处理。
+::: warning 本地改动优先
+本地未提交改动优先——sync 仅做快进拉取，**不覆盖本地改动、不回退本地历史**；与远端分叉时停下交人工处理。
 :::
 
 **自动同步**：`agile worktree create` 创建前、后各自动执行一次 sync（失败仅警告不阻塞，见 [worktree](#worktree)）。
@@ -175,7 +177,7 @@ agile sync                 # 执行
 
 ## config
 
-外部仓库与分发源地址的快捷配置——类 npm 换源体验。键为白名单四键，其余配置直接编辑 `.agile/settings.json`：
+外部资源与分发源地址的快捷配置，操作方式与 npm 换源一致。键为白名单四键，其余配置直接编辑 `.agile/settings.json`：
 
 | 键 | settings.json 落点 | unset 行为 |
 |---|---|---|
@@ -201,14 +203,14 @@ agile config list
 ```
 
 ::: tip 换源即生效
-四键都支持本地路径（内网镜像直接 clone）。`plugin-repo` 换源后已安装插件不受影响（`agile sync` 绝不卸载）；私有市场须与官方同名（市场名 `fcc`）依赖声明才无缝衔接。
+四键都支持本地路径（内网镜像可直接指向本地目录）。`plugin-repo` 换源后已安装插件不受影响（`agile sync` 不卸载）；私有市场须与官方同名（市场名 `fcc`）依赖声明才无缝衔接。
 :::
 
 ---
 
 ## worktree
 
-为 workspace 根仓库创建隔离的 git worktree——**一个分支 = 一套完整开发环境**（仓库内全部前后端代码与文档，外加在 worktree 内独立就位的外部资源目录）。
+为 workspace 创建隔离的开发环境——**一个分支 = 一套完整开发环境**（全部前后端代码与文档，外部资源目录自动就绪）。
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
@@ -221,19 +223,19 @@ agile config list
 | 情况 | 行为 |
 |---|---|
 | 本地已有该分支 | 直接检出 |
-| 远程 `origin/<branch>` 已有 | 创建跟踪分支检出——协作场景：负责人推了需求分支，另一端直接拉取 |
+| 远程 `origin/<branch>` 已有 | 创建跟踪分支检出——协作场景：负责人已推送需求分支，其他成员可直接跟踪检出 |
 | 本地远程都没有 | 以 `--base`（默认当前 HEAD）新建分支 |
 
 目录名转写：分支名中的 `/` 与 `\` 转写为 `__`（如 `feat/STO-001` → `.worktrees/feat__STO-001`）。
 
 ::: warning 前置条件
-workspace 仓库必须有首次提交（unborn HEAD 时 create 会给出明确指引）。
+workspace 需至少一次提交（尚无提交时 create 会给出明确指引）。
 :::
 
 ### 自动同步（autoSync）
 
 - **创建前**：主仓自动 sync 一次外部资源（基于同步后的状态创建）
-- **创建后**：在 worktree 内再 sync 一次——`git worktree` 只检出仓库内文件，已登记的外部仓库（tech-specs / biz-tech-docs）不入库，需在 worktree 内独立 clone/拉取（未登记的 biz-tech-docs 是普通目录，随检出直接可用）
+- **创建后**：在新环境内再 sync 一次——外部资源不随分支检出，需在新环境内重新拉取（未登记的 biz-tech-docs 是普通目录，随检出直接可用）
 - 两次 sync 失败均**仅警告不阻塞**（可进入 worktree 手动执行 `agile sync`）
 
 ```bash
@@ -249,30 +251,30 @@ agile worktree create feat/STO-001    # 自动跟踪检出 origin/feat/STO-001
 
 ## template
 
-项目模板管理。模板注册中心 = git 仓库，地址在 settings.json `templates.registry`（默认官方源，`agile config set template-repo <git-url>` 可换团队私有仓库）。**workspace 外也可用**：`list` / `update` 自动落到内置官方源（模板缓存用户级，跨 workspace 共享）——模板开发者在模板仓内、或尚未初始化 workspace 时都能直接查询。
+项目模板管理。模板源地址在 settings.json `templates.registry`（默认官方源，`agile config set template-repo <git-url>` 可换团队私有仓库）。**workspace 外也可用**：`list` / `update` 自动落到内置官方源（模板缓存本机共用）——模板开发者在模板仓内、或尚未初始化 workspace 时都能直接查询。
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
 | `list` | `agile template list [--json]` | 列出全部模板与组合模板（默认读本地缓存，`agile sync` / `agile template update` 刷新）；组合模板树形多行展开成员（成员行缩进、按成员名对齐，顺序 = registry `projects` 数组顺序）；注册中心存在一致性问题（issues）时逐条输出并退出码 1。`--json` 输出结构化 JSON（singles / solutions 数组，含组合成员 name+description，顺序 = registry 顺序）供脚本消费——纯 JSON 走 stdout，stale/issues 提示走 stderr |
 | `update` | `agile template update` | 强制刷新模板缓存到注册中心远端最新 |
-| `clean` | `agile template clean` | 清理全部模板缓存（下次使用自动重新克隆） |
+| `clean` | `agile template clean` | 清理全部模板缓存（下次使用自动重新拉取） |
 
-模板缓存位于 `~/.agile/templates/<url哈希>`（用户级，跨 workspace 共享）；刷新失联时降级使用本地缓存（提示 stale）。
+模板缓存位于 `~/.agile/templates/<url哈希>`（本机所有 workspace 共用）；刷新失联时使用本地缓存（提示 stale）。
 
 ---
 
 ## plugin
 
-Claude Code 插件管理（类 npm 心智）。插件市场是独立 git 仓库（新增插件无需升级 CLI）；依赖声明登记在 `.agile/settings.json` 的 `plugins.dependencies`，`agile sync` 按声明补装。`ls` 在 workspace 外仅显示本机安装实况（无声明对照）。
+Claude Code 插件管理（操作方式与 npm 一致）。新增插件无需升级 CLI；依赖声明登记在 `.agile/settings.json` 的 `plugins.dependencies`，`agile sync` 按声明补装。`ls` 在 workspace 外仅显示本机安装实况（无声明对照）。
 
 | 子命令 | 语法 | 说明 |
 |---|---|---|
-| `install` | `agile plugin install [name]` | 从市场安装并登记依赖声明（类 npm install --save；默认 `agile`） |
+| `install` | `agile plugin install [name]` | 从市场安装并登记依赖声明（默认 `agile`） |
 | `uninstall` | `agile plugin uninstall [name]` | 卸载插件并移除依赖声明（缺省 `agile`） |
-| `update` | `agile plugin update [name]` | 更新到市场最新：刷新市场克隆 → uninstall + install 强制重装 → 登记声明 |
+| `update` | `agile plugin update [name]` | 更新到市场最新：刷新市场缓存 → uninstall + install 强制重装 → 登记声明 |
 | `ls` | `agile plugin ls` | 依赖声明 × 本机安装实况对照表 |
 
-- 市场地址解析：settings.json `plugins.marketplace`（workspace 外用官方默认）；市场名固定 `fcc`——换源（`agile config set plugin-repo`）目标市场（如镜像）需保持 marketplace.json 的 name=`fcc`
+- 市场地址解析：settings.json `plugins.marketplace`（workspace 外使用官方默认）；市场名固定 `fcc`——换源（`agile config set plugin-repo`）目标市场（如镜像）需保持 marketplace.json 的 name=`fcc`
 - workspace 外也可 install / update（仅跳过依赖声明登记）
 - 注册市场失败 / 安装失败 → 退出码 1，并给出可手动执行的命令（`claude plugin marketplace add <市场地址>` + `claude plugin install <name>@<市场名>`）
 - 异名第三方市场的插件：直接用 `claude plugin` 命令；要纳入 workspace 声明则手改 settings.json `plugins.dependencies`（`agile sync` 认声明照样补装）
@@ -286,7 +288,7 @@ agile plugin uninstall agile                                # 卸载并删除声
 
 ### 依赖声明（plugins.dependencies）
 
-`.agile/settings.json` 的 `plugins.dependencies` 随 workspace 仓库提交，只声明「用哪些插件、来自哪个市场」，不记录安装实况（安装/启用状态由 Claude Code 全局管理 `~/.claude/plugins`）：
+`.agile/settings.json` 的 `plugins.dependencies` 随工作区提交，只声明「用哪些插件、来自哪个市场」，不记录安装实况（安装/启用状态由 Claude Code 全局管理 `~/.claude/plugins`）：
 
 ```json
 {
@@ -309,7 +311,7 @@ agile plugin uninstall agile                                # 卸载并删除声
 | ✖ | 市场冲突：声明与本机安装来自不同市场——按提示 uninstall 后重新安装 |
 | · | 本机已装但当前 workspace 未声明 |
 
-更新（`plugin update`）= `marketplace add`（幂等注册）→ `marketplace update`（拉取市场仓库最新——`add` 对已注册市场不拉新，此步必须）→ uninstall + install 强制重装（`claude plugin update` 对 git 分发市场可能判「已是最新」而跳过）。更新后重启 Claude Code 会话生效。
+更新（`plugin update`）= 刷新市场到最新 → 卸载后重装强制更新（不直接使用 `claude plugin update`——其可能误判「已是最新」而跳过重装）。更新后重启 Claude Code 会话生效。
 
 ---
 
@@ -322,6 +324,7 @@ agile update              # 更新 CLI
 ```
 
 插件更新走 `agile plugin update`（见 plugin 节）。
+模板更新走 `agile template update`（见 template 节）。
 
 ---
 

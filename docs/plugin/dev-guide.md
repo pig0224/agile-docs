@@ -1,6 +1,6 @@
 # 插件开发指南
 
-如何为 agile-plugins 市场仓库开发新插件（或修改 Agile 主插件）。**开发插件不需要动 agile-cli**——CLI 对插件内容零知识。
+如何为 agile-plugins 市场仓库开发新插件（或修改 Agile 主插件）。**开发插件不需要改动 agile-cli**。
 
 ## 市场仓库结构
 
@@ -25,10 +25,11 @@ agile-plugins/                        # 市场仓库（git 分发，无 npm）
 {
   "name": "my-plugin",
   "description": "一句话描述（模型判断何时使用的依据）",
-  "version": "0.1.0",
   "author": { "name": "you" }
 }
 ```
+
+> 本市场**不写 `version` 字段**：git 分发市场以 commit SHA 作为更新键，推送即更新（详见[插件发布](/plugin/publishing)）。
 
 2. 添加内容（commands/agents/skills 至少其一，写法见下文）
 3. 在 `.claude-plugin/marketplace.json` 的 `plugins[]` 追加：
@@ -54,12 +55,12 @@ disable-model-invocation: true                                 ← 可选：仅�
 
 - **只做「前置校验 → Task 委派 agent → 复核汇报」**，不写实现细节
 - 开头 `先阅读 skill sdd-tdd-method`（共享方法论按需加载）
-- 文件系统/git 操作一律走 CLI（外部资源用 `agile sync` 等），不手搓命令；任务目录按 SKILL 附录 A 模板直接创建（幂等）
-- 产物全中文、落盘位置写明（抽屉路径从 `.agile/settings.json` 读取）
+- 文件系统/git 操作一律走 CLI（外部资源用 `agile sync` 等），不手工拼装命令；任务目录按 SKILL 附录 A 模板直接创建（幂等）
+- 产物全中文、落盘位置写明（目录路径从 `.agile/settings.json` 读取）
 
 ## 角色 Agent（agents/*.md）
 
-frontmatter 的 `description` 用第三人称描述"何时使用"——模型 Task 委派的触发依据：
+frontmatter 的 `description` 用第三人称描述「何时使用」——模型 Task 委派的触发依据：
 
 ```markdown
 ---
@@ -98,9 +99,9 @@ claude plugin install <name>@fcc    # 安装
 
 仓库自带 Validate workflow：`claude plugin validate .` 校验市场与插件清单合法性，PR/push 自动执行。
 
-## 设计原则回顾
+## 开发约定
 
 1. 命令=入口、agent=执行、skill=知识，职责不混
 2. 两条 SDD/TDD 红线不得削弱（无 design.md 不开发；无失败测试不写实现）
-3. 不硬编码抽屉路径与 git 命令，全部经 `.agile/settings.json` / CLI
+3. 不硬编码知识库目录路径与 git 命令，全部经 `.agile/settings.json` / CLI
 4. 破坏性写操作先 dry-run 或显式向用户确认
