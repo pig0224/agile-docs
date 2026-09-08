@@ -188,4 +188,4 @@ agile init project --template <你的模板> --name demo
 
 ## CI
 
-仓库 Check workflow 自动执行 `scripts/check.mjs`，PR/push 时拦截不一致的 registry 与缺失的项目级规范骨架文件；CLI 侧 `init project` 加载注册中心时同样校验（issues 非空即拒绝生成）。
+仓库 Check workflow 为 **PR-only 门禁**：仅在 Pull Request 上自动执行 `scripts/check.mjs`，拦截不一致的 registry 与缺失的项目级规范骨架文件（直接 push main 不触发 CI，推送前请先本地跑一遍 `node scripts/check.mjs`）；CLI 侧 `init project` 加载注册中心时同样校验（issues 非空即拒绝生成）。

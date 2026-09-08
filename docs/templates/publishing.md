@@ -13,7 +13,7 @@ git add -A && git commit -m "feat: add go-grpc template"
 git push origin main
 ```
 
-CI（Check workflow）在推送时自动执行一致性校验，registry 与目录不一致的变更将被拦截。
+CI（Check workflow）为 **PR-only 门禁**：仅在 Pull Request 上自动执行一致性校验，registry 与目录不一致的 PR 将被拦截；直接 push main 不触发 CI（发版 = 推送，推送前请先本地跑一遍 `node scripts/check.mjs`）。
 
 ## 用户侧生效路径
 

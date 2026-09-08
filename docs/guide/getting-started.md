@@ -22,7 +22,7 @@ mkdir my-workspace && cd my-workspace
 agile init workspace --name my-workspace
 ```
 
-初始化完成：得到统一配置 `.agile/settings.json` 与五个目录骨架（公司规范、技术知识库、产品知识库、项目代码、过程产物，详见[核心概念](/guide/concepts)）。
+初始化完成：得到统一配置 `.agile/settings.json`、工作区根 `CLAUDE.md`（导航地图：五类目录表 + 配置与清单指针 + 常用命令 + AI 会话须知，按团队实际增补后随仓库提交；已存在则不覆盖）与五个目录骨架（公司规范、技术知识库、产品知识库、项目代码、过程产物，详见[核心概念](/guide/concepts)）。
 
 ## 3. 登记外部资源并同步
 
@@ -37,7 +37,7 @@ agile sync
 tech-specs 与 biz-tech-docs 目录由 CLI 自动维护：有更新时执行 `agile sync` 即拉取最新内容；目录内有未提交改动时 sync 跳过不覆盖，与远端分叉时暂停并提示人工处理。日常无需手动管理这两个目录。
 
 ```bash
-agile sync --dry-run    # 预先查看执行计划（幂等：重复执行时全部显示 skipped）
+agile sync --dry-run    # 预先查看执行计划（已同步步骤显示 skipped，属预期行为）
 agile config get tech-specs   # 查看仓库地址
 agile config list             # settings.json 全量
 ```

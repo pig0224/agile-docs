@@ -15,7 +15,7 @@ git push origin main
 # 完成。用户侧立即拿到新版本。
 ```
 
-CI（Validate workflow）在推送时自动校验清单；校验失败即红，不合格的变更不会静默生效。
+CI（Validate workflow）为 **PR-only 门禁**：仅在 Pull Request 上自动校验清单，校验失败即红，不合格的 PR 被拦截；直接 push main 不触发 CI（推送即发版，推送前请先本地跑一遍 `claude plugin validate .`）。
 
 ## 版本模型（无版本号 + commit SHA）
 

@@ -21,7 +21,7 @@ hero:
 
 features:
   - icon: 🗂️
-    title: 五类抽屉，一个工作区
+    title: 五类目录，一个工作区
     details: 一次初始化，得到包含公司规范、技术知识库、产品知识库、项目代码、过程产物的完整工作区——研发内容集中一处，统一管理。
     link: /guide/concepts
     linkText: 核心概念
