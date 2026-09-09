@@ -1,6 +1,6 @@
 # 团队协作 SOP · 需求输入提示词
 
-`biz-product-docs/prompts/` 是 `/agile:prd` 的需求描述源：**提示词是「源」，PRD 是编译产物**——需求变更改提示词稿、重跑 `/agile:prd` 再生成，不直接手改 PRD/AC。工作区初始化时已预建 `prompts/README.md`（[初始化](/guide/sop/init)）。
+`biz-product-docs/prompts/` 是 `/agile:prd` 的需求描述源：**提示词是「源」，PRD 是编译产物**——需求变更（范围 / 规则调整）优先改提示词稿、重跑 `/agile:prd` 再生成；细节修订（补一条 AC、勾选状态、文字勘误）直接改 PRD/AC 即可，重跑时人工修订会被检测采纳、不会覆盖。工作区初始化时已预建 `prompts/README.md`（[初始化](/guide/sop/init)）。
 
 提示词工作流是**可选流程**：不用提示词稿时，`/agile:prd` 一切照旧（直接贴需求描述）。
 
