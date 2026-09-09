@@ -28,7 +28,7 @@
 
 - **固化 e2e 脚本**入项目 `e2e/`（长期资产，随页面同 PR 演进，供 `/agile:run-test` 与 stage 冒烟复用；**默认不进 PR CI 门禁**——e2e 依赖浏览器与环境，不稳定且耗时较长，各项目可选择执行关键路径冒烟子集）
 - **临时验证/复现脚本**放 `process-docs/<编号>/scripts/`，**严禁放置在 projects/ 下的项目内**
-- **运行产物**（`test-results/`、`playwright-report/`、截图、trace）一律不提交（已列入忽略规则）；报告引用的关键截图归档 `process-docs/<编号>/assets/`
+- **运行产物**（`test-results/`、`playwright-report/`、截图、trace）一律不提交（已列入忽略规则）；报告引用的关键截图归档 `process-docs/<编号>/assets/`（本机留存供验收出示，同样不入库）
 - e2e 主要测试工具 **Playwright**，辅助调试 **Chrome DevTools**；项目尚无测试工具时建议引入 Playwright（经负责人确认）
 
 ---
