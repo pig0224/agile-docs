@@ -51,6 +51,7 @@ export default defineConfig({
           items: [
             { text: '总览与角色', link: '/guide/sop/' },
             { text: '初始化', link: '/guide/sop/init' },
+            { text: '需求输入提示词', link: '/guide/sop/prompts' },
             { text: '完整流程（STO）', link: '/guide/sop/full-flow' },
             { text: '轻量通道', link: '/guide/sop/lite' },
             { text: '协作与文档规则', link: '/guide/sop/collab' },

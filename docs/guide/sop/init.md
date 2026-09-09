@@ -15,6 +15,7 @@ agile plugin install agile                            # Claude Code 插件
 |---|---|
 | 公司级技术规范 | tech-specs（未登记则普通目录随工作区提交；登记为外部资源后 `agile sync` 自动拉取维护，多 workspace 共享同一份） |
 | 产品文档模板（PRD/AC/功能树/菜单树） | `biz-product-docs/templates/`（init 已内置 PRD 模板） |
+| 需求输入提示词目录 | `biz-product-docs/prompts/`（预建 README，`/agile:prd` 的描述源，可选流程；见[需求输入提示词](/guide/sop/prompts)） |
 | UI / 交互规范 | `biz-product-docs/` |
 | 项目模板 | [agile-templates](/templates/overview) 注册中心 |
 | **CI/CD**：分支 push 自动 CI + stage 环境自动部署、main 分支保护 | 各项目 / workspace |
