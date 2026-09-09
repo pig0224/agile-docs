@@ -173,7 +173,7 @@ Agile 插件的 18 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 参数 | `<问题描述或 编号+问题描述>`，如 `STO-001 下单接口 500`（无编号则创建 BUG-xxx 并轻量初始化目录） |
 | 委派 | 无（主会话按 roles/bug-hunter.md 角色规范直接执行，诊断过程全程可见） |
 | 前置 | 工作区干净（修复基于干净基线） |
-| 产物 | 最小修复 diff + 复现测试（Red→Green）+ 全量回归确认；无编号时建 BUG-xxx 目录（requirement 落缺陷描述+复现步骤、gen-test 豁免行）；design.md 记根因分析、run-test.md 记回归结论；review.md 由 `/agile:review` 轻量形态生成验收确认 |
+| 产物 | 最小修复 diff + 复现测试（Red→Green；浏览器行为 bug 固化为项目 `e2e/` 脚本，服务端 bug 进项目测试套件）+ 全量回归确认；无编号时建 BUG-xxx 目录（requirement 落缺陷描述+复现步骤、gen-test 豁免行）；design.md 记根因分析、run-test.md 记回归结论；review.md 由 `/agile:review` 轻量形态生成验收确认 |
 | 示例 | `/agile:fix-bug STO-001 导出 CSV 中文乱码` |
 
 ---
