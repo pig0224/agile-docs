@@ -88,10 +88,10 @@ Agile 插件的 18 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 
 | 项目 | 说明 |
 |---|---|
-| 用途 | 调度 backend-dev subagent 按 design.md 以 Red-Green-Refactor 循环实现后端任务 |
+| 用途 | 按 backend-dev 角色规范以 Red-Green-Refactor 循环实现后端任务（主会话直接执行，过程全程可见） |
 | 场景 | 测试案例就绪后的后端开发阶段 |
 | 参数 | `<需求编号> [项目名/模块名]`（`projects/` 下目录），如 `STO-001` 或 `STO-001 order-service` |
-| 委派 | backend-dev subagent（分批，每批 ≤5 任务） |
+| 委派 | 无（主会话按 roles/backend-dev.md 角色规范直接执行；分批 2~3 任务、逐任务增量落盘） |
 | 前置 | design.md 已填充；开发环境准备：`agile worktree create feat/<编号>`；工作区干净 |
 | 产物 | worktree 内代码 + 测试；`implementation-be.md` 任务清单与 TDD 循环记录；`STO-xxx(red\|green\|refactor):` 序列 commit |
 | 示例 | `/agile:backend STO-001` |
@@ -104,10 +104,10 @@ Agile 插件的 18 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 
 | 项目 | 说明 |
 |---|---|
-| 用途 | 调度 frontend-dev subagent 完成接口层→组件层→页面层分层实现与浏览器验证 |
+| 用途 | 按 frontend-dev 角色规范完成接口层→组件层→页面层分层实现与浏览器验证（主会话直接执行，过程全程可见） |
 | 场景 | 前端开发阶段（可与 backend 并行——接口层按 design.md 契约逐字段 mock） |
 | 参数 | `<需求编号> [前端项目名]` |
-| 委派 | frontend-dev subagent（分批） |
+| 委派 | 无（主会话按 roles/frontend-dev.md 角色规范直接执行；分批 2~3 任务、逐任务增量落盘） |
 | 前置 | design.md 已填充；menu-tree/feature-tree 确定页面范围；工作区干净 |
 | 产物 | 分层代码 + 组件测试；浏览器验证记录（关键路径固化项目 `e2e/` 目录，Playwright）；implementation-fe.md 更新 |
 | 示例 | `/agile:frontend STO-001 frontend-web` |
@@ -123,7 +123,7 @@ Agile 插件的 18 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 用途 | Stage 2：按测试案例逐条执行并产出验收报告，**全程 auto 模式**（不中途提问） |
 | 场景 | 提测验收（含 e2e 用例）；发布前 stage 冒烟 |
 | 参数 | `<需求编号> [--only P0] [--repo 仓库路径]` |
-| 委派 | test-engineer subagent |
+| 委派 | 无（主会话按 agents/test-engineer.md Stage 2 规范直接执行，auto 模式不变） |
 | 前置 | `design.md` 已填充（按「涉及模块」表定位项目）；`gen-test.md` 缺失时执行时生成精简清单（报告注明） |
 | 产物 | `process-docs/<编号>/run-test.md`：范围/环境/逐案例结果表/失败清单/通过率/结论（通过/有条件通过/不通过）；关键截图归档 `assets/` 子目录（运行产物不提交 git） |
 | 示例 | `/agile:run-test STO-001` |
@@ -171,7 +171,7 @@ Agile 插件的 18 个 `/agile:xxx` 斜杠命令。每个命令：**用途 / 使
 | 用途 | 自主完成「复现 → 定位 → 根因 → 最小修复 → 回归验证 → 登记」闭环 |
 | 场景 | **任意阶段**的缺陷：开发期、测试期、线上问题；团队 SOP 轻量通道中 **BUG 形态**的标准入口（[SOP · 轻量通道](/guide/sop/lite)） |
 | 参数 | `<问题描述或 编号+问题描述>`，如 `STO-001 下单接口 500`（无编号则创建 BUG-xxx 并轻量初始化目录） |
-| 委派 | bug-hunter subagent |
+| 委派 | 无（主会话按 roles/bug-hunter.md 角色规范直接执行，诊断过程全程可见） |
 | 前置 | 工作区干净（修复基于干净基线） |
 | 产物 | 最小修复 diff + 复现测试（Red→Green）+ 全量回归确认；无编号时建 BUG-xxx 目录（requirement 落缺陷描述+复现步骤、gen-test 豁免行）；design.md 记根因分析、run-test.md 记回归结论；review.md 由 `/agile:review` 轻量形态生成验收确认 |
 | 示例 | `/agile:fix-bug STO-001 导出 CSV 中文乱码` |

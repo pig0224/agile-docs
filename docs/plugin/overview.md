@@ -3,7 +3,7 @@
 Agile 插件是 [Claude Code](https://code.claude.com/docs) 插件（市场仓库 [agile-plugins](https://github.com/pig0224/agile-plugins)），以 **SDD（先设计后开发）/ TDD（测试驱动开发）** 方法论组织团队研发流程：
 
 - **18 个 `/agile:xxx` 斜杠命令**——人机入口（[命令详解](/plugin/commands)）
-- **7 个角色 subagent**——具体执行（[角色说明](/plugin/roles)）
+- **7 个角色**——调研产出类命令委派 subagent 执行，执行循环类命令主会话按角色规范直接执行（[角色说明](/plugin/roles)）
 - **1 个方法论 skill**——共享知识（命令按需加载）
 
 ## 安装
@@ -46,7 +46,7 @@ agile plugin install agile
 
 轻量通道豁免：STO 轻量 / BUG-xxx / OPS-xxx（判定与填写规范见[团队协作 SOP · 轻量通道](/guide/sop/lite)）下 SDD 约束放宽——design.md 可由根因分析（BUG）或三五行方案简述替代；TDD 约束**不豁免**。
 
-**分工模式**：命令负责前置校验、委派与汇总汇报，具体实施由对应角色 agent 完成。部分命令（`/agile:sync-req`、`/agile:add-task`、`/agile:feedback`、`/agile:help`、`/agile:init`、`/agile:add-template`、`/agile:share-template`、`/agile:knowledge`、`/agile:review`、`/agile:release`）由主会话直接执行。
+**分工模式**：命令负责前置校验与汇总汇报。实施分两类——**调研产出类**（prd / architect / gen-test / ui）委派对应角色 subagent；**执行循环类**（backend / frontend / run-test / fix-bug）主会话按角色规范直接执行（跑测试、看结果、迭代的代码实施——过程全程可见，可随时纠偏）；其余主会话直接执行的命令（`/agile:sync-req`、`/agile:add-task`、`/agile:feedback`、`/agile:help`、`/agile:init`、`/agile:add-template`、`/agile:share-template`、`/agile:knowledge`、`/agile:review`、`/agile:release`——素材在主会话对话中）。
 
 ## 与 CLI 的协作
 
