@@ -86,7 +86,7 @@ tech-specs 与 biz-tech-docs 可登记为外部资源：地址写进配置后由
 |---|---|---|
 | `requirement.md` | 需求说明与验收标准（AC） | 负责人（/agile:prd + /agile:sync-req） |
 | `design.md` | 技术设计（方案、接口设计） | 负责人（/agile:architect） |
-| `implementation.md` | 实施主文件：任务分配表（design 冻结时填写，之后只读）+ 联调约定 | 负责人建骨架 |
+| `implementation.md` | 实施主文件：任务分配表（/agile:architect 在 design 冻结时填写，之后只读）+ 联调约定 | 负责人（/agile:architect） |
 | `implementation-be.md` | 后端任务清单、TDD 循环记录、变更清单（**后端专属**） | 后端（/agile:backend） |
 | `implementation-fe.md` | 前端任务清单、测试记录、变更清单（**前端专属**） | 前端（/agile:frontend） |
 | `gen-test.md` | 测试案例（Stage 1，分「后端用例/前端用例」两节） | 负责人兼任/测试（/agile:gen-test） |

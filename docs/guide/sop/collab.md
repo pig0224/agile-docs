@@ -14,7 +14,7 @@
 |---|---|---|---|
 | requirement.md | 负责人（sync-req 时并入） | 需求 + AC | 入仓后只读；需求变更 = 产品重新定稿 → 负责人重新 sync |
 | design.md | 负责人 | 方案、接口契约（跨接口统一约定 + 逐接口契约块）、任务分配 | **以此为准**——并行开发唯一契约依赖；变更先改这里 |
-| implementation.md | 负责人建骨架 | 任务分配表 + 联调约定 | design 冻结时填写，之后**只读**；只允许 add-task 追加行 |
+| implementation.md | 负责人（/agile:architect 冻结时填写） | 任务分配表 + 联调约定 | design 冻结（architect 完成填表）后**只读**；只允许 add-task 追加行 |
 | implementation-be.md | **仅后端**（无论是否负责人） | 后端任务清单、TDD 循环记录、变更清单 | 前端禁写 |
 | implementation-fe.md | **仅前端**（无论是否负责人） | 前端任务清单、测试记录、变更清单 | 后端禁写 |
 | gen-test.md | 负责人兼任/测试 | 测试范围、案例清单（分后端/前端两节）、数据准备、自动化映射 | 开发期各自只在自己节内补充 |

@@ -71,7 +71,7 @@
 |---|---|---|---|---|
 | 0 | 需求立项 | 产品 | 外部平台（腾讯文档/飞书） | 需求文档（背景/目标/AC）+ **分配编号 + 指派负责人** |
 | 1 | 建环境 | 负责人 | 主工作区 | `agile worktree create feat/STO-xxx`，推送远程分支 |
-| 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:prd`（需求结构化入产品知识库）→ `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口设计**）→ design 冻结时填 implementation.md 任务分配表 → 推送 |
+| 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:prd`（需求结构化入产品知识库）→ `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口设计**）→ design 冻结时填 implementation.md 任务分配表（architect 完成时一并填写）→ 推送 |
 | 3 | 测试设计 | 负责人 | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节；e2e 用例归前端节）→ 推送（对端拉取环境时即含测试案例） |
 | 4 | 拉取环境 | 后端 + 前端 | 各自机器 | `agile worktree create feat/STO-xxx`（**自动跟踪已存在的远程分支**） |
 | 5 | 并行开发 | 负责人担任其中一端 + 对端 | 各自本地 | `/agile:backend` ‖ `/agile:frontend`（辅以 ui / fix-bug / add-task / feedback），各自写 `implementation-be/-fe.md`，小步推送（自动 CI + stage CD） |
