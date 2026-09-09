@@ -50,23 +50,15 @@ $ git push -u origin feat/STO-012
 
 ### 页面原型（可选节点）
 
-涉及新页面 / 重交互的需求，建议在测试设计（#4）前后、开发（#5）前执行 `/agile:ui prototype <编号>`（prd 后、frontend 前的可选动作，**不设门禁**）——原型读项目 `docs/ui.md`（**有则必读**，视觉描述引用 token 名）与产品知识库 UI 规范，产出落 `biz-product-docs/prototypes/<编号>/`，规范缺口反馈产品；页面实现仍归 `/agile:frontend`。
+涉及新页面 / 重交互的需求，建议在测试设计（#3）前后、开发（#5）前执行 `/agile:ui prototype <编号>`（prd 后、frontend 前的可选动作，**不设门禁**）——原型读项目 `docs/ui.md`（**有则必读**，视觉描述引用 token 名）与产品知识库 UI 规范，产出落 `biz-product-docs/prototypes/<编号>/`，规范缺口反馈产品；页面实现仍归 `/agile:frontend`。
 
 ::: tip 📌 STO-012 实录
 `/agile:ui prototype STO-012` 产出 `page-order-export.md`：导出按钮用主色 token（引用项目 `docs/ui.md` 的 `--color-primary`，不写裸色值）、任务进行中显示进度态；标注一个规范缺口「批量导出上限未定义」反馈产品。
 :::
 
-## #3 拉取环境（后端 + 前端）
+## #3 测试设计（负责人兼任；或测试执行）
 
-**规则**：前置——对端本机已完成 workspace 初始化（`agile init workspace` + `agile sync`）。对端在自己机器执行 `agile worktree create feat/STO-xxx`——分支已存在远程时**自动跟踪检出**，无需手工 checkout。
-
-::: tip 📌 STO-012 实录
-小琪执行 `agile worktree create feat/STO-012`，输出「远程分支已存在，已跟踪检出」。
-:::
-
-## #4 测试设计（开发兼任；有独立测试则测试先行）
-
-**规则**：`/agile:gen-test STO-xxx` 产出 gen-test.md——测试范围、案例清单（分「**后端用例/前端用例**」两节，TC 表：AC 映射/前置/步骤/期望/优先级/类型）、数据准备、自动化映射（单测/e2e）。质量要求：每条 AC 至少 1 正常 + 1 边界/异常案例；e2e 用例归前端节，只覆盖关键路径。
+**规则**：`/agile:gen-test STO-xxx` 产出 gen-test.md——测试范围、案例清单（分「**后端用例/前端用例**」两节，TC 表：AC 映射/前置/步骤/期望/优先级/类型）、数据准备、自动化映射（单测/e2e）。质量要求：每条 AC 至少 1 正常 + 1 边界/异常案例；e2e 用例归前端节，只覆盖关键路径。完成后推送——对端 #4 拉取环境时 gen-test.md 已在远程分支上，各自按自己节开始 TDD。
 
 ::: tip 📌 STO-012 实录（摘两行）
 
@@ -74,6 +66,14 @@ $ git push -u origin feat/STO-012
 |---|---|---|---|---|
 | TC-B2 | AC2 | 后端用例 | 异常 | 超 5 分钟任务状态 = timeout，接口返回提示 |
 | TC-F3 | AC1 | 前端用例 | e2e | 关键路径：点击导出 → 轮询 → 浏览器下载 CSV |
+:::
+
+## #4 拉取环境（后端 + 前端）
+
+**规则**：前置——对端本机已完成 workspace 初始化（`agile init workspace` + `agile sync`）。对端在自己机器执行 `agile worktree create feat/STO-xxx`——分支已存在远程时**自动跟踪检出**，无需手工 checkout；检出的分支即包含 #3 已推送的 gen-test.md。
+
+::: tip 📌 STO-012 实录
+小琪执行 `agile worktree create feat/STO-012`，输出「远程分支已存在，已跟踪检出」。
 :::
 
 ## #5 并行开发（负责人承其一端 + 对端）

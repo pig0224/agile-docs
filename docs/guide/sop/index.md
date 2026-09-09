@@ -49,7 +49,7 @@
 1. **交叉验收**：前端验后端接口、后端验前端页面
 2. **AC 验收**：产品按 requirement.md 验收标准逐条确认（stage 环境）
 3. 负责人将结论汇总进 review.md（`/agile:review` 辅助汇总与门禁判定）
-4. **若有独立测试人员**：开发前先行 `/agile:gen-test`（测试设计前置）；开发提交后独立执行 `/agile:run-test`；没有则由开发兼任 + 产品 stage 验收兜底
+4. **测试设计与执行**：测试案例设计（`/agile:gen-test`）由负责人执行（生命周期 #3，先于对端拉取环境）；`/agile:run-test` 若有独立测试人员则由其执行，没有则由开发兼任 + 产品 stage 验收兜底
 
 ## AI 协作者（全员适用）
 
@@ -72,8 +72,8 @@
 | 0 | 需求立项 | 产品 | 外部平台（腾讯文档/飞书） | 需求文档（背景/目标/AC）+ **分配编号 + 指派负责人** |
 | 1 | 建环境 | 负责人 | 主工作区 | `agile worktree create feat/STO-xxx`，推送远程分支 |
 | 2 | 入仓 + 设计 | 负责人 | worktree 内 | `/agile:prd`（需求结构化入产品知识库）→ `/agile:sync-req`（AC 校验）→ `/agile:architect`（design.md：方案、**接口设计**）→ design 冻结时填 implementation.md 任务分配表 → 推送 |
-| 3 | 拉取环境 | 后端 + 前端 | 各自机器 | `agile worktree create feat/STO-xxx`（**自动跟踪已存在的远程分支**） |
-| 4 | 测试设计 | 开发兼任（有测试则测试先行） | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节；e2e 用例归前端节） |
+| 3 | 测试设计 | 负责人 | worktree 内 | `/agile:gen-test` → gen-test.md（分「后端用例/前端用例」两节；e2e 用例归前端节）→ 推送（对端拉取环境时即含测试案例） |
+| 4 | 拉取环境 | 后端 + 前端 | 各自机器 | `agile worktree create feat/STO-xxx`（**自动跟踪已存在的远程分支**） |
 | 5 | 并行开发 | 负责人担任其中一端 + 对端 | 各自本地 | `/agile:backend` ‖ `/agile:frontend`（辅以 ui / fix-bug / add-task / feedback），各自写 `implementation-be/-fe.md`，小步推送（自动 CI + stage CD） |
 | 6 | 联调 | 后端 + 前端 | worktree 内 | 集成测试通过 |
 | 7 | 自测验收 | 开发兼任（有测试则独立执行） | worktree 内 | `/agile:run-test` → run-test.md |
